@@ -3,53 +3,112 @@
 @import "@fontsource-variable/geist-mono";
 
 :root {
-  /* Colors */
-  --color-ink: #171717;
-  --color-on-primary: #ffffff;
-  --color-body: #4d4d4d;
-  --color-mute: #888888;
-  --color-hairline: #ebebeb;
-  --color-hairline-strong: #a1a1a1;
-  --color-canvas: #ffffff;
-  --color-canvas-soft: #fafafa;
-  --color-canvas-soft-2: #f5f5f5;
-  --color-link: #0070f3;
-  --color-link-deep: #0761d1;
-  --color-success: #0070f3;
-  --color-error: #ee0000;
-  --color-cyan: #50e3c2;
+  /* Dark theme surface */
+  --color-bg:          #0a0a0a;
+  --color-surface:     #111111;
+  --color-surface-2:   #1a1a1a;
+  --color-surface-3:   #222222;
+
+  /* Text */
+  --color-ink:         #f0f0f0;
+  --color-body:        #a0a0a0;
+  --color-mute:        #555555;
+  --color-on-primary:  #0a0a0a;
+
+  /* Borders */
+  --color-hairline:        #222222;
+  --color-hairline-strong: #333333;
+
+  /* Accent */
+  --color-link:   #50e3c2;
+  --color-cyan:   #50e3c2;
   --color-violet: #7928ca;
-  --color-highlight-pink: #ff0080;
+  --color-error:  #ff4d4d;
 
-  /* Gradient stops */
+  /* Brand gradients (same stops, used in hero) */
   --gradient-develop-start: #007cf0;
-  --gradient-develop-end: #00dfd8;
+  --gradient-develop-end:   #00dfd8;
   --gradient-preview-start: #7928ca;
-  --gradient-preview-end: #ff0080;
-  --gradient-ship-start: #ff4d4d;
-  --gradient-ship-end: #f9cb28;
+  --gradient-preview-end:   #ff0080;
+  --gradient-ship-start:    #ff4d4d;
+  --gradient-ship-end:      #f9cb28;
 
-  /* Shadows */
-  --shadow-level-1: inset 0 0 0 1px #00000014;
-  --shadow-level-2: inset 0 0 0 1px #00000014, 0px 1px 1px #00000005, 0px 2px 2px #0000000a;
-  --shadow-level-3: inset 0 0 0 1px #00000014, 0px 2px 2px #0000000a, 0px 8px 8px -8px #0000000a;
-  --shadow-level-4: inset 0 0 0 1px #00000014, 0px 2px 2px #0000000a, 0px 8px 16px -4px #0000000a;
+  /* Shadows (dark-mode stacked) */
+  --shadow-level-1: inset 0 0 0 1px rgba(255,255,255,0.06);
+  --shadow-level-2: inset 0 0 0 1px rgba(255,255,255,0.06), 0 1px 2px rgba(0,0,0,0.4);
+  --shadow-level-3: inset 0 0 0 1px rgba(255,255,255,0.06), 0 2px 4px rgba(0,0,0,0.4), 0 8px 16px rgba(0,0,0,0.3);
+  --shadow-level-4: inset 0 0 0 1px rgba(255,255,255,0.08), 0 4px 8px rgba(0,0,0,0.5), 0 16px 32px rgba(0,0,0,0.4);
 }
 
+*, *::before, *::after { box-sizing: border-box; }
+
 html {
-  background-color: var(--color-canvas-soft);
+  background-color: var(--color-bg);
   color: var(--color-ink);
   font-family: 'Geist Variable', Inter, system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
+body { margin: 0; }
+
 ::selection {
-  background: #171717;
-  color: #f2f2f2;
+  background: #50e3c2;
+  color: #0a0a0a;
 }
 
-/* ── Converter app styles ── */
+/* ── App header ── */
+.app-header {
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-hairline);
+  height: 56px;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
 
+.app-header-inner {
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-logo-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.app-logo-img {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.app-logo-text {
+  font-family: 'Geist Mono Variable', ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-ink);
+  letter-spacing: -0.01em;
+}
+
+.app-tagline {
+  font-size: 12px;
+  color: var(--color-mute);
+  font-family: 'Geist Mono Variable', ui-monospace, monospace;
+}
+
+/* ── Converter ── */
 .converter {
   max-width: 960px;
   margin: 0 auto;
@@ -75,8 +134,8 @@ html {
   flex: 1;
   height: 52px;
   padding: 0 16px;
-  background: var(--color-canvas);
-  border: 1px solid var(--color-hairline);
+  background: var(--color-surface);
+  border: 1px solid var(--color-hairline-strong);
   border-radius: 10px;
   font-size: 16px;
   font-family: inherit;
@@ -86,8 +145,8 @@ html {
 }
 
 .nlp-input:focus {
-  border-color: var(--color-ink);
-  box-shadow: 0 0 0 3px rgba(23, 23, 23, 0.08);
+  border-color: var(--color-cyan);
+  box-shadow: 0 0 0 3px rgba(80, 227, 194, 0.12);
 }
 
 .nlp-input::placeholder { color: var(--color-mute); }
@@ -95,10 +154,10 @@ html {
 .nlp-go {
   height: 52px;
   padding: 0 20px;
-  background: var(--color-ink);
-  color: white;
+  background: var(--color-cyan);
+  color: #0a0a0a;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   font-family: inherit;
   border: none;
   border-radius: 10px;
@@ -111,7 +170,7 @@ html {
 
 .nlp-hint {
   font-size: 13px;
-  color: var(--color-link);
+  color: var(--color-cyan);
   font-family: 'Geist Mono Variable', ui-monospace, monospace;
   margin: 0;
   padding-left: 4px;
@@ -125,12 +184,12 @@ html {
 }
 
 .preset-btn {
-  height: 32px;
+  height: 30px;
   padding: 0 12px;
-  background: var(--color-canvas);
-  border: 1px solid var(--color-hairline);
+  background: var(--color-surface);
+  border: 1px solid var(--color-hairline-strong);
   border-radius: 9999px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 400;
   font-family: inherit;
   color: var(--color-body);
@@ -141,8 +200,8 @@ html {
 
 .preset-btn:hover {
   color: var(--color-ink);
-  border-color: var(--color-hairline-strong);
-  background: var(--color-canvas-soft-2);
+  border-color: var(--color-cyan);
+  background: rgba(80, 227, 194, 0.06);
 }
 
 /* Source controls */
@@ -153,11 +212,11 @@ html {
 }
 
 .source-label {
-  font-size: 12px;
+  font-size: 11px;
   font-family: 'Geist Mono Variable', ui-monospace, monospace;
   color: var(--color-mute);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
 }
 
 .source-controls {
@@ -170,8 +229,8 @@ html {
 .time-input {
   height: 40px;
   padding: 0 12px;
-  background: var(--color-canvas);
-  border: 1px solid var(--color-hairline);
+  background: var(--color-surface);
+  border: 1px solid var(--color-hairline-strong);
   border-radius: 6px;
   font-size: 14px;
   font-family: 'Geist Mono Variable', ui-monospace, monospace;
@@ -179,15 +238,16 @@ html {
   outline: none;
   cursor: pointer;
   transition: border-color 0.15s;
+  color-scheme: dark;
 }
 
-.time-input:focus { border-color: var(--color-ink); }
+.time-input:focus { border-color: var(--color-cyan); }
 
 .live-btn {
   height: 40px;
   padding: 0 14px;
-  background: var(--color-canvas);
-  border: 1px solid var(--color-hairline);
+  background: var(--color-surface);
+  border: 1px solid var(--color-hairline-strong);
   border-radius: 6px;
   font-size: 13px;
   font-family: inherit;
@@ -199,23 +259,26 @@ html {
 .live-btn-active {
   border-color: #22c55e;
   color: #22c55e;
-  background: #f0fdf4;
+  background: rgba(34, 197, 94, 0.08);
 }
 
 .toggle-btn {
   height: 40px;
   padding: 0 14px;
-  background: var(--color-canvas);
-  border: 1px solid var(--color-hairline);
+  background: var(--color-surface);
+  border: 1px solid var(--color-hairline-strong);
   border-radius: 6px;
   font-size: 13px;
   font-family: 'Geist Mono Variable', ui-monospace, monospace;
   color: var(--color-body);
   cursor: pointer;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, color 0.15s;
 }
 
-.toggle-btn:hover { border-color: var(--color-hairline-strong); }
+.toggle-btn:hover {
+  border-color: var(--color-cyan);
+  color: var(--color-ink);
+}
 
 /* City search */
 .city-search {
@@ -228,8 +291,8 @@ html {
   width: 100%;
   height: 40px;
   padding: 0 12px;
-  background: var(--color-canvas);
-  border: 1px solid var(--color-hairline);
+  background: var(--color-surface);
+  border: 1px solid var(--color-hairline-strong);
   border-radius: 6px;
   font-size: 14px;
   font-family: inherit;
@@ -239,7 +302,7 @@ html {
   transition: border-color 0.15s;
 }
 
-.city-search-input:focus { border-color: var(--color-ink); }
+.city-search-input:focus { border-color: var(--color-cyan); }
 .city-search-input::placeholder { color: var(--color-mute); }
 
 .city-dropdown {
@@ -247,14 +310,14 @@ html {
   top: calc(100% + 4px);
   left: 0;
   right: 0;
-  background: var(--color-canvas);
-  border: 1px solid var(--color-hairline);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-hairline-strong);
   border-radius: 8px;
   list-style: none;
   margin: 0;
   padding: 4px 0;
   z-index: 100;
-  box-shadow: 0px 4px 16px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
   overflow: hidden;
 }
 
@@ -272,7 +335,7 @@ html {
   transition: background 0.1s;
 }
 
-.city-dropdown-item:hover { background: var(--color-canvas-soft); }
+.city-dropdown-item:hover { background: var(--color-surface-3); }
 
 .dropdown-city {
   font-size: 14px;
@@ -294,23 +357,27 @@ html {
 
 /* City cards */
 .city-card {
-  background: var(--color-canvas);
-  border-radius: 10px;
+  background: var(--color-surface);
+  border-radius: 12px;
   padding: 20px;
   box-shadow: var(--shadow-level-3);
   display: flex;
   flex-direction: column;
   gap: 10px;
-  transition: box-shadow 0.15s;
+  transition: box-shadow 0.15s, transform 0.15s;
 }
 
-.city-card:hover { box-shadow: var(--shadow-level-4); }
+.city-card:hover {
+  box-shadow: var(--shadow-level-4);
+  transform: translateY(-1px);
+}
 
 .city-card-source {
-  border: 1.5px solid var(--color-ink);
+  border: 1px solid var(--color-cyan);
+  box-shadow: var(--shadow-level-3), 0 0 0 1px rgba(80, 227, 194, 0.15);
 }
 
-.city-card[data-status="sleeping"] { opacity: 0.85; }
+.city-card[data-status="sleeping"] { opacity: 0.7; }
 
 .city-card-header {
   display: flex;
@@ -348,7 +415,7 @@ html {
   flex-shrink: 0;
 }
 
-.remove-btn:hover { color: var(--color-ink); }
+.remove-btn:hover { color: #ff4d4d; }
 
 .city-time-row {
   display: flex;
@@ -357,7 +424,7 @@ html {
 }
 
 .city-time {
-  font-size: 32px;
+  font-size: 34px;
   font-weight: 600;
   letter-spacing: -1.5px;
   color: var(--color-ink);
@@ -371,8 +438,8 @@ html {
   font-family: 'Geist Mono Variable', ui-monospace, monospace;
   padding: 2px 6px;
   border-radius: 4px;
-  background: #fef9c3;
-  color: #854d0e;
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
 }
 
 .city-meta-row {
@@ -389,7 +456,7 @@ html {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 6px;
+  padding-top: 8px;
   border-top: 1px solid var(--color-hairline);
 }
 
@@ -419,54 +486,20 @@ html {
 .action-btn {
   height: 36px;
   padding: 0 16px;
-  background: var(--color-canvas);
-  border: 1px solid var(--color-hairline);
+  background: var(--color-surface);
+  border: 1px solid var(--color-hairline-strong);
   border-radius: 6px;
   font-size: 13px;
   font-family: inherit;
   color: var(--color-body);
   cursor: pointer;
-  transition: color 0.15s, border-color 0.15s;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
 }
 
 .action-btn:hover {
   color: var(--color-ink);
-  border-color: var(--color-hairline-strong);
-}
-
-/* App header */
-.app-header {
-  background: var(--color-canvas);
-  border-bottom: 1px solid var(--color-hairline);
-  height: 56px;
-  display: flex;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 40;
-}
-
-.app-header-inner {
-  max-width: 960px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.app-logo {
-  font-family: 'Geist Mono Variable', ui-monospace, monospace;
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--color-ink);
-  text-decoration: none;
-}
-
-.app-tagline {
-  font-size: 13px;
-  color: var(--color-mute);
+  border-color: var(--color-cyan);
+  background: rgba(80, 227, 194, 0.06);
 }
 
 /* Responsive */
@@ -478,4 +511,5 @@ html {
   .city-search { min-width: 100%; }
   .presets-row { gap: 6px; }
   .preset-btn { font-size: 12px; padding: 0 10px; }
+  .app-tagline { display: none; }
 }
