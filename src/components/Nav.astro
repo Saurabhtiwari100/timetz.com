@@ -1,0 +1,137 @@
+---
+const links = [
+  { label: 'Features', href: '#features' },
+  { label: 'How it works', href: '#how-it-works' },
+  { label: 'Pricing', href: '#pricing' },
+];
+---
+
+<header class="nav-bar">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <span class="nav-logo-mono">freeworldtimeconverter</span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      {links.map(link => (
+        <a href={link.href} class="nav-link">{link.label}</a>
+      ))}
+    </nav>
+
+    <div class="nav-ctas">
+      <a href="#" class="nav-cta-login">Log in</a>
+      <a href="#" class="nav-cta-signup">Get early access</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .nav-bar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--color-canvas);
+    border-bottom: 1px solid var(--color-hairline);
+    height: 64px;
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-inner {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .nav-logo {
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .nav-logo-mono {
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--color-ink);
+    letter-spacing: -0.01em;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .nav-link {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: -0.28px;
+    color: var(--color-body);
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    transition: color 0.15s, background 0.15s;
+  }
+
+  .nav-link:hover {
+    color: var(--color-ink);
+    background: var(--color-canvas-soft-2);
+  }
+
+  .nav-ctas {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .nav-cta-login {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    color: var(--color-ink);
+    text-decoration: none;
+    background: var(--color-canvas);
+    padding: 0 8px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 6px;
+    border: 1px solid var(--color-hairline);
+    transition: border-color 0.15s;
+  }
+
+  .nav-cta-login:hover {
+    border-color: var(--color-hairline-strong);
+  }
+
+  .nav-cta-signup {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    color: var(--color-on-primary);
+    text-decoration: none;
+    background: var(--color-ink);
+    padding: 0 8px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 6px;
+    transition: opacity 0.15s;
+  }
+
+  .nav-cta-signup:hover {
+    opacity: 0.85;
+  }
+
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .nav-cta-login { display: none; }
+  }
+</style>

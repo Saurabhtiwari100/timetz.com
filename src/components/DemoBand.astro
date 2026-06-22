@@ -1,0 +1,187 @@
+---
+---
+
+<section id="how-it-works" class="demo-band">
+  <div class="demo-inner">
+    <div class="demo-copy">
+      <span class="demo-eyebrow">How it works</span>
+      <h2 class="demo-headline">Just type what you mean.</h2>
+      <p class="demo-body">freeworldtimeconverter understands natural language, cities, airports, time zones, and even DST edge cases. No configuration needed.</p>
+    </div>
+
+    <div class="demo-mockup">
+      <div class="mockup-bar">
+        <span class="mockup-dot"></span>
+        <span class="mockup-dot"></span>
+        <span class="mockup-dot"></span>
+      </div>
+      <div class="mockup-body">
+        <div class="mockup-line">
+          <span class="mockup-prompt">›</span>
+          <span class="mockup-input">"Find best time for Mumbai, London, New York next week"</span>
+        </div>
+        <div class="mockup-divider"></div>
+        <div class="mockup-result">
+          <div class="result-row">
+            <span class="result-label">Best overall</span>
+            <span class="result-time">Tue 9:00 AM EST · 7:30 PM IST · 2:00 PM GMT</span>
+            <span class="result-score score-green">Score 87</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Fairest</span>
+            <span class="result-time">Wed 8:00 AM EST · 6:30 PM IST · 1:00 PM GMT</span>
+            <span class="result-score score-blue">Score 82</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Earliest</span>
+            <span class="result-time">Mon 7:00 AM EST · 5:30 PM IST · 12:00 PM GMT</span>
+            <span class="result-score score-amber">Score 71</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .demo-band {
+    background: var(--color-ink);
+    color: var(--color-on-primary);
+    padding: 96px 24px;
+  }
+
+  .demo-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+
+  .demo-eyebrow {
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 12px;
+    font-weight: 400;
+    color: #888888;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .demo-headline {
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 40px;
+    letter-spacing: -1.28px;
+    color: #ffffff;
+    margin: 0 0 16px;
+  }
+
+  .demo-body {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 28px;
+    color: #a1a1a1;
+    margin: 0;
+  }
+
+  .demo-mockup {
+    background: #0f0f0f;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0px 2px 2px #00000040, 0px 8px 16px -4px #00000060;
+    border: 1px solid #2a2a2a;
+  }
+
+  .mockup-bar {
+    background: #1a1a1a;
+    padding: 10px 14px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    border-bottom: 1px solid #2a2a2a;
+  }
+
+  .mockup-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 9999px;
+    background: #333;
+    display: block;
+  }
+
+  .mockup-body {
+    padding: 24px;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+  .mockup-line {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+
+  .mockup-prompt {
+    color: var(--color-cyan);
+    flex-shrink: 0;
+  }
+
+  .mockup-input {
+    color: #e0e0e0;
+  }
+
+  .mockup-divider {
+    border-top: 1px solid #2a2a2a;
+    margin-bottom: 20px;
+  }
+
+  .result-row {
+    display: grid;
+    grid-template-columns: 100px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #1e1e1e;
+  }
+
+  .result-row:last-child { border-bottom: none; }
+
+  .result-label {
+    color: #888;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .result-time {
+    color: #e0e0e0;
+    font-size: 12px;
+  }
+
+  .result-score {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 9999px;
+  }
+
+  .score-green { background: #0d2d1a; color: #4ade80; }
+  .score-blue { background: #0d1a2d; color: #60a5fa; }
+  .score-amber { background: #2d1f0d; color: #fbbf24; }
+
+  @media (max-width: 960px) {
+    .demo-inner { grid-template-columns: 1fr; gap: 40px; }
+  }
+
+  @media (max-width: 600px) {
+    .demo-band { padding: 64px 16px; }
+    .demo-headline { font-size: 24px; }
+    .result-row { grid-template-columns: 80px 1fr; }
+    .result-score { display: none; }
+  }
+</style>

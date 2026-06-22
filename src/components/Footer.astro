@@ -1,0 +1,168 @@
+---
+const columns = [
+  {
+    label: 'Product',
+    links: [
+      { label: 'Features', href: '#features' },
+      { label: 'Pricing', href: '#pricing' },
+      { label: 'Changelog', href: '#' },
+      { label: 'Roadmap', href: '#' },
+    ],
+  },
+  {
+    label: 'Use cases',
+    links: [
+      { label: 'Remote teams', href: '#' },
+      { label: 'Freelancers', href: '#' },
+      { label: 'Agencies', href: '#' },
+      { label: 'Enterprises', href: '#' },
+    ],
+  },
+  {
+    label: 'Resources',
+    links: [
+      { label: 'Documentation', href: '#' },
+      { label: 'API', href: '#' },
+      { label: 'Blog', href: '#' },
+      { label: 'Status', href: '#' },
+    ],
+  },
+  {
+    label: 'Company',
+    links: [
+      { label: 'About', href: '#' },
+      { label: 'Privacy', href: '#' },
+      { label: 'Terms', href: '#' },
+      { label: 'Contact', href: '#' },
+    ],
+  },
+];
+---
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="footer-logo">freeworldtimeconverter</span>
+        <p class="footer-tagline">The fastest time zone converter on the internet.</p>
+      </div>
+
+      {columns.map(col => (
+        <div class="footer-col">
+          <span class="footer-col-label">{col.label}</span>
+          <ul class="footer-links">
+            {col.links.map(link => (
+              <li><a href={link.href} class="footer-link">{link.label}</a></li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 freeworldtimeconverter.com. All rights reserved.</p>
+      <p class="footer-copy">Built with Astro · Powered by OpenAI</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-canvas);
+    border-top: 1px solid var(--color-hairline);
+    padding: 64px 24px 40px;
+  }
+
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 48px;
+  }
+
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .footer-logo {
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--color-ink);
+  }
+
+  .footer-tagline {
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--color-mute);
+    margin: 0;
+    max-width: 240px;
+  }
+
+  .footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footer-col-label {
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--color-ink);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .footer-link {
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--color-body);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .footer-link:hover { color: var(--color-ink); }
+
+  .footer-bottom {
+    border-top: 1px solid var(--color-hairline);
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .footer-copy {
+    font-size: 12px;
+    color: var(--color-mute);
+    margin: 0;
+  }
+
+  @media (max-width: 960px) {
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    .footer-brand { grid-column: 1 / -1; }
+  }
+
+  @media (max-width: 600px) {
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 24px; }
+    .footer { padding: 48px 16px 32px; }
+  }
+</style>

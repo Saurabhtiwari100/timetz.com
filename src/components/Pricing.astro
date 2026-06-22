@@ -1,0 +1,254 @@
+---
+const tiers = [
+  {
+    name: 'Free',
+    price: '$0',
+    period: 'forever',
+    description: 'For individuals who need fast timezone lookups.',
+    features: ['Natural language conversion', 'Up to 5 saved cities', 'Share cards', 'Mobile-first UI'],
+    cta: 'Get started',
+    featured: false,
+  },
+  {
+    name: 'Pro',
+    price: '$9',
+    period: 'per month',
+    description: 'For remote workers who schedule cross-timezone meetings daily.',
+    features: ['Everything in Free', 'AI meeting finder', 'Unlimited saved people', 'DST intelligence alerts', 'Calendar integrations'],
+    cta: 'Start free trial',
+    featured: true,
+  },
+  {
+    name: 'Team',
+    price: '$29',
+    period: 'per month',
+    description: 'For distributed teams who need shared scheduling.',
+    features: ['Everything in Pro', 'Team workspace', 'Slack & Teams integration', 'Shared city groups', 'Priority support'],
+    cta: 'Contact us',
+    featured: false,
+  },
+];
+---
+
+<section id="pricing" class="pricing-section">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-eyebrow">Pricing</span>
+      <h2 class="section-headline">Simple, transparent pricing.</h2>
+      <p class="section-body">Start free. Upgrade when you need the AI features.</p>
+    </div>
+
+    <div class="pricing-grid">
+      {tiers.map(tier => (
+        <article class={`pricing-card ${tier.featured ? 'pricing-card-featured' : ''}`}>
+          <div class="tier-header">
+            <span class="tier-name">{tier.name}</span>
+            <div class="tier-price">
+              <span class="tier-amount">{tier.price}</span>
+              <span class="tier-period">/{tier.period}</span>
+            </div>
+            <p class="tier-desc">{tier.description}</p>
+          </div>
+
+          <ul class="tier-features">
+            {tier.features.map(f => (
+              <li class="tier-feature">
+                <span class="tier-check" aria-hidden="true">✓</span>
+                {f}
+              </li>
+            ))}
+          </ul>
+
+          <a href="#" class={tier.featured ? 'tier-cta-featured' : 'tier-cta'}>{tier.cta}</a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .pricing-section {
+    background: var(--color-canvas-soft);
+    padding: 96px 24px;
+  }
+
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .section-eyebrow {
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--color-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .section-headline {
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 40px;
+    letter-spacing: -1.28px;
+    color: var(--color-ink);
+    margin: 0;
+  }
+
+  .section-body {
+    font-size: 18px;
+    color: var(--color-body);
+    margin: 0;
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    align-items: start;
+  }
+
+  .pricing-card {
+    background: var(--color-canvas);
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: var(--shadow-level-4);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .pricing-card-featured {
+    background: var(--color-ink);
+    color: var(--color-on-primary);
+  }
+
+  .tier-header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .tier-name {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.28px;
+    color: var(--color-body);
+  }
+
+  .pricing-card-featured .tier-name { color: #888; }
+
+  .tier-price {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+
+  .tier-amount {
+    font-size: 48px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -2.4px;
+    color: var(--color-ink);
+  }
+
+  .pricing-card-featured .tier-amount { color: #fff; }
+
+  .tier-period {
+    font-size: 14px;
+    color: var(--color-mute);
+  }
+
+  .pricing-card-featured .tier-period { color: #888; }
+
+  .tier-desc {
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--color-body);
+    margin: 0;
+  }
+
+  .pricing-card-featured .tier-desc { color: #a1a1a1; }
+
+  .tier-features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .tier-feature {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--color-body);
+  }
+
+  .pricing-card-featured .tier-feature { color: #e0e0e0; }
+
+  .tier-check {
+    color: var(--color-link);
+    flex-shrink: 0;
+    font-size: 12px;
+    margin-top: 2px;
+  }
+
+  .pricing-card-featured .tier-check { color: var(--color-cyan); }
+
+  .tier-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 16px;
+    background: var(--color-ink);
+    color: var(--color-on-primary);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 9999px;
+    transition: opacity 0.15s;
+  }
+
+  .tier-cta:hover { opacity: 0.85; }
+
+  .tier-cta-featured {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 16px;
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 9999px;
+    transition: opacity 0.15s;
+  }
+
+  .tier-cta-featured:hover { opacity: 0.9; }
+
+  @media (max-width: 960px) {
+    .pricing-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+  }
+
+  @media (max-width: 600px) {
+    .pricing-section { padding: 64px 16px; }
+    .section-headline { font-size: 24px; }
+  }
+</style>

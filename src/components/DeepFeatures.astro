@@ -1,0 +1,126 @@
+---
+const features = [
+  {
+    eyebrow: '04',
+    title: 'Beautiful share cards.',
+    body: 'Generate Slack, Teams, WhatsApp, and email-optimized images of your meeting times in one click.',
+  },
+  {
+    eyebrow: '05',
+    title: 'DST intelligence.',
+    body: 'freeworldtimeconverter warns you: "This meeting changes by 1 hour next week because London enters DST." No surprises.',
+  },
+  {
+    eyebrow: '06',
+    title: 'Saved people.',
+    body: 'Store your manager, client, or team members. Then just ask: "What time is 3pm for my manager?"',
+  },
+];
+---
+
+<section class="deep-section">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-eyebrow">More features</span>
+      <h2 class="section-headline">The details that matter.</h2>
+    </div>
+    <div class="feature-grid">
+      {features.map(f => (
+        <article class="feature-card">
+          <span class="feature-eyebrow">{f.eyebrow}</span>
+          <h3 class="feature-title">{f.title}</h3>
+          <p class="feature-body">{f.body}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .deep-section {
+    background: var(--color-canvas);
+    padding: 96px 24px;
+  }
+
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .section-eyebrow {
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--color-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .section-headline {
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 40px;
+    letter-spacing: -1.28px;
+    color: var(--color-ink);
+    margin: 0;
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .feature-card {
+    background: var(--color-canvas-soft);
+    border-radius: 8px;
+    padding: 32px;
+    box-shadow: var(--shadow-level-1);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .feature-eyebrow {
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--color-mute);
+    line-height: 16px;
+  }
+
+  .feature-title {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 28px;
+    letter-spacing: -0.6px;
+    color: var(--color-ink);
+    margin: 0;
+  }
+
+  .feature-body {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color: var(--color-body);
+    margin: 0;
+  }
+
+  @media (max-width: 960px) {
+    .feature-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 600px) {
+    .feature-grid { grid-template-columns: 1fr; }
+    .deep-section { padding: 64px 16px; }
+    .section-headline { font-size: 24px; }
+  }
+</style>

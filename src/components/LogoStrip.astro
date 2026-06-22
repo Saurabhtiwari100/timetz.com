@@ -1,0 +1,67 @@
+---
+const logos = [
+  { name: 'Vercel', width: 80 },
+  { name: 'Linear', width: 72 },
+  { name: 'Notion', width: 80 },
+  { name: 'Stripe', width: 60 },
+  { name: 'GitHub', width: 72 },
+];
+---
+
+<section class="logo-strip">
+  <p class="logo-strip-label">Trusted by teams at world-class companies</p>
+  <div class="logo-row">
+    {logos.map(logo => (
+      <div class="logo-item" style={`width: ${logo.width}px`}>
+        <span class="logo-name">{logo.name}</span>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .logo-strip {
+    background: var(--color-canvas);
+    border-top: 1px solid var(--color-hairline);
+    border-bottom: 1px solid var(--color-hairline);
+    padding: 24px;
+    text-align: center;
+  }
+
+  .logo-strip-label {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--color-mute);
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+
+  .logo-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+  }
+
+  .logo-item {
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-hairline-strong);
+    letter-spacing: -0.5px;
+  }
+
+  @media (max-width: 600px) {
+    .logo-row { gap: 24px; }
+    .logo-name { font-size: 14px; }
+  }
+</style>

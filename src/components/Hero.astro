@@ -1,0 +1,197 @@
+---
+---
+
+<section class="hero-band">
+  <div class="hero-gradient" aria-hidden="true">
+    <svg width="100%" height="100%" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="g1" cx="20%" cy="30%" r="60%">
+          <stop offset="0%" stop-color="#007cf0" stop-opacity="0.7"/>
+          <stop offset="100%" stop-color="#007cf0" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="g2" cx="80%" cy="20%" r="55%">
+          <stop offset="0%" stop-color="#7928ca" stop-opacity="0.6"/>
+          <stop offset="100%" stop-color="#7928ca" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="g3" cx="60%" cy="70%" r="60%">
+          <stop offset="0%" stop-color="#ff0080" stop-opacity="0.5"/>
+          <stop offset="100%" stop-color="#ff0080" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="g4" cx="10%" cy="80%" r="50%">
+          <stop offset="0%" stop-color="#00dfd8" stop-opacity="0.5"/>
+          <stop offset="100%" stop-color="#00dfd8" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="g5" cx="90%" cy="80%" r="45%">
+          <stop offset="0%" stop-color="#f9cb28" stop-opacity="0.4"/>
+          <stop offset="100%" stop-color="#f9cb28" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="100%" height="100%" fill="white"/>
+      <rect width="100%" height="100%" fill="url(#g1)"/>
+      <rect width="100%" height="100%" fill="url(#g2)"/>
+      <rect width="100%" height="100%" fill="url(#g3)"/>
+      <rect width="100%" height="100%" fill="url(#g4)"/>
+      <rect width="100%" height="100%" fill="url(#g5)"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="hero-badge-mono">New</span>
+      <span class="hero-badge-text">AI-powered meeting scheduling</span>
+    </div>
+
+    <h1 class="hero-headline">
+      The fastest way to<br />convert time zones.
+    </h1>
+
+    <p class="hero-body">
+      No UTC offsets. No city selection complexity. Just type what you need — freeworldtimeconverter figures out the rest in under 3 seconds.
+    </p>
+
+    <div class="hero-ctas">
+      <a href="#" class="btn-primary">Try it free</a>
+      <a href="#features" class="btn-secondary">See how it works</a>
+    </div>
+
+    <p class="hero-proof">No login required &middot; Works instantly &middot; Free forever</p>
+  </div>
+</section>
+
+<style>
+  .hero-band {
+    position: relative;
+    overflow: hidden;
+    padding: 96px 24px;
+    text-align: center;
+    background: var(--color-canvas);
+  }
+
+  .hero-gradient {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .hero-gradient svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--color-canvas-soft);
+    border: 1px solid var(--color-hairline);
+    padding: 4px 12px;
+    border-radius: 9999px;
+  }
+
+  .hero-badge-mono {
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--color-body);
+    line-height: 16px;
+  }
+
+  .hero-badge-text {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--color-body);
+    line-height: 20px;
+    letter-spacing: -0.28px;
+  }
+
+  .hero-headline {
+    font-size: 48px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -2.4px;
+    color: var(--color-ink);
+    margin: 0;
+  }
+
+  .hero-body {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 28px;
+    color: var(--color-body);
+    margin: 0;
+    max-width: 520px;
+  }
+
+  .hero-ctas {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    padding: 0 24px;
+    background: var(--color-ink);
+    color: var(--color-on-primary);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    text-decoration: none;
+    border-radius: 9999px;
+    transition: opacity 0.15s;
+  }
+
+  .btn-primary:hover { opacity: 0.85; }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    padding: 0 24px;
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    text-decoration: none;
+    border-radius: 9999px;
+    box-shadow: var(--shadow-level-2);
+    transition: box-shadow 0.15s;
+  }
+
+  .btn-secondary:hover {
+    box-shadow: var(--shadow-level-3);
+  }
+
+  .hero-proof {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--color-mute);
+    letter-spacing: -0.28px;
+    margin: 0;
+  }
+
+  @media (max-width: 600px) {
+    .hero-band { padding: 64px 16px; }
+    .hero-headline { font-size: 36px; letter-spacing: -1.5px; }
+    .hero-body { font-size: 16px; }
+  }
+</style>
