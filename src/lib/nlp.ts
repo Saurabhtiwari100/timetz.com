@@ -28,8 +28,8 @@ function extractTimeFromStr(str: string): { hour: number; minute: number } | nul
     if (!m) continue;
 
     let hour = parseInt(m[1]);
-    const minute = m[2] ? parseInt(m[2]) : 0;
-    const meridiem = (m[3] || m[2] || '').toLowerCase();
+    const minute = m[2] && /^\d+$/.test(m[2]) ? parseInt(m[2]) : 0;
+    const meridiem = (m[3] || (/^(am|pm)$/i.test(m[2] ?? '') ? m[2] : '') || '').toLowerCase();
 
     if (meridiem === 'pm' && hour !== 12) hour += 12;
     if (meridiem === 'am' && hour === 12) hour = 0;

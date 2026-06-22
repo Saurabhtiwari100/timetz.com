@@ -28,7 +28,7 @@ export const CITIES: City[] = [
   { name: 'Zurich', country: 'Switzerland', timezone: 'Europe/Zurich', aliases: ['switzerland', 'swiss', 'zrh'], region: 'Europe' },
   { name: 'Stockholm', country: 'Sweden', timezone: 'Europe/Stockholm', aliases: ['sweden', 'arn'], region: 'Europe' },
   { name: 'Moscow', country: 'Russia', timezone: 'Europe/Moscow', aliases: ['russia', 'msk', 'svo'], region: 'Europe' },
-  { name: 'Istanbul', country: 'Turkey', timezone: 'Europe/Istanbul', aliases: ['turkey', 'ist', 'tur', 'try'], region: 'Europe' },
+  { name: 'Istanbul', country: 'Turkey', timezone: 'Europe/Istanbul', aliases: ['turkey', 'istanbul', 'tur', 'try'], region: 'Europe' },
   { name: 'Athens', country: 'Greece', timezone: 'Europe/Athens', aliases: ['greece', 'eet', 'ath'], region: 'Europe' },
   { name: 'Lisbon', country: 'Portugal', timezone: 'Europe/Lisbon', aliases: ['portugal', 'wet', 'west', 'lis'], region: 'Europe' },
   // Middle East & Africa

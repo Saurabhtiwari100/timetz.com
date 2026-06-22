@@ -61,19 +61,21 @@ function CityRow({ result, use24h, onRemove, isPinned }: {
 
   return (
     <div className="row-card" data-status={result.status} data-pinned={isPinned ? '' : undefined} style={{ '--status-color': meta.color } as React.CSSProperties}>
+      {/* Top: city info + remove */}
       <div className="row-left">
-        <div className="row-city-name">
-          {result.cityName}
-          {isPinned && <span className="row-source-dot" title="Source" />}
+        <div>
+          <div className="row-city-name">
+            {isPinned && <span className="row-source-dot" title="Source" />}
+            {result.cityName}
+          </div>
+          <div className="row-country">{result.country} · {result.timezone.replace('_', ' ')}</div>
         </div>
-        <div className="row-country">{result.country} · {result.timezone.replace('_', ' ')}</div>
+        {!isPinned && (
+          <button className="row-remove" onClick={onRemove} aria-label={`Remove ${result.cityName}`}>×</button>
+        )}
       </div>
 
-      <div className="row-center">
-        <span className="row-status-dot" style={{ background: meta.color }} title={meta.label} />
-        <span className="row-status-label">{meta.emoji} {meta.label}</span>
-      </div>
-
+      {/* Big time */}
       <div className="row-right">
         <div className="row-time-wrap">
           <span className="row-time">{time}</span>
@@ -83,9 +85,11 @@ function CityRow({ result, use24h, onRemove, isPinned }: {
         <div className="row-offset">{result.offsetStr}</div>
       </div>
 
-      {!isPinned && (
-        <button className="row-remove" onClick={onRemove} aria-label={`Remove ${result.cityName}`}>×</button>
-      )}
+      {/* Status badge at bottom */}
+      <div className="row-center">
+        <span className="row-status-dot" style={{ background: meta.color }} title={meta.label} />
+        <span className="row-status-label">{meta.emoji} {meta.label}</span>
+      </div>
     </div>
   );
 }
@@ -146,13 +150,15 @@ export default function TimeConverter() {
     if (parsed.sourceCity) {
       setSourceCity(parsed.sourceCity);
       setSourceDt(parsed.time ?? DateTime.now().setZone(parsed.sourceCity.timezone));
+      setLiveMode(parsed.time == null);
+      // When targets are explicitly named, replace the list; otherwise keep existing
+      if (parsed.targetCities.length > 0) {
+        setTargetCities(parsed.targetCities);
+      }
+    } else if (parsed.time) {
+      // Time-only query: just update the time, keep cities
+      setSourceDt(parsed.time);
       setLiveMode(false);
-    }
-    if (parsed.targetCities.length > 0) {
-      setTargetCities(prev => {
-        const existing = new Set(prev.map(c => c.timezone));
-        return [...prev, ...parsed.targetCities.filter(c => !existing.has(c.timezone))];
-      });
     }
     setNlpInput(''); setNlpHint('');
   };

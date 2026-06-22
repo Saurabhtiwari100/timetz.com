@@ -2,8 +2,9 @@
 @import "@fontsource-variable/geist";
 @import "@fontsource-variable/geist-mono";
 
-/* ── Design tokens ── */
-:root {
+/* ── Design tokens — dark (default) ── */
+:root,
+[data-theme="dark"] {
   --bg:         #0a0a0a;
   --surface:    #111111;
   --surface-2:  #181818;
@@ -17,6 +18,23 @@
   --cyan-dim:   rgba(80,227,194,0.12);
   --red:        #ff4d4d;
   --yellow:     #fbbf24;
+}
+
+/* ── Light theme ── */
+[data-theme="light"] {
+  --bg:         #f8f8f8;
+  --surface:    #ffffff;
+  --surface-2:  #f0f0f0;
+  --surface-3:  #e8e8e8;
+  --border:     #e0e0e0;
+  --border-2:   #d0d0d0;
+  --ink:        #0a0a0a;
+  --body:       #555555;
+  --mute:       #aaaaaa;
+  --cyan:       #0ba37f;
+  --cyan-dim:   rgba(11,163,127,0.10);
+  --red:        #dc2626;
+  --yellow:     #d97706;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -82,6 +100,33 @@ html, body {
   color: var(--mute);
   font-family: 'Geist Mono Variable', ui-monospace, monospace;
 }
+
+.theme-toggle {
+  margin-left: auto;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-3);
+  border: 1px solid var(--border-2);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.theme-toggle:hover { border-color: var(--cyan); background: var(--surface-2); }
+
+/* Show correct icon per theme */
+[data-theme="light"] .theme-icon-dark  { display: none; }
+[data-theme="light"] .theme-icon-light { display: inline; }
+[data-theme="dark"]  .theme-icon-light { display: none; }
+[data-theme="dark"]  .theme-icon-dark  { display: inline; }
+/* Fallback before JS runs */
+:root:not([data-theme]) .theme-icon-light { display: none; }
 
 /* ── Converter root ── */
 .tc {
@@ -347,55 +392,60 @@ html, body {
   background: var(--cyan-dim);
 }
 
-/* ── Row list ── */
+/* ── Card grid ── */
 .tc-rows {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+  padding: 16px;
+}
+
+.tc-divider { display: none; }
+
+/* ── Individual city card ── */
+.row-card {
   display: flex;
   flex-direction: column;
-}
-
-.tc-divider {
-  height: 1px;
-  background: var(--border);
-  margin: 0;
-}
-
-/* ── Individual city row ── */
-.row-card {
-  display: grid;
-  grid-template-columns: 1fr auto 180px 28px;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg);
-  transition: background 0.12s;
+  gap: 10px;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
   position: relative;
+  overflow: hidden;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 
+/* status colour bar along the top */
 .row-card::before {
   content: '';
   position: absolute;
-  left: 0;
   top: 0;
-  bottom: 0;
-  width: 3px;
+  left: 0;
+  right: 0;
+  height: 3px;
   background: var(--status-color, transparent);
-  opacity: 0;
-  transition: opacity 0.15s;
-  border-radius: 0 2px 2px 0;
+  border-radius: 12px 12px 0 0;
 }
 
-.row-card:hover { background: var(--surface); }
-.row-card:hover::before { opacity: 0.7; }
+.row-card:hover {
+  border-color: var(--border-2);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+}
 
-/* Pinned (source) row */
+/* Pinned (source) card */
 .row-card[data-pinned] {
-  background: var(--surface);
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 1px var(--cyan-dim);
 }
-.row-card[data-pinned]::before { opacity: 1; }
 
-/* Left */
-.row-left { min-width: 0; }
+/* Top row: city name + remove btn */
+.row-left {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-width: 0;
+}
 
 .row-city-name {
   font-size: 15px;
@@ -405,15 +455,15 @@ html, body {
   display: flex;
   align-items: center;
   gap: 6px;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .row-source-dot {
   display: inline-block;
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 9999px;
   background: var(--cyan);
   flex-shrink: 0;
@@ -422,18 +472,65 @@ html, body {
 .row-country {
   font-size: 12px;
   color: var(--body);
+  margin-top: 3px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-top: 2px;
 }
 
-/* Center */
+/* Big time display */
+.row-right {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.row-time-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+}
+
+.row-time {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -1.5px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.row-day-badge {
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'Geist Mono Variable', ui-monospace, monospace;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(251,191,36,0.15);
+  color: var(--yellow);
+  align-self: center;
+}
+
+.row-date {
+  font-size: 13px;
+  color: var(--body);
+  font-variant-numeric: tabular-nums;
+}
+
+.row-offset {
+  font-size: 11px;
+  font-family: 'Geist Mono Variable', ui-monospace, monospace;
+  color: var(--mute);
+}
+
+/* Status badge at bottom */
 .row-center {
   display: flex;
   align-items: center;
-  gap: 6px;
-  justify-content: center;
+  gap: 5px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+  margin-top: auto;
 }
 
 .row-status-dot {
@@ -444,70 +541,26 @@ html, body {
 }
 
 .row-status-label {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--body);
   white-space: nowrap;
 }
 
-/* Right */
-.row-right {
-  text-align: right;
-}
-
-.row-time-wrap {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-  justify-content: flex-end;
-}
-
-.row-time {
-  font-size: 24px;
-  font-weight: 600;
-  letter-spacing: -1px;
-  color: var(--ink);
-  font-variant-numeric: tabular-nums;
-  line-height: 1;
-}
-
-.row-day-badge {
-  font-size: 10px;
-  font-weight: 600;
-  font-family: 'Geist Mono Variable', ui-monospace, monospace;
-  padding: 1px 5px;
-  border-radius: 3px;
-  background: rgba(251,191,36,0.15);
-  color: var(--yellow);
-}
-
-.row-date {
-  font-size: 12px;
-  color: var(--body);
-  margin-top: 2px;
-  font-variant-numeric: tabular-nums;
-}
-
-.row-offset {
-  font-size: 11px;
-  font-family: 'Geist Mono Variable', ui-monospace, monospace;
-  color: var(--mute);
-  margin-top: 1px;
-}
-
-/* Remove btn */
+/* Remove btn — top-right of card */
 .row-remove {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1;
   color: var(--mute);
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
+  border-radius: 5px;
+  flex-shrink: 0;
   transition: color 0.15s, background 0.15s;
 }
 
@@ -515,8 +568,7 @@ html, body {
 
 /* ── Add city row ── */
 .tc-add-row {
-  padding: 12px 16px;
-  border-top: 1px solid var(--border);
+  padding: 4px 16px 16px;
   background: var(--bg);
 }
 
@@ -594,24 +646,17 @@ html, body {
   .app-tagline { display: none; }
 
   .tc-bar { gap: 6px; padding: 8px 12px; }
-
   .tc-time-row { flex-wrap: nowrap; overflow-x: auto; }
   .tc-nlp { min-width: 0; font-size: 13px; }
   .tc-city-search { width: 120px; }
 
-  .row-card {
-    grid-template-columns: 1fr auto;
-    grid-template-rows: auto auto;
-    gap: 4px 8px;
-    padding: 12px 12px;
+  .tc-rows {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 8px;
+    padding: 10px;
   }
 
-  .row-left { grid-column: 1; grid-row: 1; }
-  .row-center { grid-column: 1; grid-row: 2; justify-content: flex-start; }
-  .row-right { grid-column: 2; grid-row: 1 / 3; }
-  .row-remove { display: none; }
-
-  .row-time { font-size: 22px; }
+  .row-time { font-size: 26px; }
 
   .tc-controls { gap: 4px; }
   .tc-pill-btn { padding: 0 8px; }
@@ -619,7 +664,7 @@ html, body {
   .tc-presets { padding: 8px 12px; gap: 4px; }
   .tc-preset { font-size: 11px; height: 26px; padding: 0 10px; }
 
-  .tc-add-row { padding: 10px 12px; }
+  .tc-add-row { padding: 4px 10px 10px; }
   .tc-add-row .cs-wrap { max-width: 100%; }
 }
 
