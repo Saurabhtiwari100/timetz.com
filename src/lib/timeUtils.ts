@@ -6,35 +6,31 @@ export interface ConvertedTime {
   timezone: string;
   dt: DateTime;
   timeStr: string;
+  time24: string;
   dateStr: string;
   dayName: string;
+  dayShort: string;
   offsetStr: string;
   offsetMinutes: number;
   status: TimeStatus;
-  isNextDay: boolean;
-  isPrevDay: boolean;
   dayDiff: number;
 }
 
-export type TimeStatus =
-  | 'working'
-  | 'early-morning'
-  | 'evening'
-  | 'sleeping';
+export type TimeStatus = 'working' | 'early-morning' | 'evening' | 'sleeping';
 
 export function getTimeStatus(dt: DateTime): TimeStatus {
-  const hour = dt.hour;
-  if (hour >= 9 && hour < 18) return 'working';
-  if (hour >= 6 && hour < 9) return 'early-morning';
-  if (hour >= 18 && hour < 23) return 'evening';
+  const h = dt.hour;
+  if (h >= 9 && h < 18) return 'working';
+  if (h >= 6 && h < 9) return 'early-morning';
+  if (h >= 18 && h < 23) return 'evening';
   return 'sleeping';
 }
 
-export const STATUS_META: Record<TimeStatus, { emoji: string; label: string; color: string }> = {
-  working: { emoji: '🟢', label: 'Working hours', color: '#22c55e' },
-  'early-morning': { emoji: '🌅', label: 'Early morning', color: '#f59e0b' },
-  evening: { emoji: '🌆', label: 'Evening', color: '#8b5cf6' },
-  sleeping: { emoji: '🌙', label: 'Sleeping', color: '#64748b' },
+export const STATUS_META: Record<TimeStatus, { emoji: string; label: string; color: string; bg: string }> = {
+  working:        { emoji: '🟢', label: 'Working',       color: '#4ade80', bg: 'rgba(74,222,128,0.10)' },
+  'early-morning':{ emoji: '🌅', label: 'Early morning', color: '#fb923c', bg: 'rgba(251,146,60,0.10)' },
+  evening:        { emoji: '🌆', label: 'Evening',       color: '#a78bfa', bg: 'rgba(167,139,250,0.10)' },
+  sleeping:       { emoji: '🌙', label: 'Sleeping',      color: '#64748b', bg: 'rgba(100,116,139,0.10)' },
 };
 
 export function convertTime(
@@ -49,16 +45,12 @@ export function convertTime(
   const convertedDay = converted.startOf('day');
   const dayDiff = Math.round(convertedDay.diff(sourceDay, 'days').days);
 
-  const offsetMins = converted.offset;
-  const sourceOffsetMins = sourceDt.offset;
-  const diffMins = offsetMins - sourceOffsetMins;
+  const diffMins = converted.offset - sourceDt.offset;
   const absDiff = Math.abs(diffMins);
   const hours = Math.floor(absDiff / 60);
   const mins = absDiff % 60;
   const sign = diffMins >= 0 ? '+' : '-';
-  const offsetStr = diffMins === 0
-    ? 'same time'
-    : `${sign}${hours}h${mins > 0 ? ` ${mins}m` : ''}`;
+  const offsetStr = diffMins === 0 ? '±0h' : `${sign}${hours}h${mins > 0 ? `${mins}m` : ''}`;
 
   return {
     cityName: targetCityName,
@@ -66,23 +58,24 @@ export function convertTime(
     timezone: targetTimezone,
     dt: converted,
     timeStr: converted.toFormat('h:mm a'),
-    dateStr: converted.toFormat('MMM d, yyyy'),
+    time24: converted.toFormat('HH:mm'),
+    dateStr: converted.toFormat('MMM d'),
     dayName: converted.toFormat('cccc'),
+    dayShort: converted.toFormat('EEE'),
     offsetStr,
     offsetMinutes: diffMins,
     status: getTimeStatus(converted),
-    isNextDay: dayDiff > 0,
-    isPrevDay: dayDiff < 0,
     dayDiff,
   };
 }
 
-export function formatTime24(dt: DateTime): string {
-  return dt.toFormat('HH:mm');
-}
-
-export function nowInZone(timezone: string): DateTime {
-  return DateTime.now().setZone(timezone);
+export function parseEpoch(input: string): DateTime | null {
+  const n = Number(input.trim());
+  if (isNaN(n)) return null;
+  // Handle seconds or milliseconds
+  const ms = n > 1e12 ? n : n * 1000;
+  const dt = DateTime.fromMillis(ms, { zone: 'UTC' });
+  return dt.isValid ? dt : null;
 }
 
 export function shareUrl(cities: string[], isoTime: string): string {

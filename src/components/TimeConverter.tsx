@@ -1,98 +1,42 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { DateTime } from 'luxon';
-import { CITIES, QUICK_PRESETS, searchCities, type City } from '../lib/cities';
-import { convertTime, STATUS_META, nowInZone, shareUrl, type ConvertedTime } from '../lib/timeUtils';
+import { CITIES, WORLD_CLOCK_DEFAULTS, QUICK_PRESETS, searchCities, type City } from '../lib/cities';
+import { convertTime, STATUS_META, parseEpoch, shareUrl, type ConvertedTime } from '../lib/timeUtils';
 import { parseQuery } from '../lib/nlp';
 
-const DEFAULT_CITIES = [
-  CITIES.find(c => c.name === 'Mumbai')!,
-  CITIES.find(c => c.name === 'London')!,
-  CITIES.find(c => c.name === 'New York')!,
-];
-
-function CityCard({ result, sourceDt, onRemove }: {
-  result: ConvertedTime;
-  sourceDt: DateTime;
-  onRemove: () => void;
-}) {
-  const meta = STATUS_META[result.status];
-  const dayLabel = result.dayDiff === 0 ? '' : result.dayDiff > 0 ? `+${result.dayDiff}d` : `${result.dayDiff}d`;
-
-  return (
-    <div className="city-card" data-status={result.status}>
-      <div className="city-card-header">
-        <div className="city-info">
-          <span className="city-name">{result.cityName}</span>
-          <span className="city-country">{result.country}</span>
-        </div>
-        <button className="remove-btn" onClick={onRemove} aria-label={`Remove ${result.cityName}`}>×</button>
-      </div>
-
-      <div className="city-time-row">
-        <span className="city-time">{result.timeStr}</span>
-        {dayLabel && <span className="day-badge">{dayLabel}</span>}
-      </div>
-
-      <div className="city-meta-row">
-        <span className="city-date">{result.dayName}, {result.dateStr}</span>
-      </div>
-
-      <div className="city-footer">
-        <span className="status-pill" style={{ color: meta.color }}>
-          {meta.emoji} {meta.label}
-        </span>
-        <span className="offset-label">{result.offsetStr}</span>
-      </div>
-    </div>
-  );
-}
-
-function CitySearch({ onSelect, placeholder }: {
+// ── CitySearch ──────────────────────────────────────────────────────────────
+function CitySearch({ onSelect, placeholder, className = '' }: {
   onSelect: (city: City) => void;
   placeholder: string;
+  className?: string;
 }) {
-  const [query, setQuery] = useState('');
+  const [q, setQ] = useState('');
   const [results, setResults] = useState<City[]>([]);
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
+  useEffect(() => { setResults(searchCities(q)); }, [q]);
   useEffect(() => {
-    setResults(searchCities(query));
-  }, [query]);
-
-  useEffect(() => {
-    function handler(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-    }
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    const h = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false); };
+    document.addEventListener('mousedown', h);
+    return () => document.removeEventListener('mousedown', h);
   }, []);
 
   return (
-    <div className="city-search" ref={ref}>
-      <input
-        className="city-search-input"
-        value={query}
-        onChange={e => { setQuery(e.target.value); setOpen(true); }}
+    <div className={`cs-wrap ${className}`} ref={ref}>
+      <input className="cs-input" value={q}
+        onChange={e => { setQ(e.target.value); setOpen(true); }}
         onFocus={() => setOpen(true)}
-        placeholder={placeholder}
-        autoComplete="off"
-      />
+        placeholder={placeholder} autoComplete="off" />
       {open && results.length > 0 && (
-        <ul className="city-dropdown">
+        <ul className="cs-dropdown">
           {results.map(city => (
             <li key={city.timezone + city.name}>
-              <button
-                className="city-dropdown-item"
-                onMouseDown={e => {
-                  e.preventDefault();
-                  onSelect(city);
-                  setQuery('');
-                  setOpen(false);
-                }}
-              >
-                <span className="dropdown-city">{city.name}</span>
-                <span className="dropdown-country">{city.country}</span>
+              <button className="cs-item" onMouseDown={e => {
+                e.preventDefault(); onSelect(city); setQ(''); setOpen(false);
+              }}>
+                <span className="cs-city">{city.name}</span>
+                <span className="cs-country">{city.country}</span>
               </button>
             </li>
           ))}
@@ -102,60 +46,99 @@ function CitySearch({ onSelect, placeholder }: {
   );
 }
 
+// ── Row card for each city ───────────────────────────────────────────────────
+function CityRow({ result, use24h, onRemove, isPinned }: {
+  result: ConvertedTime;
+  use24h: boolean;
+  onRemove: () => void;
+  isPinned?: boolean;
+}) {
+  const meta = STATUS_META[result.status];
+  const time = use24h ? result.time24 : result.timeStr;
+  const dayLabel = result.dayDiff !== 0
+    ? (result.dayDiff > 0 ? `+${result.dayDiff}d` : `${result.dayDiff}d`)
+    : null;
+
+  return (
+    <div className="row-card" data-status={result.status} data-pinned={isPinned ? '' : undefined} style={{ '--status-color': meta.color } as React.CSSProperties}>
+      <div className="row-left">
+        <div className="row-city-name">
+          {result.cityName}
+          {isPinned && <span className="row-source-dot" title="Source" />}
+        </div>
+        <div className="row-country">{result.country} · {result.timezone.replace('_', ' ')}</div>
+      </div>
+
+      <div className="row-center">
+        <span className="row-status-dot" style={{ background: meta.color }} title={meta.label} />
+        <span className="row-status-label">{meta.emoji} {meta.label}</span>
+      </div>
+
+      <div className="row-right">
+        <div className="row-time-wrap">
+          <span className="row-time">{time}</span>
+          {dayLabel && <span className="row-day-badge">{dayLabel}</span>}
+        </div>
+        <div className="row-date">{result.dayShort}, {result.dateStr}</div>
+        <div className="row-offset">{result.offsetStr}</div>
+      </div>
+
+      {!isPinned && (
+        <button className="row-remove" onClick={onRemove} aria-label={`Remove ${result.cityName}`}>×</button>
+      )}
+    </div>
+  );
+}
+
+// ── Main component ───────────────────────────────────────────────────────────
 export default function TimeConverter() {
-  const [sourceDt, setSourceDt] = useState<DateTime>(() => DateTime.now().setZone('Asia/Kolkata'));
-  const [sourceCity, setSourceCity] = useState<City>(DEFAULT_CITIES[0]);
-  const [targetCities, setTargetCities] = useState<City[]>(DEFAULT_CITIES.slice(1));
+  const [sourceDt, setSourceDt] = useState<DateTime>(() => DateTime.now());
+  const [sourceCity, setSourceCity] = useState<City>(CITIES.find(c => c.name === 'New York')!);
+  const [targetCities, setTargetCities] = useState<City[]>(() =>
+    WORLD_CLOCK_DEFAULTS.filter(n => n !== 'New York')
+      .map(n => CITIES.find(c => c.name === n)!).filter(Boolean)
+  );
   const [nlpInput, setNlpInput] = useState('');
   const [nlpHint, setNlpHint] = useState('');
+  const [epochInput, setEpochInput] = useState('');
+  const [epochError, setEpochError] = useState('');
   const [use24h, setUse24h] = useState(false);
-  const [copied, setCopied] = useState(false);
   const [liveMode, setLiveMode] = useState(true);
-  const nlpRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [copied, setCopied] = useState(false);
+  const [inputTab, setInputTab] = useState<'time' | 'epoch'>('time');
+  const nlpTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Live clock tick
+  // Live tick
   useEffect(() => {
     if (!liveMode) return;
-    const id = setInterval(() => {
-      setSourceDt(DateTime.now().setZone(sourceCity.timezone));
-    }, 1000);
+    const id = setInterval(() => setSourceDt(DateTime.now().setZone(sourceCity.timezone)), 1000);
     return () => clearInterval(id);
   }, [liveMode, sourceCity.timezone]);
 
-  // URL params on load
+  // URL hydration
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const citiesParam = params.get('cities');
-    const tParam = params.get('t');
-    if (citiesParam) {
-      const names = citiesParam.split(',');
-      const found = names.map(n => CITIES.find(c => c.name === n)).filter(Boolean) as City[];
-      if (found.length >= 2) {
-        setSourceCity(found[0]);
-        setTargetCities(found.slice(1));
-      }
+    const p = new URLSearchParams(window.location.search);
+    const cs = p.get('cities'); const t = p.get('t');
+    if (cs) {
+      const found = cs.split(',').map(n => CITIES.find(c => c.name === n)).filter(Boolean) as City[];
+      if (found.length >= 1) { setSourceCity(found[0]); setTargetCities(found.slice(1)); }
     }
-    if (tParam) {
-      const dt = DateTime.fromISO(tParam);
-      if (dt.isValid) {
-        setSourceDt(dt);
-        setLiveMode(false);
-      }
+    if (t) {
+      const dt = DateTime.fromISO(t);
+      if (dt.isValid) { setSourceDt(dt); setLiveMode(false); }
     }
   }, []);
 
-  // NLP debounce
+  // NLP hint
   useEffect(() => {
     if (!nlpInput.trim()) { setNlpHint(''); return; }
-    if (nlpRef.current) clearTimeout(nlpRef.current);
-    nlpRef.current = setTimeout(() => {
+    if (nlpTimer.current) clearTimeout(nlpTimer.current);
+    nlpTimer.current = setTimeout(() => {
       const parsed = parseQuery(nlpInput);
       if (parsed.time && parsed.sourceCity) {
-        setNlpHint(`→ ${parsed.time.toFormat('h:mm a')} in ${parsed.sourceCity.name}${parsed.targetCities.length ? ' to ' + parsed.targetCities.map(c => c.name).join(', ') : ''}`);
-      } else {
-        setNlpHint('');
-      }
-    }, 300);
+        setNlpHint(`→ ${parsed.time.toFormat('h:mm a')} in ${parsed.sourceCity.name}${parsed.targetCities.length ? ' → ' + parsed.targetCities.map(c => c.name).join(', ') : ''}`);
+      } else { setNlpHint(''); }
+    }, 250);
   }, [nlpInput]);
 
   const applyNlp = () => {
@@ -168,17 +151,18 @@ export default function TimeConverter() {
     if (parsed.targetCities.length > 0) {
       setTargetCities(prev => {
         const existing = new Set(prev.map(c => c.timezone));
-        const newOnes = parsed.targetCities.filter(c => !existing.has(c.timezone));
-        return [...prev, ...newOnes];
+        return [...prev, ...parsed.targetCities.filter(c => !existing.has(c.timezone))];
       });
     }
-    setNlpInput('');
-    setNlpHint('');
+    setNlpInput(''); setNlpHint('');
   };
 
-  const handleSourceCityChange = (city: City) => {
-    setSourceCity(city);
-    setSourceDt(prev => prev.setZone(city.timezone));
+  const applyEpoch = () => {
+    const dt = parseEpoch(epochInput);
+    if (!dt) { setEpochError('Invalid epoch — enter seconds or milliseconds'); return; }
+    setEpochError('');
+    setSourceDt(dt.setZone(sourceCity.timezone));
+    setLiveMode(false);
   };
 
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -189,183 +173,121 @@ export default function TimeConverter() {
   };
 
   const addTarget = (city: City) => {
-    if (!targetCities.find(c => c.timezone === city.timezone && c.name === city.name)) {
+    if (city.name === sourceCity.name) return;
+    if (!targetCities.find(c => c.timezone === city.timezone && c.name === city.name))
       setTargetCities(prev => [...prev, city]);
-    }
   };
 
-  const removeTarget = (idx: number) => {
-    setTargetCities(prev => prev.filter((_, i) => i !== idx));
-  };
+  const removeTarget = (idx: number) => setTargetCities(prev => prev.filter((_, i) => i !== idx));
 
   const applyPreset = (cities: string[]) => {
     const found = cities.map(n => CITIES.find(c => c.name === n)).filter(Boolean) as City[];
-    if (found.length < 2) return;
+    if (!found.length) return;
     setSourceCity(found[0]);
     setSourceDt(DateTime.now().setZone(found[0].timezone));
     setTargetCities(found.slice(1));
     setLiveMode(true);
   };
 
-  const copyText = () => {
-    const lines = [
-      `${sourceCity.name}: ${sourceDt.toFormat('h:mm a')} — ${sourceDt.toFormat('cccc, MMM d')}`,
-      ...results.map(r => `${r.cityName}: ${r.timeStr} — ${r.dayName}, ${r.dateStr}`),
-    ].join('\n');
-    navigator.clipboard.writeText(lines).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+  const copyTimes = () => {
+    const src = `${sourceCity.name}: ${use24h ? sourceDt.toFormat('HH:mm') : sourceDt.toFormat('h:mm a')} — ${sourceDt.toFormat('EEE, MMM d')}`;
+    const rows = results.map(r => `${r.cityName}: ${use24h ? r.time24 : r.timeStr} — ${r.dayShort}, ${r.dateStr}`);
+    navigator.clipboard.writeText([src, ...rows].join('\n')).then(() => {
+      setCopied(true); setTimeout(() => setCopied(false), 2000);
     });
-  };
-
-  const getShareUrl = () => {
-    const all = [sourceCity, ...targetCities];
-    return shareUrl(all.map(c => c.name), sourceDt.toISO()!);
   };
 
   const copyShare = () => {
-    navigator.clipboard.writeText(getShareUrl()).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+    const url = shareUrl([sourceCity, ...targetCities].map(c => c.name), sourceDt.toISO()!);
+    navigator.clipboard.writeText(url).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
   };
 
   const results: ConvertedTime[] = targetCities.map(city =>
     convertTime(sourceCity.timezone, city.timezone, city.name, city.country, sourceDt)
   );
 
-  const sourceResult: ConvertedTime = {
-    cityName: sourceCity.name,
-    country: sourceCity.country,
-    timezone: sourceCity.timezone,
-    dt: sourceDt,
-    timeStr: sourceDt.toFormat(use24h ? 'HH:mm' : 'h:mm a'),
-    dateStr: sourceDt.toFormat('MMM d, yyyy'),
-    dayName: sourceDt.toFormat('cccc'),
-    offsetStr: 'source',
-    offsetMinutes: 0,
-    status: (() => {
-      const h = sourceDt.hour;
-      if (h >= 9 && h < 18) return 'working';
-      if (h >= 6 && h < 9) return 'early-morning';
-      if (h >= 18 && h < 23) return 'evening';
-      return 'sleeping';
-    })(),
-    isNextDay: false,
-    isPrevDay: false,
-    dayDiff: 0,
-  };
+  const sourceResult = convertTime(sourceCity.timezone, sourceCity.timezone, sourceCity.name, sourceCity.country, sourceDt);
 
   return (
-    <div className="converter">
-      {/* NLP Input */}
-      <div className="nlp-section">
-        <div className="nlp-input-wrap">
-          <input
-            className="nlp-input"
-            value={nlpInput}
-            onChange={e => setNlpInput(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && applyNlp()}
-            placeholder='Try "4pm Mumbai to London" or "Tomorrow 9am New York to India"'
-            spellCheck={false}
-          />
-          {nlpInput && (
-            <button className="nlp-go" onClick={applyNlp}>Convert</button>
-          )}
+    <div className="tc">
+
+      {/* ── Sticky control bar ── */}
+      <div className="tc-bar">
+
+        {/* Tab: time vs epoch */}
+        <div className="tc-tabs">
+          <button className={`tc-tab ${inputTab === 'time' ? 'tc-tab-active' : ''}`} onClick={() => setInputTab('time')}>Time</button>
+          <button className={`tc-tab ${inputTab === 'epoch' ? 'tc-tab-active' : ''}`} onClick={() => setInputTab('epoch')}>Epoch</button>
         </div>
-        {nlpHint && <p className="nlp-hint">{nlpHint}</p>}
+
+        {inputTab === 'time' ? (
+          <div className="tc-time-row">
+            {/* NLP input */}
+            <input className="tc-nlp" value={nlpInput}
+              onChange={e => setNlpInput(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && applyNlp()}
+              placeholder='e.g. "4pm Mumbai to London" or "tomorrow 9am NY"'
+              spellCheck={false} />
+            {/* Manual time + source city */}
+            <input type="time" className="tc-time-input" value={sourceDt.toFormat('HH:mm')} onChange={handleTimeChange} />
+            <CitySearch onSelect={c => { setSourceCity(c); setSourceDt(dt => dt.setZone(c.timezone)); }} placeholder={sourceCity.name} className="tc-city-search" />
+            {nlpInput
+              ? <button className="tc-btn-cyan" onClick={applyNlp}>Go</button>
+              : <button className={`tc-btn-live ${liveMode ? 'active' : ''}`} onClick={() => { setLiveMode(true); setSourceDt(DateTime.now().setZone(sourceCity.timezone)); }}>● Live</button>
+            }
+          </div>
+        ) : (
+          <div className="tc-epoch-row">
+            <input className="tc-epoch-input" value={epochInput}
+              onChange={e => { setEpochInput(e.target.value); setEpochError(''); }}
+              onKeyDown={e => e.key === 'Enter' && applyEpoch()}
+              placeholder="Unix timestamp — seconds (1700000000) or ms (1700000000000)" />
+            <button className="tc-btn-cyan" onClick={applyEpoch}>Convert</button>
+          </div>
+        )}
+
+        {/* Right controls */}
+        <div className="tc-controls">
+          <button className="tc-pill-btn" onClick={() => setUse24h(v => !v)}>{use24h ? '12h' : '24h'}</button>
+          <button className="tc-pill-btn" onClick={copyTimes}>{copied ? '✓' : '⎘'}</button>
+          <button className="tc-pill-btn" onClick={copyShare}>🔗</button>
+        </div>
       </div>
 
-      {/* Quick Presets */}
-      <div className="presets-row">
-        {QUICK_PRESETS.map(preset => (
-          <button
-            key={preset.label}
-            className="preset-btn"
-            onClick={() => applyPreset(preset.cities)}
-          >
-            {preset.label}
-          </button>
+      {/* NLP hint */}
+      {nlpHint && <div className="tc-hint">{nlpHint}</div>}
+      {epochError && <div className="tc-error">{epochError}</div>}
+
+      {/* Epoch info strip */}
+      {!liveMode && (
+        <div className="tc-epoch-strip">
+          <span className="tc-epoch-val">Unix: <b>{Math.floor(sourceDt.toMillis() / 1000)}</b></span>
+          <span className="tc-epoch-val">ms: <b>{sourceDt.toMillis()}</b></span>
+          <span className="tc-epoch-val">ISO: <b>{sourceDt.toISO()}</b></span>
+        </div>
+      )}
+
+      {/* ── Quick presets ── */}
+      <div className="tc-presets">
+        {QUICK_PRESETS.map(p => (
+          <button key={p.label} className="tc-preset" onClick={() => applyPreset(p.cities)}>{p.label}</button>
         ))}
       </div>
 
-      {/* Source Controls */}
-      <div className="source-section">
-        <div className="source-label">Source timezone</div>
-        <div className="source-controls">
-          <CitySearch onSelect={handleSourceCityChange} placeholder={sourceCity.name} />
-          <input
-            type="time"
-            className="time-input"
-            value={sourceDt.toFormat('HH:mm')}
-            onChange={handleTimeChange}
-          />
-          <button
-            className={`live-btn ${liveMode ? 'live-btn-active' : ''}`}
-            onClick={() => {
-              setLiveMode(true);
-              setSourceDt(DateTime.now().setZone(sourceCity.timezone));
-            }}
-          >
-            ● Live
-          </button>
-          <button className="toggle-btn" onClick={() => setUse24h(v => !v)}>
-            {use24h ? '12h' : '24h'}
-          </button>
-        </div>
-      </div>
-
-      {/* Results Grid */}
-      <div className="results-grid">
-        {/* Source card */}
-        <div className="city-card city-card-source" data-status={sourceResult.status}>
-          <div className="city-card-header">
-            <div className="city-info">
-              <span className="city-name">{sourceResult.cityName}</span>
-              <span className="city-country">{sourceResult.country} · source</span>
-            </div>
-          </div>
-          <div className="city-time-row">
-            <span className="city-time">{use24h ? sourceDt.toFormat('HH:mm') : sourceResult.timeStr}</span>
-          </div>
-          <div className="city-meta-row">
-            <span className="city-date">{sourceResult.dayName}, {sourceResult.dateStr}</span>
-          </div>
-          <div className="city-footer">
-            <span className="status-pill" style={{ color: STATUS_META[sourceResult.status].color }}>
-              {STATUS_META[sourceResult.status].emoji} {STATUS_META[sourceResult.status].label}
-            </span>
-          </div>
-        </div>
-
-        {/* Target cards */}
-        {results.map((result, idx) => (
-          <CityCard
-            key={result.cityName + result.timezone + idx}
-            result={{
-              ...result,
-              timeStr: use24h ? result.dt.toFormat('HH:mm') : result.timeStr,
-            }}
-            sourceDt={sourceDt}
-            onRemove={() => removeTarget(idx)}
-          />
+      {/* ── World clock rows ── */}
+      <div className="tc-rows">
+        <CityRow result={sourceResult} use24h={use24h} onRemove={() => {}} isPinned />
+        <div className="tc-divider" />
+        {results.map((r, idx) => (
+          <CityRow key={r.cityName + r.timezone + idx} result={r} use24h={use24h} onRemove={() => removeTarget(idx)} />
         ))}
       </div>
 
-      {/* Add city */}
-      <div className="add-city-row">
+      {/* ── Add city ── */}
+      <div className="tc-add-row">
         <CitySearch onSelect={addTarget} placeholder="+ Add city, country, or timezone" />
       </div>
 
-      {/* Actions */}
-      <div className="actions-row">
-        <button className="action-btn" onClick={copyText}>
-          {copied ? '✓ Copied' : '⎘ Copy times'}
-        </button>
-        <button className="action-btn" onClick={copyShare}>
-          🔗 Share link
-        </button>
-      </div>
     </div>
   );
 }
