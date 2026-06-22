@@ -1,24 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Nav from '../components/Nav.astro';
-import Hero from '../components/Hero.astro';
-import LogoStrip from '../components/LogoStrip.astro';
-import FeatureGrid from '../components/FeatureGrid.astro';
-import DemoBand from '../components/DemoBand.astro';
-import DeepFeatures from '../components/DeepFeatures.astro';
-import Pricing from '../components/Pricing.astro';
-import Footer from '../components/Footer.astro';
+import TimeConverter from '../components/TimeConverter';
 ---
 
-<Layout>
-  <Nav />
+<Layout title="Free World Time Converter — Convert time zones instantly" description="The fastest time zone converter. Type '4pm Mumbai to London' and get the answer instantly.">
+  <header class="app-header">
+    <div class="app-header-inner">
+      <a href="/" class="app-logo">freeworldtimeconverter.com</a>
+      <span class="app-tagline">Convert any timezone instantly</span>
+    </div>
+  </header>
+
   <main>
-    <Hero />
-    <LogoStrip />
-    <FeatureGrid />
-    <DemoBand />
-    <DeepFeatures />
-    <Pricing />
+    <TimeConverter client:load />
   </main>
-  <Footer />
 </Layout>
