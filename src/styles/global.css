@@ -69,8 +69,8 @@ html, body {
   max-width: 1600px;
   margin: 0 auto;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 12px;
 }
 
 .app-logo-link {
@@ -101,7 +101,6 @@ html, body {
 }
 
 .theme-toggle {
-  margin-left: auto;
   width: 32px;
   height: 32px;
   display: flex;

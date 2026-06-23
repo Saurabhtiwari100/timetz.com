@@ -15,7 +15,7 @@ const TIME_PATTERNS = [
   /(\d{2})(\d{2})\s*(?:hrs?|h)/i,
 ];
 
-const CONNECTORS = ['to', 'in', 'for', 'at', 'and', '→', '->', 'vs'];
+const CONNECTORS = new Set(['to', 'in', 'for', 'at', 'and', '→', '->', 'vs']);
 const DATE_KEYWORDS: Record<string, number> = {
   today: 0,
   tomorrow: 1,
@@ -71,9 +71,10 @@ export function parseQuery(input: string): ParsedQuery {
 
   for (let i = 0; i < tokens.length; i++) {
     if (usedTokens.has(i)) continue;
-    if (CONNECTORS.includes(tokens[i])) continue;
 
-    // Try 3-word, 2-word, 1-word windows
+    // Try 3-word, 2-word, 1-word windows — check city match BEFORE skipping connectors
+    // so single-word aliases like "in" (India) can still match
+    let matched = false;
     for (let len = 3; len >= 1; len--) {
       if (i + len > tokens.length) continue;
       const phrase = tokens.slice(i, i + len).join(' ');
@@ -81,9 +82,13 @@ export function parseQuery(input: string): ParsedQuery {
       if (city) {
         citiesFound.push(city);
         for (let j = i; j < i + len; j++) usedTokens.add(j);
+        matched = true;
         break;
       }
     }
+
+    // Only skip as connector if no city matched
+    if (!matched && CONNECTORS.has(tokens[i])) continue;
   }
 
   // Determine source (first city found) and targets (rest)
