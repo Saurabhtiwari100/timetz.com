@@ -641,14 +641,62 @@ html, body {
   white-space: nowrap;
 }
 
-/* ── Mobile ── */
+/* ── Laptop / large tablet (≤ 1200px) ── */
+@media (max-width: 1200px) {
+  .tc-rows {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+}
+
+/* ── Tablet (≤ 1024px) ── */
+@media (max-width: 1024px) {
+  .tc {
+    max-width: 100%;
+  }
+
+  .tc-rows {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+  }
+
+  .app-header-inner {
+    padding: 0 12px;
+  }
+}
+
+/* ── Mobile (≤ 720px) ── */
 @media (max-width: 720px) {
   .app-tagline { display: none; }
 
+  /* Bar layout: tabs + controls on line 1, input row on line 2 */
   .tc-bar { gap: 6px; padding: 8px 12px; }
-  .tc-time-row { flex-wrap: nowrap; overflow-x: auto; }
-  .tc-nlp { min-width: 0; font-size: 13px; }
-  .tc-city-search { width: 120px; }
+  .tc-tabs  { order: 1; flex-shrink: 0; }
+  .tc-controls { order: 2; margin-left: auto; gap: 4px; }
+
+  .tc-time-row {
+    order: 3;
+    width: 100%;
+    flex: none;
+    flex-wrap: wrap;
+    gap: 6px;
+    overflow: visible;
+  }
+  .tc-epoch-row { order: 3; width: 100%; flex: none; }
+
+  /* NLP input spans full width */
+  .tc-nlp {
+    order: 1;
+    flex: none;
+    width: 100%;
+    min-width: 0;
+    font-size: 13px;
+  }
+
+  /* Time picker + city search + action button share a second row */
+  .tc-time-input { order: 2; flex-shrink: 0; }
+  .tc-city-search { order: 3; flex: 1; width: auto; min-width: 0; }
+  .tc-btn-cyan    { order: 4; flex-shrink: 0; }
+  .tc-btn-live    { order: 4; flex-shrink: 0; }
 
   .tc-rows {
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -658,7 +706,6 @@ html, body {
 
   .row-time { font-size: 26px; }
 
-  .tc-controls { gap: 4px; }
   .tc-pill-btn { padding: 0 8px; }
 
   .tc-presets { padding: 8px 12px; gap: 4px; }
@@ -668,6 +715,7 @@ html, body {
   .tc-add-row .cs-wrap { max-width: 100%; }
 }
 
+/* ── Small mobile (≤ 480px) ── */
 @media (max-width: 480px) {
   .app-logo-text {
     max-width: 160px;
@@ -675,4 +723,23 @@ html, body {
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
+  .tc-bar { padding: 8px 10px; }
+
+  .tc-rows {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .row-card { padding: 12px; }
+  .row-time { font-size: 22px; letter-spacing: -1px; }
+  .row-date { font-size: 12px; }
+
+  .tc-pill-btn { padding: 0 6px; font-size: 11px; }
+
+  .tc-epoch-strip { gap: 12px; flex-direction: column; }
+
+  .tc-presets { gap: 3px; }
+  .tc-preset { font-size: 11px; height: 24px; padding: 0 8px; }
 }
