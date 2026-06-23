@@ -18,6 +18,22 @@
   --cyan-dim:   rgba(80,227,194,0.12);
   --red:        #ff4d4d;
   --yellow:     #fbbf24;
+  /* landing page tokens */
+  --color-canvas:        #0a0a0a;
+  --color-canvas-soft:   #111111;
+  --color-canvas-soft-2: #181818;
+  --color-ink:           #f0f0f0;
+  --color-body:          #888888;
+  --color-mute:          #444444;
+  --color-hairline:      #1e1e1e;
+  --color-hairline-strong: #2e2e2e;
+  --color-on-primary:    #000000;
+  --color-link:          #50e3c2;
+  --color-cyan:          #50e3c2;
+  --shadow-level-1: 0 1px 4px rgba(0,0,0,0.4);
+  --shadow-level-2: 0 2px 8px rgba(0,0,0,0.5);
+  --shadow-level-3: 0 4px 16px rgba(0,0,0,0.5);
+  --shadow-level-4: 0 8px 32px rgba(0,0,0,0.6);
 }
 
 /* ── Light theme ── */
@@ -35,6 +51,22 @@
   --cyan-dim:   rgba(11,163,127,0.10);
   --red:        #dc2626;
   --yellow:     #d97706;
+  /* landing page tokens */
+  --color-canvas:        #ffffff;
+  --color-canvas-soft:   #f8f8f8;
+  --color-canvas-soft-2: #f0f0f0;
+  --color-ink:           #0a0a0a;
+  --color-body:          #555555;
+  --color-mute:          #aaaaaa;
+  --color-hairline:      #e0e0e0;
+  --color-hairline-strong: #c0c0c0;
+  --color-on-primary:    #ffffff;
+  --color-link:          #0ba37f;
+  --color-cyan:          #0ba37f;
+  --shadow-level-1: 0 1px 4px rgba(0,0,0,0.06);
+  --shadow-level-2: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-level-3: 0 4px 16px rgba(0,0,0,0.10);
+  --shadow-level-4: 0 8px 32px rgba(0,0,0,0.12);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -51,7 +83,7 @@ html, body {
 
 /* ── Header ── */
 .app-header {
-  background: rgba(10,10,10,0.9);
+  background: var(--surface);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
@@ -389,6 +421,73 @@ html, body {
   border-color: var(--cyan);
   background: var(--cyan-dim);
 }
+
+/* ── Epoch widget ── */
+.tc-epoch-widget {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.tc-epoch-widget-label {
+  font-size: 11px;
+  font-family: 'Geist Mono Variable', ui-monospace, monospace;
+  color: var(--mute);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+}
+
+.tc-epoch-widget-vals {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.tc-epoch-widget-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface-3);
+  border: 1px solid var(--border-2);
+  border-radius: 7px;
+  padding: 4px 10px;
+}
+
+.tc-epoch-widget-key {
+  font-size: 10px;
+  font-family: 'Geist Mono Variable', ui-monospace, monospace;
+  color: var(--mute);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.tc-epoch-widget-val {
+  font-size: 12px;
+  font-family: 'Geist Mono Variable', ui-monospace, monospace;
+  color: var(--cyan);
+  font-variant-numeric: tabular-nums;
+}
+
+.tc-epoch-widget-copy {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--mute);
+  padding: 0 2px;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.tc-epoch-widget-copy:hover { color: var(--ink); }
 
 /* ── Card grid ── */
 .tc-rows {

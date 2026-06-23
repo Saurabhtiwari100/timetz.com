@@ -1,0 +1,150 @@
+---
+---
+
+<section id="contact" class="contact-section">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-eyebrow">Contact</span>
+      <h2 class="section-headline">Get in touch.</h2>
+      <p class="section-body">Have a question, suggestion, or bug report? We read every message.</p>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-card">
+        <span class="contact-icon">📧</span>
+        <h3 class="contact-card-title">Email us</h3>
+        <p class="contact-card-body">For general enquiries, feedback, or partnerships.</p>
+        <a href="mailto:hello@timetz.com" class="contact-link">hello@timetz.com</a>
+      </div>
+
+      <div class="contact-card">
+        <span class="contact-icon">🐛</span>
+        <h3 class="contact-card-title">Report a bug</h3>
+        <p class="contact-card-body">Found something broken? Let us know and we'll fix it fast.</p>
+        <a href="mailto:bugs@timetz.com" class="contact-link">bugs@timetz.com</a>
+      </div>
+
+      <div class="contact-card">
+        <span class="contact-icon">💡</span>
+        <h3 class="contact-card-title">Feature requests</h3>
+        <p class="contact-card-body">Got an idea that would make timetz better for your team?</p>
+        <a href="mailto:ideas@timetz.com" class="contact-link">ideas@timetz.com</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact-section {
+    background: var(--color-canvas-soft);
+    padding: 96px 24px;
+  }
+
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 56px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .section-eyebrow {
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--color-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .section-headline {
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 40px;
+    letter-spacing: -1.28px;
+    color: var(--color-ink);
+    margin: 0;
+  }
+
+  .section-body {
+    font-size: 18px;
+    color: var(--color-body);
+    margin: 0;
+    max-width: 480px;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .contact-card {
+    background: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    border-radius: 12px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: box-shadow 0.15s, border-color 0.15s;
+  }
+
+  .contact-card:hover {
+    border-color: var(--color-hairline-strong);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  .contact-icon {
+    font-size: 28px;
+    line-height: 1;
+  }
+
+  .contact-card-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-ink);
+    letter-spacing: -0.4px;
+    margin: 0;
+  }
+
+  .contact-card-body {
+    font-size: 14px;
+    line-height: 22px;
+    color: var(--color-body);
+    margin: 0;
+    flex: 1;
+  }
+
+  .contact-link {
+    font-size: 14px;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    color: var(--color-link, var(--color-ink));
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.15s;
+  }
+
+  .contact-link:hover { opacity: 0.7; }
+
+  @media (max-width: 960px) {
+    .contact-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+  }
+
+  @media (max-width: 768px) {
+    .contact-section { padding: 64px 20px; }
+    .section-headline { font-size: 26px; }
+    .section-body { font-size: 16px; }
+  }
+
+  @media (max-width: 480px) {
+    .contact-section { padding: 48px 16px; }
+    .contact-card { padding: 24px; }
+  }
+</style>

@@ -1,0 +1,204 @@
+---
+---
+
+<section id="about" class="about-section">
+  <div class="section-inner">
+
+    <div class="about-grid">
+      <div class="about-copy">
+        <span class="section-eyebrow">About</span>
+        <h2 class="section-headline">Built for people who work across time zones.</h2>
+        <p class="about-body">
+          timetz was born out of frustration. Every existing tool required dropdown menus, manual UTC math, or a paid subscription just to answer a simple question: <em>"What time is 3pm in Mumbai for someone in London?"</em>
+        </p>
+        <p class="about-body">
+          We built timetz to be the tool we always wanted — fast, natural, and free. Type the way you think, and get the answer in under a second.
+        </p>
+
+        <div class="why-box">
+          <h3 class="why-title">Why timetz?</h3>
+          <ul class="why-list">
+            <li class="why-item">
+              <span class="why-icon">⚡</span>
+              <div>
+                <strong>tz</strong> is the universal shorthand for timezone — used by engineers, Linux, and IANA worldwide. <strong>time + tz = timetz</strong>. Simple, memorable, obvious.
+              </div>
+            </li>
+            <li class="why-item">
+              <span class="why-icon">🌍</span>
+              <div>
+                It's short enough to type fast and clear enough to know exactly what it does. No fluff.
+              </div>
+            </li>
+            <li class="why-item">
+              <span class="why-icon">🔤</span>
+              <div>
+                <strong>timetz.com</strong> — four syllables, zero ambiguity. You'll never forget it.
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="about-stats">
+        <div class="stat-card">
+          <span class="stat-number">40+</span>
+          <span class="stat-label">Cities covered</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">&lt;1s</span>
+          <span class="stat-label">Natural language parse</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">100%</span>
+          <span class="stat-label">Free, no login</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">DST</span>
+          <span class="stat-label">Daylight saving aware</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .about-section {
+    background: var(--color-canvas);
+    padding: 96px 24px;
+  }
+
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-eyebrow {
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--color-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .section-headline {
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 40px;
+    letter-spacing: -1.28px;
+    color: var(--color-ink);
+    margin: 0 0 24px;
+  }
+
+  .about-body {
+    font-size: 16px;
+    line-height: 28px;
+    color: var(--color-body);
+    margin: 0 0 16px;
+  }
+
+  .about-body em {
+    color: var(--color-ink);
+    font-style: italic;
+  }
+
+  .why-box {
+    margin-top: 32px;
+    background: var(--color-canvas-soft);
+    border: 1px solid var(--color-hairline);
+    border-radius: 12px;
+    padding: 24px;
+  }
+
+  .why-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-ink);
+    margin: 0 0 16px;
+    letter-spacing: -0.4px;
+  }
+
+  .why-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .why-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 14px;
+    line-height: 22px;
+    color: var(--color-body);
+  }
+
+  .why-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .why-item strong { color: var(--color-ink); }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .stat-card {
+    background: var(--color-canvas-soft);
+    border: 1px solid var(--color-hairline);
+    border-radius: 12px;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .stat-number {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    color: var(--color-ink);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    color: var(--color-mute);
+    line-height: 18px;
+  }
+
+  @media (max-width: 1024px) {
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .about-stats { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  @media (max-width: 768px) {
+    .about-section { padding: 64px 20px; }
+    .section-headline { font-size: 26px; }
+    .about-stats { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 480px) {
+    .about-section { padding: 48px 16px; }
+    .section-headline { font-size: 22px; }
+  }
+</style>

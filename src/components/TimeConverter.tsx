@@ -109,13 +109,18 @@ export default function TimeConverter() {
   const [use24h, setUse24h] = useState(false);
   const [liveMode, setLiveMode] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [sharedCopied, setSharedCopied] = useState(false);
+  const [epochCopied, setEpochCopied] = useState<string | null>(null);
   const [inputTab, setInputTab] = useState<'time' | 'epoch'>('time');
+  const [nowEpoch, setNowEpoch] = useState(() => DateTime.now());
   const nlpTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Live tick
   useEffect(() => {
-    if (!liveMode) return;
-    const id = setInterval(() => setSourceDt(DateTime.now().setZone(sourceCity.timezone)), 1000);
+    const id = setInterval(() => {
+      setNowEpoch(DateTime.now());
+      if (liveMode) setSourceDt(DateTime.now().setZone(sourceCity.timezone));
+    }, 1000);
     return () => clearInterval(id);
   }, [liveMode, sourceCity.timezone]);
 
@@ -205,7 +210,13 @@ export default function TimeConverter() {
 
   const copyShare = () => {
     const url = shareUrl([sourceCity, ...targetCities].map(c => c.name), sourceDt.toISO()!);
-    navigator.clipboard.writeText(url).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
+    navigator.clipboard.writeText(url).then(() => { setSharedCopied(true); setTimeout(() => setSharedCopied(false), 2000); });
+  };
+
+  const copyEpoch = (val: string, key: string) => {
+    navigator.clipboard.writeText(val).then(() => {
+      setEpochCopied(key); setTimeout(() => setEpochCopied(null), 2000);
+    });
   };
 
   const results: ConvertedTime[] = targetCities.map(city =>
@@ -255,8 +266,8 @@ export default function TimeConverter() {
         {/* Right controls */}
         <div className="tc-controls">
           <button className="tc-pill-btn" onClick={() => setUse24h(v => !v)}>{use24h ? '12h' : '24h'}</button>
-          <button className="tc-pill-btn" onClick={copyTimes}>{copied ? '✓' : '⎘'}</button>
-          <button className="tc-pill-btn" onClick={copyShare}>🔗</button>
+          <button className="tc-pill-btn" onClick={copyTimes} title="Copy times">{copied ? '✓ Copied' : '⎘ Copy'}</button>
+          <button className="tc-pill-btn" onClick={copyShare} title="Share link">{sharedCopied ? '✓ Copied' : '🔗 Share'}</button>
         </div>
       </div>
 
@@ -278,6 +289,28 @@ export default function TimeConverter() {
         {QUICK_PRESETS.map(p => (
           <button key={p.label} className="tc-preset" onClick={() => applyPreset(p.cities)}>{p.label}</button>
         ))}
+      </div>
+
+      {/* ── Live epoch widget ── */}
+      <div className="tc-epoch-widget">
+        <span className="tc-epoch-widget-label">Current epoch</span>
+        <div className="tc-epoch-widget-vals">
+          {[
+            { key: 'unix', label: 'Unix (s)', val: String(Math.floor(nowEpoch.toMillis() / 1000)) },
+            { key: 'ms',   label: 'ms',       val: String(nowEpoch.toMillis()) },
+            { key: 'iso',  label: 'ISO',       val: nowEpoch.toUTC().toISO()! },
+          ].map(({ key, label, val }) => (
+            <div key={key} className="tc-epoch-widget-item">
+              <span className="tc-epoch-widget-key">{label}</span>
+              <span className="tc-epoch-widget-val">{val}</span>
+              <button
+                className="tc-epoch-widget-copy"
+                onClick={() => copyEpoch(val, key)}
+                title={`Copy ${label}`}
+              >{epochCopied === key ? '✓' : '⎘'}</button>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* ── World clock rows ── */}
