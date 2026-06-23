@@ -3,6 +3,7 @@ import { DateTime } from 'luxon';
 import { CITIES, WORLD_CLOCK_DEFAULTS, QUICK_PRESETS, searchCities, type City } from '../lib/cities';
 import { convertTime, STATUS_META, parseEpoch, shareUrl, type ConvertedTime } from '../lib/timeUtils';
 import { parseQuery } from '../lib/nlp';
+import GlobeWidget from './GlobeWidget';
 
 // ── CitySearch ──────────────────────────────────────────────────────────────
 function CitySearch({ onSelect, placeholder, className = '' }: {
@@ -61,7 +62,6 @@ function CityRow({ result, use24h, onRemove, isPinned }: {
 
   return (
     <div className="row-card" data-status={result.status} data-pinned={isPinned ? '' : undefined} style={{ '--status-color': meta.color } as React.CSSProperties}>
-      {/* Top: city info + remove */}
       <div className="row-left">
         <div>
           <div className="row-city-name">
@@ -75,7 +75,6 @@ function CityRow({ result, use24h, onRemove, isPinned }: {
         )}
       </div>
 
-      {/* Big time */}
       <div className="row-right">
         <div className="row-time-wrap">
           <span className="row-time">{time}</span>
@@ -85,12 +84,29 @@ function CityRow({ result, use24h, onRemove, isPinned }: {
         <div className="row-offset">{result.offsetStr}</div>
       </div>
 
-      {/* Status badge at bottom */}
       <div className="row-center">
         <span className="row-status-dot" style={{ background: meta.color }} title={meta.label} />
         <span className="row-status-label">{meta.emoji} {meta.label}</span>
       </div>
     </div>
+  );
+}
+
+// ── Copy icon SVG ────────────────────────────────────────────────────────────
+function CopyIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="5" y="5" width="8" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
+      <path d="M3 11V3.5A1.5 1.5 0 0 1 4.5 2H11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  );
+}
+
+function CheckIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M3 8.5L6.5 12L13 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
   );
 }
 
@@ -112,14 +128,17 @@ export default function TimeConverter() {
   const [sharedCopied, setSharedCopied] = useState(false);
   const [epochCopied, setEpochCopied] = useState<string | null>(null);
   const [inputTab, setInputTab] = useState<'time' | 'epoch'>('time');
-  const [nowEpoch, setNowEpoch] = useState(() => DateTime.now());
+  // null until mounted to avoid SSR/CSR hydration mismatch
+  const [nowEpoch, setNowEpoch] = useState<DateTime | null>(null);
   const nlpTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Live tick
+  // Start epoch ticker after mount only (avoids hydration mismatch)
   useEffect(() => {
+    setNowEpoch(DateTime.now());
     const id = setInterval(() => {
-      setNowEpoch(DateTime.now());
-      if (liveMode) setSourceDt(DateTime.now().setZone(sourceCity.timezone));
+      const now = DateTime.now();
+      setNowEpoch(now);
+      if (liveMode) setSourceDt(now.setZone(sourceCity.timezone));
     }, 1000);
     return () => clearInterval(id);
   }, [liveMode, sourceCity.timezone]);
@@ -156,12 +175,8 @@ export default function TimeConverter() {
       setSourceCity(parsed.sourceCity);
       setSourceDt(parsed.time ?? DateTime.now().setZone(parsed.sourceCity.timezone));
       setLiveMode(parsed.time == null);
-      // When targets are explicitly named, replace the list; otherwise keep existing
-      if (parsed.targetCities.length > 0) {
-        setTargetCities(parsed.targetCities);
-      }
+      if (parsed.targetCities.length > 0) setTargetCities(parsed.targetCities);
     } else if (parsed.time) {
-      // Time-only query: just update the time, keep cities
       setSourceDt(parsed.time);
       setLiveMode(false);
     }
@@ -225,13 +240,17 @@ export default function TimeConverter() {
 
   const sourceResult = convertTime(sourceCity.timezone, sourceCity.timezone, sourceCity.name, sourceCity.country, sourceDt);
 
+  const epochRows = nowEpoch ? [
+    { key: 'unix', label: 'Unix (s)', val: String(Math.floor(nowEpoch.toMillis() / 1000)) },
+    { key: 'ms',   label: 'ms',       val: String(nowEpoch.toMillis()) },
+    { key: 'iso',  label: 'ISO',       val: nowEpoch.toUTC().toISO()! },
+  ] : [];
+
   return (
     <div className="tc">
 
       {/* ── Sticky control bar ── */}
       <div className="tc-bar">
-
-        {/* Tab: time vs epoch */}
         <div className="tc-tabs">
           <button className={`tc-tab ${inputTab === 'time' ? 'tc-tab-active' : ''}`} onClick={() => setInputTab('time')}>Time</button>
           <button className={`tc-tab ${inputTab === 'epoch' ? 'tc-tab-active' : ''}`} onClick={() => setInputTab('epoch')}>Epoch</button>
@@ -239,13 +258,11 @@ export default function TimeConverter() {
 
         {inputTab === 'time' ? (
           <div className="tc-time-row">
-            {/* NLP input */}
             <input className="tc-nlp" value={nlpInput}
               onChange={e => setNlpInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && applyNlp()}
               placeholder='e.g. "4pm Mumbai to London" or "tomorrow 9am NY"'
               spellCheck={false} />
-            {/* Manual time + source city */}
             <input type="time" className="tc-time-input" value={sourceDt.toFormat('HH:mm')} onChange={handleTimeChange} />
             <CitySearch onSelect={c => { setSourceCity(c); setSourceDt(dt => dt.setZone(c.timezone)); }} placeholder={sourceCity.name} className="tc-city-search" />
             {nlpInput
@@ -263,19 +280,24 @@ export default function TimeConverter() {
           </div>
         )}
 
-        {/* Right controls */}
         <div className="tc-controls">
           <button className="tc-pill-btn" onClick={() => setUse24h(v => !v)}>{use24h ? '12h' : '24h'}</button>
-          <button className="tc-pill-btn" onClick={copyTimes} title="Copy times">{copied ? '✓ Copied' : '⎘ Copy'}</button>
-          <button className="tc-pill-btn" onClick={copyShare} title="Share link">{sharedCopied ? '✓ Copied' : '🔗 Share'}</button>
+          <button className="tc-pill-btn tc-pill-btn-icon" onClick={copyTimes} title="Copy times">
+            {copied ? <CheckIcon size={16} /> : <CopyIcon size={16} />}
+            <span>{copied ? 'Copied' : 'Copy'}</span>
+          </button>
+          <button className="tc-pill-btn tc-pill-btn-icon" onClick={copyShare} title="Share link">
+            {sharedCopied ? <CheckIcon size={16} /> : (
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3l3 3-3 3M13 6H6.5A3.5 3.5 0 0 0 3 9.5V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            )}
+            <span>{sharedCopied ? 'Copied' : 'Share'}</span>
+          </button>
         </div>
       </div>
 
-      {/* NLP hint */}
       {nlpHint && <div className="tc-hint">{nlpHint}</div>}
       {epochError && <div className="tc-error">{epochError}</div>}
 
-      {/* Epoch info strip */}
       {!liveMode && (
         <div className="tc-epoch-strip">
           <span className="tc-epoch-val">Unix: <b>{Math.floor(sourceDt.toMillis() / 1000)}</b></span>
@@ -292,39 +314,48 @@ export default function TimeConverter() {
       </div>
 
       {/* ── Live epoch widget ── */}
-      <div className="tc-epoch-widget">
-        <span className="tc-epoch-widget-label">Current epoch</span>
-        <div className="tc-epoch-widget-vals">
-          {[
-            { key: 'unix', label: 'Unix (s)', val: String(Math.floor(nowEpoch.toMillis() / 1000)) },
-            { key: 'ms',   label: 'ms',       val: String(nowEpoch.toMillis()) },
-            { key: 'iso',  label: 'ISO',       val: nowEpoch.toUTC().toISO()! },
-          ].map(({ key, label, val }) => (
-            <div key={key} className="tc-epoch-widget-item">
-              <span className="tc-epoch-widget-key">{label}</span>
-              <span className="tc-epoch-widget-val">{val}</span>
-              <button
-                className="tc-epoch-widget-copy"
-                onClick={() => copyEpoch(val, key)}
-                title={`Copy ${label}`}
-              >{epochCopied === key ? '✓' : '⎘'}</button>
-            </div>
-          ))}
+      {nowEpoch && (
+        <div className="tc-epoch-widget">
+          <span className="tc-epoch-widget-label">Current epoch</span>
+          <div className="tc-epoch-widget-vals">
+            {epochRows.map(({ key, label, val }) => (
+              <div key={key} className="tc-epoch-widget-item">
+                <span className="tc-epoch-widget-key">{label}</span>
+                <span className="tc-epoch-widget-val">{val}</span>
+                <button
+                  className="tc-epoch-widget-copy"
+                  onClick={() => copyEpoch(val, key)}
+                  title={`Copy ${label}`}
+                  aria-label={`Copy ${label}`}
+                >
+                  {epochCopied === key ? <CheckIcon size={15} /> : <CopyIcon size={15} />}
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* ── World clock rows ── */}
-      <div className="tc-rows">
-        <CityRow result={sourceResult} use24h={use24h} onRemove={() => {}} isPinned />
-        <div className="tc-divider" />
-        {results.map((r, idx) => (
-          <CityRow key={r.cityName + r.timezone + idx} result={r} use24h={use24h} onRemove={() => removeTarget(idx)} />
-        ))}
-      </div>
+      {/* ── Main layout: cards + globe ── */}
+      <div className="tc-main-layout">
+        <div className="tc-cards-col">
+          <div className="tc-rows">
+            <CityRow result={sourceResult} use24h={use24h} onRemove={() => {}} isPinned />
+            <div className="tc-divider" />
+            {results.map((r, idx) => (
+              <CityRow key={r.cityName + r.timezone + idx} result={r} use24h={use24h} onRemove={() => removeTarget(idx)} />
+            ))}
+          </div>
 
-      {/* ── Add city ── */}
-      <div className="tc-add-row">
-        <CitySearch onSelect={addTarget} placeholder="+ Add city, country, or timezone" />
+          <div className="tc-add-row">
+            <CitySearch onSelect={addTarget} placeholder="+ Add city, country, or timezone" />
+          </div>
+        </div>
+
+        {/* ── Globe sidebar ── */}
+        <div className="tc-globe-col">
+          <GlobeWidget sourceCity={sourceCity} targetCities={targetCities} />
+        </div>
       </div>
 
     </div>

@@ -1,42 +1,4 @@
 ---
-const columns = [
-  {
-    label: 'Product',
-    links: [
-      { label: 'Features', href: '#features' },
-      { label: 'Pricing', href: '#pricing' },
-      { label: 'Changelog', href: '#' },
-      { label: 'Roadmap', href: '#' },
-    ],
-  },
-  {
-    label: 'Use cases',
-    links: [
-      { label: 'Remote teams', href: '#' },
-      { label: 'Freelancers', href: '#' },
-      { label: 'Agencies', href: '#' },
-      { label: 'Enterprises', href: '#' },
-    ],
-  },
-  {
-    label: 'Resources',
-    links: [
-      { label: 'Documentation', href: '#' },
-      { label: 'API', href: '#' },
-      { label: 'Blog', href: '#' },
-      { label: 'Status', href: '#' },
-    ],
-  },
-  {
-    label: 'Company',
-    links: [
-      { label: 'About', href: '#' },
-      { label: 'Privacy', href: '#' },
-      { label: 'Terms', href: '#' },
-      { label: 'Contact', href: '#' },
-    ],
-  },
-];
 ---
 
 <footer class="footer">
@@ -47,21 +9,20 @@ const columns = [
         <p class="footer-tagline">The fastest time zone converter on the internet.</p>
       </div>
 
-      {columns.map(col => (
-        <div class="footer-col">
-          <span class="footer-col-label">{col.label}</span>
-          <ul class="footer-links">
-            {col.links.map(link => (
-              <li><a href={link.href} class="footer-link">{link.label}</a></li>
-            ))}
-          </ul>
-        </div>
-      ))}
+      <div class="footer-col">
+        <span class="footer-col-label">Company</span>
+        <ul class="footer-links">
+          <li><a href="#about" class="footer-link">About</a></li>
+          <li><a href="/privacy" class="footer-link">Privacy</a></li>
+          <li><a href="/terms" class="footer-link">Terms</a></li>
+          <li><a href="#contact" class="footer-link">Contact</a></li>
+        </ul>
+      </div>
     </div>
 
     <div class="footer-bottom">
       <p class="footer-copy">© 2026 timetz.com. All rights reserved.</p>
-      <p class="footer-copy">Built with Astro · Powered by OpenAI</p>
+      <p class="footer-copy">Built with Astro</p>
     </div>
   </div>
 </footer>
@@ -70,7 +31,7 @@ const columns = [
   .footer {
     background: var(--color-canvas);
     border-top: 1px solid var(--color-hairline);
-    padding: 64px 24px 40px;
+    padding: 48px 24px 32px;
   }
 
   .footer-inner {
@@ -79,16 +40,17 @@ const columns = [
   }
 
   .footer-top {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    display: flex;
+    justify-content: space-between;
     gap: 40px;
-    margin-bottom: 48px;
+    margin-bottom: 40px;
   }
 
   .footer-brand {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    max-width: 280px;
   }
 
   .footer-logo {
@@ -103,7 +65,6 @@ const columns = [
     line-height: 20px;
     color: var(--color-mute);
     margin: 0;
-    max-width: 240px;
   }
 
   .footer-col {
@@ -156,24 +117,9 @@ const columns = [
     margin: 0;
   }
 
-  @media (max-width: 960px) {
-    .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
-    .footer-brand { grid-column: 1 / -1; }
-    .footer { padding: 48px 24px 32px; }
-  }
-
-  @media (max-width: 768px) {
-    .footer { padding: 48px 20px 32px; }
-    .footer-top { gap: 24px; }
-  }
-
   @media (max-width: 600px) {
-    .footer-top { grid-template-columns: 1fr 1fr; gap: 24px; }
     .footer { padding: 40px 16px 28px; }
+    .footer-top { flex-direction: column; gap: 28px; }
     .footer-bottom { flex-direction: column; align-items: flex-start; }
-  }
-
-  @media (max-width: 400px) {
-    .footer-top { grid-template-columns: 1fr; }
   }
 </style>

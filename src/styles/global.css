@@ -452,11 +452,11 @@ html, body {
 .tc-epoch-widget-item {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   background: var(--surface-3);
   border: 1px solid var(--border-2);
   border-radius: 7px;
-  padding: 4px 10px;
+  padding: 5px 10px;
 }
 
 .tc-epoch-widget-key {
@@ -471,7 +471,7 @@ html, body {
 .tc-epoch-widget-val {
   font-size: 12px;
   font-family: 'Geist Mono Variable', ui-monospace, monospace;
-  color: var(--cyan);
+  color: var(--ink);
   font-variant-numeric: tabular-nums;
 }
 
@@ -479,15 +479,109 @@ html, body {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 13px;
   color: var(--mute);
-  padding: 0 2px;
-  line-height: 1;
+  padding: 2px;
+  line-height: 0;
   flex-shrink: 0;
-  transition: color 0.15s;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s, background 0.15s;
 }
 
-.tc-epoch-widget-copy:hover { color: var(--ink); }
+.tc-epoch-widget-copy:hover { color: var(--ink); background: var(--surface-2); }
+
+/* Pill button icon variant */
+.tc-pill-btn-icon {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 0;
+}
+
+.tc-pill-btn-icon span { font-size: 12px; }
+
+/* ── Main layout (cards + globe) ── */
+.tc-main-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.tc-cards-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.tc-globe-col {
+  width: 210px;
+  flex-shrink: 0;
+  padding: 16px 16px 0 8px;
+  position: sticky;
+  top: 52px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Globe widget */
+.globe-widget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.globe-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.globe-source-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--cyan);
+  flex-shrink: 0;
+}
+
+.globe-source-name {
+  font-size: 12px;
+  font-family: 'Geist Mono Variable', ui-monospace, monospace;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.globe-canvas {
+  display: block;
+  border-radius: 9999px;
+  box-shadow: 0 0 0 1px var(--border-2), 0 4px 24px rgba(0,0,0,0.4);
+}
+
+.globe-footer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.globe-target-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background: #fbbf24;
+  flex-shrink: 0;
+}
+
+.globe-target-label {
+  font-size: 11px;
+  color: var(--mute);
+  font-family: 'Geist Mono Variable', ui-monospace, monospace;
+}
+
+@media (max-width: 900px) {
+  .tc-globe-col { display: none; }
+}
 
 /* ── Card grid ── */
 .tc-rows {
