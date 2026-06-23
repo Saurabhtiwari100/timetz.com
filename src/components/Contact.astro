@@ -2,149 +2,451 @@
 ---
 
 <section id="contact" class="contact-section">
-  <div class="section-inner">
-    <div class="section-header">
-      <span class="section-eyebrow">Contact</span>
-      <h2 class="section-headline">Get in touch.</h2>
-      <p class="section-body">Have a question, suggestion, or bug report? We read every message.</p>
+  <div class="contact-inner">
+    <div class="contact-header">
+      <span class="contact-eyebrow">Contact</span>
+      <h2 class="contact-headline">Send us a message</h2>
+      <p class="contact-subtext">Have feedback, a bug report, or a feature idea? We read everything.</p>
     </div>
 
-    <div class="contact-grid">
-      <div class="contact-card">
-        <span class="contact-icon">📧</span>
-        <h3 class="contact-card-title">Email us</h3>
-        <p class="contact-card-body">For general enquiries, feedback, or partnerships.</p>
-        <a href="mailto:hello@timetz.com" class="contact-link">hello@timetz.com</a>
+    <div class="contact-layout">
+      <!-- Message bot form -->
+      <div class="msgbot-card">
+        <div class="msgbot-header">
+          <div class="msgbot-avatar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div>
+            <span class="msgbot-title">Message us</span>
+            <span class="msgbot-subtitle">Usually replies within 24h</span>
+          </div>
+          <span class="msgbot-status-dot" title="Online"></span>
+        </div>
+
+        <form class="msgbot-form" id="contact-form" novalidate>
+          <div class="msgbot-field-row">
+            <div class="msgbot-field">
+              <label class="msgbot-label" for="msg-name">Name</label>
+              <input class="msgbot-input" id="msg-name" name="name" type="text" placeholder="Your name" autocomplete="name" required />
+            </div>
+            <div class="msgbot-field">
+              <label class="msgbot-label" for="msg-email">Email</label>
+              <input class="msgbot-input" id="msg-email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
+            </div>
+          </div>
+
+          <div class="msgbot-field">
+            <label class="msgbot-label" for="msg-type">Type</label>
+            <select class="msgbot-input msgbot-select" id="msg-type" name="type">
+              <option value="feedback">💬 General feedback</option>
+              <option value="bug">🐛 Bug report</option>
+              <option value="feature">💡 Feature request</option>
+              <option value="other">📌 Other</option>
+            </select>
+          </div>
+
+          <div class="msgbot-field">
+            <label class="msgbot-label" for="msg-body">Message</label>
+            <textarea class="msgbot-input msgbot-textarea" id="msg-body" name="message" rows="5" placeholder="Describe your question or feedback…" required></textarea>
+          </div>
+
+          <div class="msgbot-actions">
+            <button type="submit" class="msgbot-send-btn" id="send-btn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              <span>Send message</span>
+            </button>
+          </div>
+
+          <p class="msgbot-success" id="form-success" aria-live="polite">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Message sent! We'll get back to you shortly.
+          </p>
+          <p class="msgbot-error" id="form-error" aria-live="polite">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Something went wrong. Email us directly at <a href="mailto:hello@timetz.com">hello@timetz.com</a>
+          </p>
+        </form>
       </div>
 
-      <div class="contact-card">
-        <span class="contact-icon">🐛</span>
-        <h3 class="contact-card-title">Report a bug</h3>
-        <p class="contact-card-body">Found something broken? Let us know and we'll fix it fast.</p>
-        <a href="mailto:bugs@timetz.com" class="contact-link">bugs@timetz.com</a>
-      </div>
-
-      <div class="contact-card">
-        <span class="contact-icon">💡</span>
-        <h3 class="contact-card-title">Feature requests</h3>
-        <p class="contact-card-body">Got an idea that would make timetz better for your team?</p>
-        <a href="mailto:ideas@timetz.com" class="contact-link">ideas@timetz.com</a>
+      <!-- Side info -->
+      <div class="contact-side">
+        <div class="contact-info-card">
+          <div class="contact-info-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div>
+            <span class="contact-info-label">Email</span>
+            <a href="mailto:hello@timetz.com" class="contact-info-value">hello@timetz.com</a>
+          </div>
+        </div>
+        <div class="contact-info-card">
+          <div class="contact-info-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div>
+            <span class="contact-info-label">Response time</span>
+            <span class="contact-info-value">Within 24 hours</span>
+          </div>
+        </div>
+        <div class="contact-info-card">
+          <div class="contact-info-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div>
+            <span class="contact-info-label">Bug reports</span>
+            <a href="mailto:bugs@timetz.com" class="contact-info-value">bugs@timetz.com</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
+<script is:inline>
+  (function () {
+    const form = document.getElementById('contact-form');
+    const btn = document.getElementById('send-btn');
+    const successEl = document.getElementById('form-success');
+    const errorEl = document.getElementById('form-error');
+
+    if (!form) return;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const name = form.querySelector('#msg-name').value.trim();
+      const email = form.querySelector('#msg-email').value.trim();
+      const type = form.querySelector('#msg-type').value;
+      const message = form.querySelector('#msg-body').value.trim();
+
+      if (!name || !email || !message) {
+        form.querySelectorAll('.msgbot-input').forEach(function (el) {
+          if (!el.value.trim()) el.classList.add('msgbot-input--error');
+        });
+        return;
+      }
+
+      form.querySelectorAll('.msgbot-input').forEach(function (el) {
+        el.classList.remove('msgbot-input--error');
+      });
+
+      const subject = encodeURIComponent('[timetz] ' + type + ': ' + name);
+      const body = encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\nType: ' + type + '\n\n' + message);
+      const mailtoHref = 'mailto:hello@timetz.com?subject=' + subject + '&body=' + body;
+
+      btn.disabled = true;
+      btn.querySelector('span').textContent = 'Opening mail…';
+
+      window.location.href = mailtoHref;
+
+      setTimeout(function () {
+        successEl.classList.add('visible');
+        btn.disabled = false;
+        btn.querySelector('span').textContent = 'Send message';
+        form.reset();
+      }, 800);
+    });
+  })();
+</script>
+
 <style>
   .contact-section {
     background: var(--color-canvas-soft);
-    padding: 96px 24px;
+    padding: 80px 24px;
+    border-top: 1px solid var(--color-hairline);
   }
 
-  .section-inner {
-    max-width: 1200px;
+  .contact-inner {
+    max-width: 1000px;
     margin: 0 auto;
   }
 
-  .section-header {
-    text-align: center;
-    margin-bottom: 56px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .section-eyebrow {
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
-    font-size: 12px;
-    font-weight: 400;
-    color: var(--color-mute);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  .section-headline {
-    font-size: 32px;
-    font-weight: 600;
-    line-height: 40px;
-    letter-spacing: -1.28px;
-    color: var(--color-ink);
-    margin: 0;
-  }
-
-  .section-body {
-    font-size: 18px;
-    color: var(--color-body);
-    margin: 0;
-    max-width: 480px;
-  }
-
-  .contact-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
-
-  .contact-card {
-    background: var(--color-canvas);
-    border: 1px solid var(--color-hairline);
-    border-radius: 12px;
-    padding: 32px;
+  .contact-header {
+    margin-bottom: 48px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    transition: box-shadow 0.15s, border-color 0.15s;
   }
 
-  .contact-card:hover {
-    border-color: var(--color-hairline-strong);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  .contact-eyebrow {
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--color-cyan);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
   }
 
-  .contact-icon {
+  .contact-headline {
     font-size: 28px;
-    line-height: 1;
-  }
-
-  .contact-card-title {
-    font-size: 18px;
-    font-weight: 600;
+    font-weight: 700;
+    letter-spacing: -0.8px;
     color: var(--color-ink);
-    letter-spacing: -0.4px;
     margin: 0;
+    line-height: 1.2;
   }
 
-  .contact-card-body {
-    font-size: 14px;
-    line-height: 22px;
+  .contact-subtext {
+    font-size: 15px;
     color: var(--color-body);
     margin: 0;
-    flex: 1;
   }
 
-  .contact-link {
+  /* Layout */
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 1fr 240px;
+    gap: 24px;
+    align-items: start;
+  }
+
+  /* Message bot card */
+  .msgbot-card {
+    background: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-level-2);
+  }
+
+  .msgbot-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: var(--color-canvas-soft-2);
+    border-bottom: 1px solid var(--color-hairline);
+  }
+
+  .msgbot-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--color-cyan);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    flex-shrink: 0;
+  }
+
+  .msgbot-title {
+    display: block;
     font-size: 14px;
-    font-family: 'Geist Mono Variable', ui-monospace, monospace;
-    color: var(--color-link, var(--color-ink));
-    text-decoration: none;
+    font-weight: 600;
+    color: var(--color-ink);
+    line-height: 1.3;
+  }
+
+  .msgbot-subtitle {
+    display: block;
+    font-size: 12px;
+    color: var(--color-mute);
+  }
+
+  .msgbot-status-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #22c55e;
+    margin-left: auto;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 2px var(--color-canvas-soft-2);
+  }
+
+  /* Form */
+  .msgbot-form {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .msgbot-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .msgbot-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .msgbot-label {
+    font-size: 12px;
     font-weight: 500;
-    transition: opacity 0.15s;
+    color: var(--color-body);
+    letter-spacing: 0.01em;
   }
 
-  .contact-link:hover { opacity: 0.7; }
-
-  @media (max-width: 960px) {
-    .contact-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+  .msgbot-input {
+    height: 38px;
+    padding: 0 12px;
+    background: var(--color-canvas-soft);
+    border: 1px solid var(--color-hairline);
+    border-radius: 9px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--color-ink);
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    width: 100%;
   }
 
-  @media (max-width: 768px) {
-    .contact-section { padding: 64px 20px; }
-    .section-headline { font-size: 26px; }
-    .section-body { font-size: 16px; }
+  .msgbot-input:focus {
+    border-color: var(--color-cyan);
+    box-shadow: 0 0 0 3px rgba(80,227,194,0.12);
   }
 
-  @media (max-width: 480px) {
-    .contact-section { padding: 48px 16px; }
-    .contact-card { padding: 24px; }
+  [data-theme="light"] .msgbot-input:focus {
+    box-shadow: 0 0 0 3px rgba(11,163,127,0.12);
+  }
+
+  .msgbot-input::placeholder { color: var(--color-mute); }
+
+  .msgbot-input--error {
+    border-color: var(--red) !important;
+  }
+
+  .msgbot-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+    cursor: pointer;
+  }
+
+  .msgbot-textarea {
+    height: auto;
+    padding: 10px 12px;
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.6;
+  }
+
+  .msgbot-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .msgbot-send-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    height: 40px;
+    padding: 0 20px;
+    background: var(--color-cyan);
+    color: #000;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+
+  .msgbot-send-btn:hover { opacity: 0.88; }
+  .msgbot-send-btn:active { transform: scale(0.98); }
+  .msgbot-send-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+  .msgbot-success,
+  .msgbot-error {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 9px;
+    margin-top: 2px;
+  }
+
+  .msgbot-success { background: rgba(34,197,94,0.1); color: #16a34a; border: 1px solid rgba(34,197,94,0.25); }
+  [data-theme="dark"] .msgbot-success { color: #4ade80; border-color: rgba(74,222,128,0.2); background: rgba(74,222,128,0.08); }
+
+  .msgbot-error { background: rgba(239,68,68,0.08); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+  .msgbot-error a { color: inherit; text-decoration: underline; }
+
+  .msgbot-success.visible { display: flex; }
+  .msgbot-error.visible   { display: flex; }
+
+  /* Side info cards */
+  .contact-side {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .contact-info-card {
+    background: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    transition: border-color 0.15s;
+  }
+
+  .contact-info-card:hover {
+    border-color: var(--color-hairline-strong);
+  }
+
+  .contact-info-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--color-canvas-soft-2);
+    border: 1px solid var(--color-hairline);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-cyan);
+    flex-shrink: 0;
+  }
+
+  .contact-info-label {
+    display: block;
+    font-size: 11px;
+    color: var(--color-mute);
+    margin-bottom: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+  }
+
+  .contact-info-value {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-ink);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  a.contact-info-value:hover { color: var(--color-cyan); }
+
+  @media (max-width: 900px) {
+    .contact-layout {
+      grid-template-columns: 1fr;
+    }
+    .contact-side {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+    .contact-info-card {
+      flex: 1;
+      min-width: 180px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .contact-section { padding: 56px 16px; }
+    .msgbot-field-row { grid-template-columns: 1fr; }
+    .contact-side { flex-direction: column; }
+    .contact-info-card { min-width: 0; }
+    .contact-headline { font-size: 22px; }
   }
 </style>
