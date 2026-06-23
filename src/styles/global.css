@@ -553,30 +553,54 @@ html, body {
   font-weight: 500;
 }
 
+.globe-drag-hint {
+  font-size: 10px;
+  color: var(--mute);
+  font-family: 'Geist Mono Variable', ui-monospace, monospace;
+  margin-left: 4px;
+}
+
+.globe-canvas-wrap {
+  position: relative;
+  display: inline-block;
+}
+
 .globe-canvas {
   display: block;
   border-radius: 9999px;
   box-shadow: 0 0 0 1px var(--border-2), 0 4px 24px rgba(0,0,0,0.4);
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-.globe-footer {
+.globe-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface-2);
+  border: 1px solid var(--border-2);
+  border-radius: 8px;
+  padding: 6px 10px;
   display: flex;
-  align-items: center;
-  gap: 5px;
+  flex-direction: column;
+  gap: 2px;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+  z-index: 10;
 }
 
-.globe-target-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 9999px;
-  background: #fbbf24;
-  flex-shrink: 0;
+.globe-tooltip-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
 }
 
-.globe-target-label {
-  font-size: 11px;
-  color: var(--mute);
+.globe-tooltip-tz {
+  font-size: 10px;
   font-family: 'Geist Mono Variable', ui-monospace, monospace;
+  color: var(--cyan);
 }
 
 @media (max-width: 900px) {
