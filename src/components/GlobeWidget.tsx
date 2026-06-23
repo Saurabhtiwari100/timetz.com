@@ -74,7 +74,7 @@ const TEX_W = 720;
 const TEX_H = 360;
 const SIZE = 290;
 const BASE_R = 132;
-const STRIDE = 2;
+const STRIDE = 1;
 
 function toTexCoords(lat: number, lng: number): [number, number] {
   return [(lng + 180) / 360 * TEX_W, (90 - lat) / 180 * TEX_H];
