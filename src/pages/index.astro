@@ -23,6 +23,22 @@ import TimeConverter from '../components/TimeConverter';
   </main>
 </Layout>
 
+<style>
+  .app-tagline {
+    margin-left: auto;
+    margin-right: 12px;
+    font-size: 13px;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    background: linear-gradient(90deg, #50e3c2, #007cf0, #7928ca);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    white-space: nowrap;
+  }
+</style>
+
 <script is:inline>
   (function () {
     const saved = localStorage.getItem('theme');

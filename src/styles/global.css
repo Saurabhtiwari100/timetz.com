@@ -97,7 +97,6 @@ html, body {
 
 .app-tagline {
   font-size: 11px;
-  color: var(--mute);
   font-family: 'Geist Mono Variable', ui-monospace, monospace;
 }
 
