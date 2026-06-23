@@ -4,9 +4,25 @@ import TimeConverter from '../components/TimeConverter';
 import About from '../components/About.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'timetz — Time Zone Converter',
+  description: "The fastest time zone converter. Type '4pm Mumbai to London' and get the answer instantly.",
+  url: 'https://timetz.com',
+  applicationCategory: 'UtilityApplication',
+  operatingSystem: 'Any',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
 ---
 
-<Layout title="timetz — Convert time zones instantly" description="The fastest time zone converter. Type '4pm Mumbai to London' and get the answer instantly.">
+<Layout
+  title="timetz — Convert time zones instantly"
+  description="The fastest time zone converter. Type '4pm Mumbai to London' and get the answer instantly."
+  canonicalPath="/"
+  {jsonLd}
+>
   <header class="app-header">
     <div class="app-header-inner">
       <a href="/" class="app-logo-link">

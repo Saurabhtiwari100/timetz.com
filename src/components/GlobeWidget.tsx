@@ -824,10 +824,27 @@ export default function GlobeWidget({ sourceCity, targetCities }: {
     overlay.addEventListener('touchmove', onTouchMove, { passive: false });
     overlay.addEventListener('touchend', onTouchEnd);
     overlay.style.cursor = 'grab';
-    stateRef.current.raf = requestAnimationFrame(frame);
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reducedMotion) {
+      stateRef.current.raf = requestAnimationFrame(frame);
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const s = stateRef.current;
+        if (entry.isIntersecting) {
+          if (!s.raf) s.raf = requestAnimationFrame(frame);
+        } else {
+          if (s.raf) { cancelAnimationFrame(s.raf); s.raf = 0; }
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(canvas);
 
     return () => {
       cancelAnimationFrame(stateRef.current.raf);
+      observer.disconnect();
       overlay.removeEventListener('mousedown', onDown);
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('mouseup', onUp);

@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { DateTime } from 'luxon';
 import { CITIES, WORLD_CLOCK_DEFAULTS, QUICK_PRESETS, searchCities, type City } from '../lib/cities';
 import { convertTime, STATUS_META, parseEpoch, shareUrl, type ConvertedTime } from '../lib/timeUtils';
 import { parseQuery } from '../lib/nlp';
-import GlobeWidget from './GlobeWidget';
+const GlobeWidget = lazy(() => import('./GlobeWidget'));
+import MeetingPlanner from './MeetingPlanner';
 
 // ── CitySearch ──────────────────────────────────────────────────────────────
 function CitySearch({ onSelect, placeholder, className = '' }: {
@@ -111,7 +112,7 @@ function CheckIcon({ size = 16 }: { size?: number }) {
 }
 
 // ── Main component ───────────────────────────────────────────────────────────
-export default function TimeConverter() {
+export default function TimeConverter({ defaultCities }: { defaultCities?: string } = {}) {
   const [sourceDt, setSourceDt] = useState<DateTime>(() => DateTime.now());
   const [sourceCity, setSourceCity] = useState<City>(CITIES.find(c => c.name === 'New York')!);
   const [targetCities, setTargetCities] = useState<City[]>(() =>
@@ -127,7 +128,8 @@ export default function TimeConverter() {
   const [copied, setCopied] = useState(false);
   const [sharedCopied, setSharedCopied] = useState(false);
   const [epochCopied, setEpochCopied] = useState<string | null>(null);
-  const [inputTab, setInputTab] = useState<'time' | 'epoch'>('time');
+  const [inputTab, setInputTab] = useState<'time' | 'epoch' | 'meeting'>('time');
+  const [showGlobe, setShowGlobe] = useState(false);
   // null until mounted to avoid SSR/CSR hydration mismatch
   const [nowEpoch, setNowEpoch] = useState<DateTime | null>(null);
   const nlpTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -146,7 +148,7 @@ export default function TimeConverter() {
   // URL hydration
   useEffect(() => {
     const p = new URLSearchParams(window.location.search);
-    const cs = p.get('cities'); const t = p.get('t');
+    const cs = p.get('cities') ?? defaultCities ?? null; const t = p.get('t');
     if (cs) {
       const found = cs.split(',').map(n => CITIES.find(c => c.name === n)).filter(Boolean) as City[];
       if (found.length >= 1) { setSourceCity(found[0]); setTargetCities(found.slice(1)); }
@@ -168,6 +170,12 @@ export default function TimeConverter() {
       } else { setNlpHint(''); }
     }, 250);
   }, [nlpInput]);
+
+  useEffect(() => {
+    if (!window.matchMedia('(max-width: 768px)').matches) {
+      setShowGlobe(true);
+    }
+  }, []);
 
   const applyNlp = () => {
     const parsed = parseQuery(nlpInput);
@@ -254,6 +262,7 @@ export default function TimeConverter() {
         <div className="tc-tabs">
           <button className={`tc-tab ${inputTab === 'time' ? 'tc-tab-active' : ''}`} onClick={() => setInputTab('time')}>Time</button>
           <button className={`tc-tab ${inputTab === 'epoch' ? 'tc-tab-active' : ''}`} onClick={() => setInputTab('epoch')}>Epoch</button>
+          <button className={`tc-tab ${inputTab === 'meeting' ? 'tc-tab-active' : ''}`} onClick={() => setInputTab('meeting')}>Meeting</button>
         </div>
 
         {inputTab === 'time' ? (
@@ -270,7 +279,7 @@ export default function TimeConverter() {
               : <button className={`tc-btn-live ${liveMode ? 'active' : ''}`} onClick={() => { setLiveMode(true); setSourceDt(DateTime.now().setZone(sourceCity.timezone)); }}>● Live</button>
             }
           </div>
-        ) : (
+        ) : inputTab === 'epoch' ? (
           <div className="tc-epoch-row">
             <input className="tc-epoch-input" value={epochInput}
               onChange={e => { setEpochInput(e.target.value); setEpochError(''); }}
@@ -278,7 +287,7 @@ export default function TimeConverter() {
               placeholder="Unix timestamp — seconds (1700000000) or ms (1700000000000)" />
             <button className="tc-btn-cyan" onClick={applyEpoch}>Convert</button>
           </div>
-        )}
+        ) : null}
 
         <div className="tc-controls">
           <button className="tc-pill-btn" onClick={() => setUse24h(v => !v)}>{use24h ? '12h' : '24h'}</button>
@@ -294,6 +303,10 @@ export default function TimeConverter() {
           </button>
         </div>
       </div>
+
+      {inputTab === 'meeting' && (
+        <MeetingPlanner sourceCity={sourceCity} targetCities={targetCities} />
+      )}
 
       {nlpHint && <div className="tc-hint">{nlpHint}</div>}
       {epochError && <div className="tc-error">{epochError}</div>}
@@ -354,7 +367,11 @@ export default function TimeConverter() {
 
         {/* ── Globe sidebar ── */}
         <div className="tc-globe-col">
-          <GlobeWidget sourceCity={sourceCity} targetCities={targetCities} />
+          {showGlobe && (
+            <Suspense fallback={null}>
+              <GlobeWidget sourceCity={sourceCity} targetCities={targetCities} />
+            </Suspense>
+          )}
         </div>
       </div>
 

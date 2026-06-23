@@ -1024,3 +1024,31 @@ html, body {
   .tc-presets    { gap: 3px; }
   .tc-preset     { font-size: 11px; height: 24px; padding: 0 8px; }
 }
+
+/* ── Meeting Planner ─────────────────────────────────────────────────────────*/
+.mp-wrap { padding: 16px 0; }
+.mp-controls { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 12px; align-items: flex-end; }
+.mp-label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--color-text-secondary); font-weight: 500; }
+.mp-input { background: var(--color-canvas-soft); border: 1px solid var(--color-hairline); border-radius: 6px; color: var(--color-text-primary); padding: 6px 10px; font-size: 13px; }
+.mp-time-range { display: flex; align-items: center; gap: 6px; }
+.mp-num { width: 52px; background: var(--color-canvas-soft); border: 1px solid var(--color-hairline); border-radius: 6px; color: var(--color-text-primary); padding: 6px 8px; font-size: 13px; text-align: center; }
+.mp-overlap-msg { font-size: 13px; color: #4ade80; margin: 0 0 12px; font-weight: 500; }
+.mp-no-overlap { font-size: 13px; color: var(--color-text-secondary); margin: 0 0 12px; }
+.mp-grid-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid var(--color-hairline); }
+.mp-grid { border-collapse: collapse; width: 100%; table-layout: fixed; }
+.mp-city-th, .mp-city-td { min-width: 100px; padding: 6px 10px; text-align: left; font-size: 12px; font-weight: 600; white-space: nowrap; position: sticky; left: 0; background: var(--color-canvas); z-index: 1; border-right: 1px solid var(--color-hairline); }
+.mp-hour-th { width: 32px; text-align: center; font-size: 10px; color: var(--color-text-secondary); padding: 4px 0; font-weight: 400; }
+.mp-overlap-col { font-weight: 700; color: #4ade80; }
+.mp-cell { width: 32px; height: 32px; text-align: center; font-size: 14px; cursor: default; transition: opacity 0.1s; }
+.mp-cell-overlap { outline: 2px solid #4ade8066; outline-offset: -2px; }
+.mp-actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+.mp-city-overrides { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 16px; }
+.mp-city-override { display: flex; flex-direction: column; gap: 4px; }
+.mp-city-override-toggle { display: flex; align-items: center; gap: 6px; padding: 4px 10px; background: var(--color-canvas-soft); border: 1px solid var(--color-hairline); border-radius: 20px; font-size: 12px; font-weight: 500; color: var(--color-text-primary); cursor: pointer; transition: border-color 0.15s; }
+.mp-city-override-toggle:hover { border-color: var(--color-cyan); }
+.mp-city-override-toggle--active { border-color: var(--color-cyan); color: var(--color-cyan); }
+.mp-override-badge { font-size: 10px; font-family: 'Geist Mono Variable', monospace; background: var(--color-cyan-dim); color: var(--color-cyan); border-radius: 4px; padding: 1px 5px; }
+.mp-override-chevron { font-size: 9px; color: var(--color-mute); }
+.mp-city-range { padding: 4px 0 0 4px; }
+.mp-override-reset { font-size: 11px; padding: 3px 8px; border: 1px solid var(--color-hairline); border-radius: 4px; background: transparent; color: var(--color-mute); cursor: pointer; }
+.mp-override-reset:hover { color: var(--red); border-color: var(--red); }

@@ -34,7 +34,7 @@ export const STATUS_META: Record<TimeStatus, { emoji: string; label: string; col
 };
 
 export function convertTime(
-  sourceTimezone: string,
+  _sourceTimezone: string,
   targetTimezone: string,
   targetCityName: string,
   targetCountry: string,
