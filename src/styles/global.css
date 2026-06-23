@@ -643,7 +643,7 @@ html, body {
   font-weight: 600;
 }
 
-.globe-route-arrow { font-size: 11px; color: var(--mute); }
+.globe-route-arrow { font-size: 11px; color: var(--body); }
 
 .globe-target-name {
   font-size: 11px;
@@ -724,14 +724,14 @@ html, body {
   gap: 4px;
   font-size: 10px;
   font-family: 'Geist Mono Variable', ui-monospace, monospace;
-  color: var(--mute);
+  color: var(--body);
 }
 
 .globe-legend-dot { width: 6px; height: 6px; border-radius: 9999px; flex-shrink: 0; }
 .globe-legend-dot--src { background: var(--cyan); }
 .globe-legend-dot--dst { background: #fbbf24; }
 .globe-legend-plane    { font-size: 11px; line-height: 1; }
-.globe-drag-hint       { font-size: 10px; color: var(--mute); font-family: 'Geist Mono Variable', ui-monospace, monospace; }
+.globe-drag-hint       { font-size: 10px; color: var(--body); font-family: 'Geist Mono Variable', ui-monospace, monospace; }
 
 @media (max-width: 1100px) { .tc-globe-col { width: 270px; } }
 @media (max-width: 960px)  { .tc-globe-col { display: none; } }
