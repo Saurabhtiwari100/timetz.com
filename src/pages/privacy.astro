@@ -1,0 +1,297 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout
+  title="Privacy Policy — Timetz"
+  description="Timetz privacy policy. We don't collect personal data, require no login, and use no advertising trackers."
+>
+  <header class="app-header">
+    <div class="app-header-inner">
+      <a href="/" class="app-logo-link">
+        <img src="/favicon-96x96.png" alt="timetz logo" class="app-logo-img" />
+        <span class="app-logo-text">timetz</span>
+      </a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme" title="Toggle light/dark">
+        <span class="theme-icon-dark">🌙</span>
+        <span class="theme-icon-light">☀️</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="legal-page">
+    <div class="legal-inner">
+      <nav class="legal-breadcrumb">
+        <a href="/">Home</a>
+        <span>/</span>
+        <span>Privacy Policy</span>
+      </nav>
+
+      <header class="legal-header">
+        <p class="legal-eyebrow">Legal</p>
+        <h1 class="legal-title">Privacy Policy</h1>
+        <p class="legal-meta">Effective date: 1 June 2026 &nbsp;·&nbsp; Last updated: 23 June 2026</p>
+        <p class="legal-summary">
+          Short version: Timetz does not collect personal information, requires no account, and sells nothing to anyone.
+        </p>
+      </header>
+
+      <div class="legal-body">
+
+        <section class="legal-section">
+          <h2>1. Who we are</h2>
+          <p>
+            Timetz (<strong>timetz.com</strong>) is a free, browser-based timezone conversion tool
+            operated by an independent developer. The site converts times between cities and
+            timezones — nothing more. You can contact us at
+            <a href="mailto:hello@timetz.com">hello@timetz.com</a>.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>2. Information we do NOT collect</h2>
+          <ul>
+            <li>We do not require you to create an account or sign in.</li>
+            <li>We do not ask for your name, email address, or any personal identifiers.</li>
+            <li>We do not store the city or timezone queries you type into the converter.</li>
+            <li>We do not use advertising networks or retargeting pixels.</li>
+            <li>We do not sell, rent, or share any data with third parties.</li>
+          </ul>
+        </section>
+
+        <section class="legal-section">
+          <h2>3. Information that may be collected automatically</h2>
+          <p>
+            Like any website, our hosting infrastructure may capture standard server logs, which can include:
+          </p>
+          <ul>
+            <li>Your IP address (anonymised or truncated where possible)</li>
+            <li>Browser type and operating system</li>
+            <li>The URL of the page you visited and the referring URL</li>
+            <li>Date, time, and duration of the request</li>
+          </ul>
+          <p>
+            These logs are used solely for security monitoring and aggregate traffic analysis.
+            They are retained for no more than 30 days and are never linked to any individual identity.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>4. Cookies and local storage</h2>
+          <p>
+            Timetz uses <strong>browser localStorage</strong> to remember your preferred theme (light/dark)
+            and recently used city list. This data never leaves your device — it is never sent to our servers.
+          </p>
+          <p>
+            We do not set any tracking or advertising cookies. If a third-party analytics service is ever
+            added, this policy will be updated before it goes live and a cookie notice will be shown.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>5. Contact form</h2>
+          <p>
+            The contact form on our site generates a pre-filled email using your device's default
+            email client via a <code>mailto:</code> link. We never see or store the data you type
+            into the form until you choose to send the email from your own client.
+            When you do send an email to <a href="mailto:hello@timetz.com">hello@timetz.com</a>,
+            we receive only what is included in that email (name, email address, message) and use it
+            solely to respond to you.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>6. Third-party services</h2>
+          <p>
+            Timetz may be hosted on a CDN or cloud platform (e.g. Vercel, Cloudflare). These
+            providers have their own privacy policies governing infrastructure-level logs.
+            We do not integrate any advertising, social media, or analytics SDKs that phone home
+            to third parties on your behalf.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>7. Children's privacy</h2>
+          <p>
+            Timetz is a general-purpose utility with no age-gated features and no data collection,
+            making it safe for users of all ages. We do not knowingly collect information from
+            anyone under 13. If you believe a child has submitted personal data to us, email
+            <a href="mailto:hello@timetz.com">hello@timetz.com</a> and we will delete it promptly.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>8. Your rights</h2>
+          <p>
+            Because we do not collect or store personal data, most data-subject rights (access,
+            correction, deletion, portability) are satisfied by default — there is nothing to access
+            or delete. If you believe we hold personal data about you (e.g. from a contact email),
+            you may request its deletion at <a href="mailto:hello@timetz.com">hello@timetz.com</a>.
+            We will respond within 30 days.
+          </p>
+          <p>
+            If you are in the EU/EEA, you also have the right to lodge a complaint with your
+            national data protection authority.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>9. Changes to this policy</h2>
+          <p>
+            If we materially change this policy we will update the "Last updated" date at the top
+            and, where feasible, post a notice on the site. Continued use of Timetz after a change
+            constitutes acceptance of the revised policy.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>10. Contact</h2>
+          <p>
+            Questions about this policy? Email <a href="mailto:hello@timetz.com">hello@timetz.com</a>.
+          </p>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<script is:inline>
+  (function () {
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+    const btn = document.getElementById('theme-toggle');
+    if (btn) btn.addEventListener('click', function () {
+      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+  })();
+</script>
+
+<style>
+  .legal-page {
+    min-height: 70vh;
+    background: var(--bg);
+    padding: 48px 24px 80px;
+  }
+
+  .legal-inner {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .legal-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    color: var(--body);
+    margin-bottom: 32px;
+  }
+
+  .legal-breadcrumb a { color: var(--body); text-decoration: none; }
+  .legal-breadcrumb a:hover { color: var(--cyan); }
+  .legal-breadcrumb span:last-child { color: var(--ink); }
+
+  .legal-header {
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .legal-eyebrow {
+    font-size: 11px;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-weight: 500;
+    color: var(--cyan);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 10px;
+  }
+
+  .legal-title {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: var(--ink);
+    margin: 0 0 10px;
+    line-height: 1.15;
+  }
+
+  .legal-meta {
+    font-size: 13px;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    color: var(--mute);
+    margin: 0 0 18px;
+  }
+
+  .legal-summary {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--body);
+    background: var(--cyan-dim);
+    border-left: 3px solid var(--cyan);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 0;
+  }
+
+  .legal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+
+  .legal-section h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 12px;
+    letter-spacing: -0.2px;
+  }
+
+  .legal-section p,
+  .legal-section li {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--body);
+  }
+
+  .legal-section p + p { margin-top: 12px; }
+
+  .legal-section ul {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .legal-section a {
+    color: var(--cyan);
+    text-decoration: none;
+  }
+
+  .legal-section a:hover { text-decoration: underline; }
+
+  .legal-section code {
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 13px;
+    background: var(--surface-3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 6px;
+    color: var(--ink);
+  }
+
+  @media (max-width: 600px) {
+    .legal-page { padding: 32px 16px 64px; }
+    .legal-title { font-size: 26px; }
+  }
+</style>

@@ -1,0 +1,302 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout
+  title="Terms of Service — Timetz"
+  description="Timetz terms of service. Free to use, no account required. Read the full terms before using the site."
+>
+  <header class="app-header">
+    <div class="app-header-inner">
+      <a href="/" class="app-logo-link">
+        <img src="/favicon-96x96.png" alt="timetz logo" class="app-logo-img" />
+        <span class="app-logo-text">timetz</span>
+      </a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme" title="Toggle light/dark">
+        <span class="theme-icon-dark">🌙</span>
+        <span class="theme-icon-light">☀️</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="legal-page">
+    <div class="legal-inner">
+      <nav class="legal-breadcrumb">
+        <a href="/">Home</a>
+        <span>/</span>
+        <span>Terms of Service</span>
+      </nav>
+
+      <header class="legal-header">
+        <p class="legal-eyebrow">Legal</p>
+        <h1 class="legal-title">Terms of Service</h1>
+        <p class="legal-meta">Effective date: 1 June 2026 &nbsp;·&nbsp; Last updated: 23 June 2026</p>
+        <p class="legal-summary">
+          Short version: Timetz is a free tool — use it, don't abuse it, and don't hold us liable for clock-related disasters.
+        </p>
+      </header>
+
+      <div class="legal-body">
+
+        <section class="legal-section">
+          <h2>1. Acceptance of terms</h2>
+          <p>
+            By accessing or using <strong>timetz.com</strong> ("the Service"), you agree to be bound by these Terms of Service
+            ("Terms"). If you do not agree, please do not use the Service. These Terms apply to all visitors and users.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>2. Description of service</h2>
+          <p>
+            Timetz is a free, browser-based utility for converting times between timezones and cities worldwide.
+            It uses publicly available IANA timezone data and does not require registration or payment.
+            The Service is provided as-is for personal, commercial, and educational use.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>3. Permitted use</h2>
+          <p>You may use Timetz to:</p>
+          <ul>
+            <li>Convert and compare times across any number of timezones.</li>
+            <li>Plan meetings, calls, and events across geographies.</li>
+            <li>Embed or link to timetz.com from other websites or apps.</li>
+            <li>Access the Service via browser automation or scripting for personal or internal business use.</li>
+          </ul>
+        </section>
+
+        <section class="legal-section">
+          <h2>4. Prohibited use</h2>
+          <p>You may not:</p>
+          <ul>
+            <li>Use automated tools to scrape, crawl, or bulk-download the Service in a way that degrades performance for other users.</li>
+            <li>Attempt to gain unauthorised access to any system, server, or database associated with the Service.</li>
+            <li>Reverse-engineer, decompile, or otherwise attempt to extract source code for commercial redistribution without permission.</li>
+            <li>Use the Service for any purpose that violates applicable law or regulation.</li>
+            <li>Impersonate Timetz or claim any official affiliation with the Service.</li>
+          </ul>
+        </section>
+
+        <section class="legal-section">
+          <h2>5. Accuracy of information</h2>
+          <p>
+            Timetz relies on the IANA timezone database, which is widely regarded as the authoritative source
+            for timezone and DST rules. However, governments can and do change timezone rules with little notice.
+          </p>
+          <p>
+            <strong>The Service is provided for informational convenience only.</strong> Timetz makes no warranty
+            that timezone data is current, accurate, or complete for any specific jurisdiction at any specific moment.
+            Do not rely solely on Timetz for legally binding deadlines, flight schedules, medication timing, financial
+            transactions, or any situation where an error could cause harm.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>6. Intellectual property</h2>
+          <p>
+            The Timetz name, logo, and original source code are owned by the operator and may not be reproduced
+            or redistributed without written permission. IANA timezone data is in the public domain.
+            Typefaces used (Geist) are licensed under the SIL Open Font License.
+          </p>
+          <p>
+            Nothing in these Terms restricts your right to use the <em>output</em> of the Service (i.e. the
+            converted times you read on screen) for any purpose.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>7. Disclaimer of warranties</h2>
+          <p>
+            THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND,
+            EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY,
+            FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+            WE DO NOT WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED, ERROR-FREE, OR FREE OF VIRUSES
+            OR OTHER HARMFUL COMPONENTS.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>8. Limitation of liability</h2>
+          <p>
+            TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, TIMETZ AND ITS OPERATOR SHALL NOT BE
+            LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES ARISING
+            FROM YOUR USE OF OR INABILITY TO USE THE SERVICE, EVEN IF ADVISED OF THE POSSIBILITY
+            OF SUCH DAMAGES.
+          </p>
+          <p>
+            IN ALL CASES, OUR TOTAL LIABILITY TO YOU FOR ANY CLAIM ARISING FROM THESE TERMS OR THE
+            SERVICE SHALL NOT EXCEED USD $10 (TEN US DOLLARS).
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>9. Third-party links</h2>
+          <p>
+            The Service may contain links to external websites. These links are provided for convenience only.
+            Timetz has no control over and accepts no responsibility for the content or privacy practices
+            of any third-party site.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>10. Availability and modifications</h2>
+          <p>
+            We reserve the right to modify, suspend, or discontinue the Service (or any feature of it)
+            at any time without notice. We are not liable to you or any third party for any such action.
+            We also reserve the right to update these Terms at any time. The "Last updated" date at the
+            top of this page will reflect any changes. Continued use of the Service constitutes acceptance
+            of the revised Terms.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>11. Governing law</h2>
+          <p>
+            These Terms are governed by the laws of India, without regard to its conflict-of-law provisions.
+            Any disputes arising from these Terms or your use of the Service shall be subject to the
+            exclusive jurisdiction of the courts of India.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>12. Contact</h2>
+          <p>
+            Questions about these Terms? Email <a href="mailto:hello@timetz.com">hello@timetz.com</a>.
+          </p>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<script is:inline>
+  (function () {
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+    const btn = document.getElementById('theme-toggle');
+    if (btn) btn.addEventListener('click', function () {
+      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+  })();
+</script>
+
+<style>
+  .legal-page {
+    min-height: 70vh;
+    background: var(--bg);
+    padding: 48px 24px 80px;
+  }
+
+  .legal-inner {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .legal-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    color: var(--body);
+    margin-bottom: 32px;
+  }
+
+  .legal-breadcrumb a { color: var(--body); text-decoration: none; }
+  .legal-breadcrumb a:hover { color: var(--cyan); }
+  .legal-breadcrumb span:last-child { color: var(--ink); }
+
+  .legal-header {
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .legal-eyebrow {
+    font-size: 11px;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-weight: 500;
+    color: var(--cyan);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 10px;
+  }
+
+  .legal-title {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: var(--ink);
+    margin: 0 0 10px;
+    line-height: 1.15;
+  }
+
+  .legal-meta {
+    font-size: 13px;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    color: var(--mute);
+    margin: 0 0 18px;
+  }
+
+  .legal-summary {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--body);
+    background: var(--cyan-dim);
+    border-left: 3px solid var(--cyan);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 0;
+  }
+
+  .legal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+
+  .legal-section h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 12px;
+    letter-spacing: -0.2px;
+  }
+
+  .legal-section p,
+  .legal-section li {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--body);
+  }
+
+  .legal-section p + p { margin-top: 12px; }
+
+  .legal-section ul {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .legal-section a {
+    color: var(--cyan);
+    text-decoration: none;
+  }
+
+  .legal-section a:hover { text-decoration: underline; }
+
+  @media (max-width: 600px) {
+    .legal-page { padding: 32px 16px 64px; }
+    .legal-title { font-size: 26px; }
+  }
+</style>
