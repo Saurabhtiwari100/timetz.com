@@ -17,7 +17,9 @@ const {
   jsonLd,
 } = Astro.props;
 
+const siteName = 'Timetz';
 const canonicalUrl = new URL(canonicalPath, Astro.site ?? 'https://www.timetz.com').toString();
+const absoluteOgImage = new URL(ogImage, Astro.site ?? 'https://www.timetz.com').toString();
 ---
 <!doctype html>
 <html lang="en">
@@ -33,6 +35,7 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? 'https://www.timetz.co
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" crossorigin="anonymous" />
     <meta name="generator" content={Astro.generator} />
+    <meta name="application-name" content={siteName} />
     <meta name="description" content={description} />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)" />
@@ -40,18 +43,18 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? 'https://www.timetz.co
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="timetz" />
+    <meta property="og:site_name" content={siteName} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(ogImage, Astro.site ?? 'https://www.timetz.com').toString()} />
+    <meta property="og:image" content={absoluteOgImage} />
     <meta property="og:image:alt" content="timetz time zone converter" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={new URL(ogImage, Astro.site ?? 'https://www.timetz.com').toString()} />
+    <meta name="twitter:image" content={absoluteOgImage} />
     <meta name="twitter:image:alt" content="timetz time zone converter" />
 
     {jsonLd && (
