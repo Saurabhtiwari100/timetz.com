@@ -221,6 +221,41 @@ const jsonLd = {
             </article>
           ))}
         </section>
+
+        {guidePage.codeExamples && guidePage.codeExamples.length > 0 && (
+          <section class="slug-section code-examples" aria-labelledby="code-examples-title">
+            <div class="section-heading">
+              <span class="section-eyebrow">Developer examples</span>
+              <h2 id="code-examples-title">Code examples for epoch time conversion</h2>
+              <p>Copy a snippet and replace the timestamp or time zone with the values you need.</p>
+            </div>
+            <div class="code-examples-grid">
+              {guidePage.codeExamples.map((example, index) => {
+                const codeId = `code-example-${page.slug}-${index}`;
+                return (
+                  <article class="code-example">
+                    <div class="code-example-header">
+                      <div>
+                        <h3>{example.title}</h3>
+                        <p>{example.description}</p>
+                      </div>
+                      <button
+                        type="button"
+                        class="code-copy-btn"
+                        data-code-copy
+                        data-code-target={codeId}
+                        aria-label={`Copy ${example.title} code example`}
+                      >
+                        Copy
+                      </button>
+                    </div>
+                    <pre><code id={codeId} class={`language-${example.language}`}>{example.code}</code></pre>
+                  </article>
+                );
+              })}
+            </div>
+          </section>
+        )}
       </>
     )}
 
@@ -420,6 +455,85 @@ const jsonLd = {
     margin-top: 14px;
   }
 
+  .code-examples-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .code-example {
+    overflow: hidden;
+    border: 1px solid var(--color-hairline);
+    border-radius: 8px;
+    background: var(--color-canvas-soft);
+  }
+
+  .code-example-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 16px;
+    border-bottom: 1px solid var(--color-hairline);
+  }
+
+  .code-example h3 {
+    color: var(--color-text-primary);
+    font-size: 0.98rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1.3;
+    margin: 0 0 6px;
+  }
+
+  .code-example p {
+    color: var(--color-text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .code-copy-btn {
+    min-height: 32px;
+    padding: 0 12px;
+    border: 1px solid var(--color-hairline);
+    border-radius: 9999px;
+    background: var(--color-canvas-soft);
+    color: var(--color-text-primary);
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 0.74rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .code-copy-btn:hover,
+  .code-copy-btn:focus-visible {
+    border-color: var(--color-link);
+    background: var(--color-canvas);
+    outline: none;
+  }
+
+  .code-copy-btn[data-copied='true'] {
+    border-color: var(--color-link);
+    color: var(--color-link);
+  }
+
+  .code-example pre {
+    margin: 0;
+    padding: 16px;
+    overflow-x: auto;
+    background: rgba(0, 0, 0, 0.22);
+  }
+
+  .code-example code {
+    color: var(--color-text-primary);
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 0.82rem;
+    line-height: 1.65;
+    white-space: pre;
+  }
+
   .slug-faq h2 {
     margin-bottom: 24px;
   }
@@ -475,6 +589,15 @@ const jsonLd = {
       padding-left: 16px;
       padding-right: 16px;
     }
+
+    .code-example-header {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .code-copy-btn {
+      width: fit-content;
+    }
   }
 </style>
 
@@ -485,11 +608,51 @@ const jsonLd = {
     document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
     document.addEventListener('DOMContentLoaded', function () {
       const btn = document.getElementById('theme-toggle');
-      if (!btn) return;
-      btn.addEventListener('click', function () {
-        const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', next);
-        localStorage.setItem('theme', next);
+      if (btn) {
+        btn.addEventListener('click', function () {
+          const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', next);
+          localStorage.setItem('theme', next);
+        });
+      }
+
+      document.querySelectorAll('[data-code-copy]').forEach(function (copyButton) {
+        copyButton.addEventListener('click', async function () {
+          const codeId = copyButton.getAttribute('data-code-target');
+          const code = codeId ? document.getElementById(codeId) : null;
+          const text = code ? code.textContent || '' : '';
+          if (!text) return;
+
+          try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              await navigator.clipboard.writeText(text);
+            } else {
+              const textarea = document.createElement('textarea');
+              textarea.value = text;
+              textarea.setAttribute('readonly', '');
+              textarea.style.position = 'fixed';
+              textarea.style.top = '-1000px';
+              document.body.appendChild(textarea);
+              textarea.select();
+              const execCopy = document['exec' + 'Command'];
+              const didCopy = typeof execCopy === 'function' ? execCopy.call(document, 'copy') : false;
+              document.body.removeChild(textarea);
+              if (!didCopy) throw new Error('Copy command failed');
+            }
+            const originalText = copyButton.textContent || 'Copy';
+            copyButton.textContent = 'Copied';
+            copyButton.setAttribute('data-copied', 'true');
+            window.setTimeout(function () {
+              copyButton.textContent = originalText;
+              copyButton.removeAttribute('data-copied');
+            }, 1800);
+          } catch {
+            copyButton.textContent = 'Copy failed';
+            window.setTimeout(function () {
+              copyButton.textContent = 'Copy';
+            }, 1800);
+          }
+        });
       });
     });
   })();

@@ -38,6 +38,13 @@ export type GuideSection = {
   bullets?: string[];
 };
 
+export type CodeExample = {
+  title: string;
+  language: string;
+  description: string;
+  code: string;
+};
+
 export type GuideSeoPage = {
   kind: 'guide';
   slug: string;
@@ -49,6 +56,7 @@ export type GuideSeoPage = {
   defaultCities: string[];
   keyTakeaways: string[];
   sections: GuideSection[];
+  codeExamples?: CodeExample[];
   faq: FaqItem[];
   related: RelatedLink[];
 };
@@ -892,9 +900,69 @@ export const guidePages: GuideSeoPage[] = [
           'When comparing logs across servers, convert every timestamp from UTC into the same target zone before comparing event order.',
       },
     ],
+    codeExamples: [
+      {
+        title: 'JavaScript',
+        language: 'js',
+        description: 'Convert epoch seconds to India time in the browser or Node.js.',
+        code: `const epochSeconds = 1700000000;
+const date = new Date(epochSeconds * 1000);
+
+console.log(date.toLocaleString('en-US', {
+  timeZone: 'Asia/Kolkata',
+  dateStyle: 'medium',
+  timeStyle: 'long',
+}));`,
+      },
+      {
+        title: 'Python',
+        language: 'python',
+        description: 'Convert a Unix timestamp from UTC into a local IANA time zone.',
+        code: `from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
+
+epoch_seconds = 1700000000
+utc_time = datetime.fromtimestamp(epoch_seconds, tz=timezone.utc)
+local_time = utc_time.astimezone(ZoneInfo("Asia/Kolkata"))
+
+print(local_time.isoformat())`,
+      },
+      {
+        title: 'Java',
+        language: 'java',
+        description: 'Use java.time to convert epoch seconds into a ZonedDateTime.',
+        code: `import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
+Instant instant = Instant.ofEpochSecond(1700000000L);
+ZonedDateTime localTime = instant.atZone(ZoneId.of("Asia/Kolkata"));
+
+System.out.println(localTime);`,
+      },
+      {
+        title: 'PostgreSQL',
+        language: 'sql',
+        description: 'Convert epoch seconds to a local timestamp inside a query.',
+        code: `SELECT
+  to_timestamp(1700000000) AT TIME ZONE 'Asia/Kolkata'
+    AS india_time;`,
+      },
+      {
+        title: 'Terminal',
+        language: 'bash',
+        description: 'Check an epoch value from macOS/BSD or Linux/GNU date.',
+        code: `# macOS / BSD
+TZ=Asia/Kolkata date -r 1700000000
+
+# Linux / GNU
+TZ=Asia/Kolkata date -d @1700000000`,
+      },
+    ],
     faq: [
       { q: 'What is Unix time?', a: 'Unix time is the number of seconds since 1970-01-01 00:00:00 UTC, not counting leap seconds in most systems.' },
       { q: 'How do I know if a timestamp is seconds or milliseconds?', a: '10 digits usually means seconds. 13 digits usually means milliseconds.' },
+      { q: 'How do I convert epoch time in code?', a: 'Use the timestamp as UTC first, then format it with an IANA time zone such as Asia/Kolkata, America/New_York, or Europe/London.' },
       { q: 'Should timestamps be stored in local time?', a: 'Usually no. Store in UTC and convert for display.' },
     ],
     related: [
