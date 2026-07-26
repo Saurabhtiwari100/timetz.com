@@ -1,4 +1,5 @@
 ---
+import { footerConverterLinks, footerGuideLinks } from '../lib/seoPages';
 ---
 
 <footer class="footer">
@@ -28,12 +29,18 @@
       <div class="footer-col">
         <span class="footer-col-label">Converters</span>
         <ul class="footer-links">
-          <li><a href="/utc-to-ist" class="footer-link">UTC to IST</a></li>
-          <li><a href="/ist-to-est" class="footer-link">IST to EST</a></li>
-          <li><a href="/pst-to-ist" class="footer-link">PST to IST</a></li>
-          <li><a href="/india-to-usa-time" class="footer-link">India to USA time</a></li>
-          <li><a href="/new-york-to-london" class="footer-link">New York to London</a></li>
-          <li><a href="/london-to-mumbai" class="footer-link">London to Mumbai</a></li>
+          {footerConverterLinks.map(({ href, label }) => (
+            <li><a href={href} class="footer-link">{label}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <span class="footer-col-label">Guides</span>
+        <ul class="footer-links">
+          {footerGuideLinks.map(({ href, label }) => (
+            <li><a href={href} class="footer-link">{label}</a></li>
+          ))}
         </ul>
       </div>
     </div>

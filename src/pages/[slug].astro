@@ -2,170 +2,87 @@
 import Layout from '../layouts/Layout.astro';
 import TimeConverter from '../components/TimeConverter';
 import Footer from '../components/Footer.astro';
+import { seoPages } from '../lib/seoPages';
+import type { ConverterSeoPage, SeoPage } from '../lib/seoPages';
+
+type TableRow = {
+  source: string;
+  targets: string[];
+};
 
 export function getStaticPaths() {
-  return [
-    {
-      params: { slug: 'ist-to-est' },
-      props: {
-        sourceCity: 'Mumbai',
-        targetCities: ['New York'],
-        h1: 'IST to EST Time Converter',
-        intro: 'Convert India Standard Time (IST, UTC+5:30) to Eastern Standard Time (EST, UTC−5). Mumbai is 10 hours 30 minutes ahead of New York in winter; 9 hours 30 minutes during US Daylight Saving Time.',
-        title: 'IST to EST Converter — India to US Eastern Time | timetz',
-        description: "Instantly convert IST to EST. See what time it is in New York when it's any given time in India. Handles DST automatically.",
-        faq: [
-          { q: 'How many hours ahead is IST compared to EST?', a: 'IST (UTC+5:30) is 10 hours 30 minutes ahead of EST (UTC−5) in winter and 9 hours 30 minutes ahead of EDT (UTC−4) during US Daylight Saving Time (March–November).' },
-          { q: 'What is 9 AM IST in EST?', a: '9:00 AM IST is 10:30 PM EST the previous day (or 11:30 PM EDT during US summer).' },
-          { q: 'What is 5 PM IST in EST?', a: '5:00 PM IST is 6:30 AM EST the same morning (7:30 AM EDT in summer).' },
-          { q: 'Does India observe Daylight Saving Time?', a: 'No. India does not observe DST. IST is always UTC+5:30 year-round, so the offset to US Eastern Time changes twice a year when the US switches clocks.' },
-          { q: 'What is the best overlap time for India–US East Coast meetings?', a: 'The best overlap is typically 8:00–9:00 AM EST / 6:30–7:30 PM IST — both cities are in standard business hours only at that window.' },
-        ],
-        related: [
-          { href: '/pst-to-ist', label: 'PST to IST' },
-          { href: '/utc-to-ist', label: 'UTC to IST' },
-          { href: '/india-to-usa-time', label: 'India to USA time' },
-        ],
-      },
-    },
-    {
-      params: { slug: 'pst-to-ist' },
-      props: {
-        sourceCity: 'Los Angeles',
-        targetCities: ['Mumbai'],
-        h1: 'PST to IST Time Converter',
-        intro: 'Convert Pacific Standard Time (PST, UTC−8) to India Standard Time (IST, UTC+5:30). Los Angeles is 13 hours 30 minutes behind Mumbai in winter; 12 hours 30 minutes during US Daylight Saving Time.',
-        title: 'PST to IST Converter — US Pacific to India Time | timetz',
-        description: 'Convert PST to IST instantly. See the current time in India from any US West Coast time. Handles PDT/PST automatically.',
-        faq: [
-          { q: 'How many hours behind is PST compared to IST?', a: 'PST (UTC−8) is 13 hours 30 minutes behind IST (UTC+5:30). During PDT (UTC−7), the gap narrows to 12 hours 30 minutes.' },
-          { q: 'What is 9 AM PST in IST?', a: '9:00 AM PST is 10:30 PM IST the same day.' },
-          { q: 'What is midnight PST in IST?', a: 'Midnight (12:00 AM) PST is 1:30 PM IST the same day.' },
-          { q: 'What is 6 PM IST in PST?', a: '6:00 PM IST is 4:30 AM PST the same day.' },
-          { q: 'When do India and US West Coast teams have overlap?', a: 'The practical overlap window is 8:30–10:00 AM IST / 7:00–8:30 PM PST (previous evening in LA). Early morning IST / late evening PST is the only true working-hours overlap.' },
-        ],
-        related: [
-          { href: '/ist-to-est', label: 'IST to EST' },
-          { href: '/india-to-usa-time', label: 'India to USA time' },
-          { href: '/new-york-to-london', label: 'New York to London' },
-        ],
-      },
-    },
-    {
-      params: { slug: 'utc-to-ist' },
-      props: {
-        sourceCity: 'UTC',
-        targetCities: ['Mumbai'],
-        h1: 'UTC to IST Time Converter',
-        intro: 'Convert Coordinated Universal Time (UTC) to India Standard Time (IST, UTC+5:30). IST is always 5 hours and 30 minutes ahead of UTC with no Daylight Saving adjustment.',
-        title: 'UTC to IST Converter — Convert UTC to India Time | timetz',
-        description: 'Convert UTC to IST instantly. India Standard Time is UTC+5:30 with no DST. Enter any UTC timestamp to get the IST equivalent.',
-        faq: [
-          { q: 'What is UTC+5:30?', a: 'UTC+5:30 is India Standard Time (IST). It applies to all of India year-round — India does not observe Daylight Saving Time.' },
-          { q: 'What is 00:00 UTC in IST?', a: 'Midnight UTC (00:00) is 05:30 IST the same day.' },
-          { q: 'What is 12:00 UTC in IST?', a: '12:00 UTC (noon) is 17:30 IST (5:30 PM).' },
-          { q: 'How do I convert a Unix timestamp to IST?', a: 'Use the Epoch tab on timetz — paste any Unix timestamp in seconds or milliseconds and it converts to all time zones including IST instantly.' },
-          { q: 'Why is IST offset 30 minutes?', a: 'India chose UTC+5:30 as a compromise between its eastern and western extremes (spanning roughly UTC+5 to UTC+6), and the 30-minute offset has been maintained since 1906.' },
-        ],
-        related: [
-          { href: '/ist-to-est', label: 'IST to EST' },
-          { href: '/pst-to-ist', label: 'PST to IST' },
-          { href: '/india-to-usa-time', label: 'India to USA time' },
-        ],
-      },
-    },
-    {
-      params: { slug: 'new-york-to-london' },
-      props: {
-        sourceCity: 'New York',
-        targetCities: ['London'],
-        h1: 'New York to London Time Converter',
-        intro: 'Convert Eastern Time (ET) to Greenwich Mean Time or British Summer Time. New York is typically 5 hours behind London, but the gap changes to 4 hours briefly each spring and autumn when the US and UK switch clocks on different dates.',
-        title: 'New York to London Time Converter — ET to GMT/BST | timetz',
-        description: 'Convert New York time to London time. Handles the EST/EDT and GMT/BST transitions automatically so you always get the right offset.',
-        faq: [
-          { q: 'How many hours ahead is London compared to New York?', a: 'London is usually 5 hours ahead of New York (EST vs GMT) or 5 hours ahead during summer (EDT vs BST). For a brief window each spring and autumn the gap is 4 hours.' },
-          { q: 'What is 9 AM New York time in London?', a: '9:00 AM EST is 2:00 PM GMT. During summer (EDT/BST) it is still 2:00 PM BST because both cities are on their summer offsets.' },
-          { q: 'What is noon London time in New York?', a: '12:00 PM GMT is 7:00 AM EST. 12:00 PM BST is 7:00 AM EDT in summer.' },
-          { q: 'When do UK and US clocks change?', a: 'The US switches on the second Sunday of March and first Sunday of November. The UK switches on the last Sunday of March and October. The brief gap between these dates creates a 4-hour difference.' },
-          { q: 'What is the best meeting time for New York and London?', a: '2:00–5:00 PM London (9:00 AM–12:00 PM New York) is the cleanest overlap — both cities are in core business hours.' },
-        ],
-        related: [
-          { href: '/london-to-mumbai', label: 'London to Mumbai' },
-          { href: '/ist-to-est', label: 'IST to EST' },
-          { href: '/india-to-usa-time', label: 'India to USA time' },
-        ],
-      },
-    },
-    {
-      params: { slug: 'london-to-mumbai' },
-      props: {
-        sourceCity: 'London',
-        targetCities: ['Mumbai'],
-        h1: 'London to Mumbai Time Converter',
-        intro: 'Convert GMT or BST to India Standard Time (IST, UTC+5:30). Mumbai is 5 hours 30 minutes ahead of London in winter (GMT) and 4 hours 30 minutes ahead in summer (BST).',
-        title: 'London to Mumbai Time Converter — GMT/BST to IST | timetz',
-        description: 'Convert London time to Mumbai (IST) instantly. Handles GMT and BST automatically. Mumbai is 4.5–5.5 hours ahead of London.',
-        faq: [
-          { q: 'How many hours ahead is Mumbai compared to London?', a: 'Mumbai (IST, UTC+5:30) is 5 hours 30 minutes ahead of London (GMT, UTC+0) in winter and 4 hours 30 minutes ahead during UK Summer Time (BST, UTC+1).' },
-          { q: 'What is 9 AM London time in Mumbai?', a: '9:00 AM GMT is 2:30 PM IST. 9:00 AM BST (summer) is 1:30 PM IST.' },
-          { q: 'What is 5 PM IST in London?', a: '5:00 PM IST is 11:30 AM GMT (winter) or 12:30 PM BST (summer).' },
-          { q: 'When is the best time for a London–Mumbai call?', a: '1:00–3:00 PM IST (7:30–9:30 AM GMT) works well — London is just starting the day and Mumbai is in mid-afternoon.' },
-          { q: 'Does the UK have a half-hour offset with India?', a: 'Yes — IST is UTC+5:30, giving it a 30-minute fractional offset relative to most European zones. This is why India–UK time differences end in ":30".' },
-        ],
-        related: [
-          { href: '/new-york-to-london', label: 'New York to London' },
-          { href: '/ist-to-est', label: 'IST to EST' },
-          { href: '/pst-to-ist', label: 'PST to IST' },
-        ],
-      },
-    },
-    {
-      params: { slug: 'india-to-usa-time' },
-      props: {
-        sourceCity: 'Mumbai',
-        targetCities: ['New York', 'Chicago', 'Los Angeles'],
-        h1: 'India to USA Time Converter',
-        intro: 'Convert India Standard Time (IST, UTC+5:30) to all US time zones simultaneously — Eastern, Central, Mountain, and Pacific. The US spans four main time zones; all are 9.5–14.5 hours behind IST depending on DST.',
-        title: 'India to USA Time Converter — IST to EST, CST, MST, PST | timetz',
-        description: 'Convert India time (IST) to US Eastern, Central, and Pacific time at once. Useful for scheduling calls across India and the United States.',
-        faq: [
-          { q: 'What are the time differences between India and US time zones?', a: 'IST (UTC+5:30) vs EST (UTC−5): 10h 30m. IST vs CST (UTC−6): 11h 30m. IST vs MST (UTC−7): 12h 30m. IST vs PST (UTC−8): 13h 30m. All gaps shrink by 1 hour during US Daylight Saving Time (March–November).' },
-          { q: 'What is 10 AM IST in US time zones?', a: '10:00 AM IST = 11:30 PM EST previous night = 10:30 PM CST previous night = 9:30 PM MST previous night = 8:30 PM PST previous night.' },
-          { q: 'What is the best time to schedule an India–USA call?', a: 'The best overlap is 8:00–9:00 AM EST / 6:30–7:30 PM IST — US East Coast is starting its day while India is finishing theirs. For US West Coast, try 8:30 PM IST / 7:00 AM PST.' },
-          { q: 'How do I convert IST to EDT vs EST?', a: 'EDT (Eastern Daylight Time, UTC−4) is used from March to November; EST (UTC−5) the rest of the year. The timetz converter detects DST automatically — just pick a date and the correct offset is shown.' },
-          { q: 'Does India have multiple time zones?', a: "No. All of India uses a single time zone, IST (UTC+5:30), across its entire territory. This is unusual for a country of India's geographic size." },
-        ],
-        related: [
-          { href: '/ist-to-est', label: 'IST to EST' },
-          { href: '/pst-to-ist', label: 'PST to IST' },
-          { href: '/utc-to-ist', label: 'UTC to IST' },
-        ],
-      },
-    },
-  ];
+  return seoPages.map((page) => ({
+    params: { slug: page.slug },
+    props: { page },
+  }));
 }
 
-const { sourceCity, targetCities, h1, intro, title, description, faq, related } = Astro.props;
+const page = Astro.props.page as SeoPage;
+const converterPage = page.kind === 'converter' ? page : undefined;
+const guidePage = page.kind === 'guide' ? page : undefined;
 
-const allCities = [sourceCity, ...targetCities].join(',');
-const pageUrl = new URL(`/${Astro.params.slug}`, Astro.site ?? 'https://www.timetz.com').toString();
+const defaultCities = converterPage
+  ? [converterPage.sourceCity, ...converterPage.targetCities]
+  : guidePage?.defaultCities ?? ['UTC', 'Mumbai', 'London', 'New York'];
+
+const allCities = defaultCities.join(',');
+const pageUrl = new URL(`/${page.slug}`, Astro.site ?? 'https://www.timetz.com').toString();
+
+function formatClock(totalMinutes: number) {
+  const dayShift = Math.floor(totalMinutes / 1440);
+  const normalizedMinutes = ((totalMinutes % 1440) + 1440) % 1440;
+  const hour24 = Math.floor(normalizedMinutes / 60);
+  const minute = normalizedMinutes % 60;
+  const period = hour24 >= 12 ? 'PM' : 'AM';
+  const hour12 = hour24 % 12 || 12;
+  const time = `${hour12}:${String(minute).padStart(2, '0')} ${period}`;
+
+  if (dayShift === -1) return `${time} (prev day)`;
+  if (dayShift === 1) return `${time} (next day)`;
+  if (dayShift < -1) return `${time} (${Math.abs(dayShift)} days prior)`;
+  if (dayShift > 1) return `${time} (+${dayShift} days)`;
+  return time;
+}
+
+function buildTableRows(source: ConverterSeoPage): TableRow[] {
+  return Array.from({ length: 24 }, (_, hour) => {
+    const sourceMinutes = hour * 60;
+    return {
+      source: formatClock(sourceMinutes),
+      targets: source.tableTargets.map(({ offsetMinutes }) => formatClock(sourceMinutes + offsetMinutes)),
+    };
+  });
+}
+
+const tableRows = converterPage ? buildTableRows(converterPage) : [];
+
+const schemaBase =
+  page.kind === 'converter'
+    ? {
+        '@type': 'WebApplication',
+        name: page.h1,
+        description: page.description,
+        url: pageUrl,
+        applicationCategory: 'UtilityApplication',
+        operatingSystem: 'Any',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      }
+    : {
+        '@type': 'Article',
+        headline: page.h1,
+        description: page.description,
+        url: pageUrl,
+        author: { '@type': 'Organization', name: 'timetz' },
+        publisher: { '@type': 'Organization', name: 'timetz' },
+      };
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: h1,
-      description,
-      url: pageUrl,
-      applicationCategory: 'UtilityApplication',
-      operatingSystem: 'Any',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-    },
+    schemaBase,
     {
       '@type': 'FAQPage',
-      mainEntity: faq.map(({ q, a }) => ({
+      mainEntity: page.faq.map(({ q, a }) => ({
         '@type': 'Question',
         name: q,
         acceptedAnswer: {
@@ -186,7 +103,7 @@ const jsonLd = {
         {
           '@type': 'ListItem',
           position: 2,
-          name: h1,
+          name: page.h1,
           item: pageUrl,
         },
       ],
@@ -195,7 +112,7 @@ const jsonLd = {
 };
 ---
 
-<Layout {title} {description} canonicalPath={`/${Astro.params.slug}`} {jsonLd}>
+<Layout title={page.title} description={page.description} canonicalPath={`/${page.slug}`} {jsonLd}>
   <header class="app-header">
     <div class="app-header-inner">
       <a href="/" class="app-logo-link">
@@ -215,17 +132,101 @@ const jsonLd = {
       <nav class="breadcrumbs" aria-label="Breadcrumb">
         <a href="/">Time Zone Converter</a>
         <span aria-hidden="true">/</span>
-        <span>{h1}</span>
+        <span>{page.h1}</span>
       </nav>
-      <h1 class="slug-h1">{h1}</h1>
-      <p class="slug-intro">{intro}</p>
+      <span class="page-chip">{page.kind === 'converter' ? 'Converter' : 'Guide'}</span>
+      <h1 class="slug-h1">{page.h1}</h1>
+      <p class="slug-intro">{page.intro}</p>
     </div>
 
     <TimeConverter client:load defaultCities={allCities} />
 
+    {converterPage && (
+      <>
+        <section class="slug-section" aria-labelledby="conversion-table-title">
+          <div class="section-heading">
+            <span class="section-eyebrow">24-hour table</span>
+            <h2 id="conversion-table-title">{converterPage.navLabel} conversion table</h2>
+            <p>{converterPage.tableNote}</p>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>{converterPage.tableSourceLabel}</th>
+                  {converterPage.tableTargets.map(({ label }) => (
+                    <th>{label}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {tableRows.map((row) => (
+                  <tr>
+                    <td>{row.source}</td>
+                    {row.targets.map((target) => (
+                      <td>{target}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="slug-section slug-two-col" aria-label="Timezone planning notes">
+          <div>
+            <span class="section-eyebrow">DST notes</span>
+            <h2>Daylight saving notes</h2>
+            <ul class="seo-list">
+              {converterPage.dstNotes.map((note) => (
+                <li>{note}</li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <span class="section-eyebrow">Meeting window</span>
+            <h2>Best meeting time</h2>
+            <p>{converterPage.meetingWindow}</p>
+          </div>
+        </section>
+      </>
+    )}
+
+    {guidePage && (
+      <>
+        <section class="slug-section" aria-labelledby="takeaways-title">
+          <div class="section-heading">
+            <span class="section-eyebrow">Quick answer</span>
+            <h2 id="takeaways-title">Key takeaways</h2>
+          </div>
+          <ul class="takeaway-list">
+            {guidePage.keyTakeaways.map((takeaway) => (
+              <li>{takeaway}</li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="guide-body" aria-label={`${guidePage.h1} guide`}>
+          {guidePage.sections.map((section) => (
+            <article class="guide-section">
+              <h2>{section.heading}</h2>
+              <p>{section.body}</p>
+              {section.bullets && (
+                <ul class="seo-list">
+                  {section.bullets.map((bullet) => (
+                    <li>{bullet}</li>
+                  ))}
+                </ul>
+              )}
+            </article>
+          ))}
+        </section>
+      </>
+    )}
+
     <section class="slug-faq">
       <h2>Frequently Asked Questions</h2>
-      {faq.map(({ q, a }) => (
+      {page.faq.map(({ q, a }) => (
         <div class="faq-item">
           <h3>{q}</h3>
           <p>{a}</p>
@@ -234,8 +235,8 @@ const jsonLd = {
     </section>
 
     <nav class="slug-related">
-      <span>Related converters:</span>
-      {related.map(({ href, label }) => (
+      <span>{page.kind === 'converter' ? 'Related converters:' : 'Related pages:'}</span>
+      {page.related.map(({ href, label }) => (
         <a href={href}>{label}</a>
       ))}
     </nav>
@@ -246,10 +247,11 @@ const jsonLd = {
 
 <style>
   .slug-hero {
-    max-width: 800px;
+    max-width: 860px;
     margin: 40px auto 0;
     padding: 0 24px;
   }
+
   .breadcrumbs {
     display: flex;
     flex-wrap: wrap;
@@ -260,54 +262,185 @@ const jsonLd = {
     font-size: 0.78rem;
     line-height: 1.4;
   }
+
   .breadcrumbs a {
     color: var(--color-link);
     text-decoration: none;
   }
+
   .breadcrumbs a:hover { text-decoration: underline; }
+
+  .page-chip,
+  .section-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    color: var(--color-link);
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  .page-chip {
+    margin-bottom: 12px;
+  }
+
   .slug-h1 {
-    font-size: clamp(1.5rem, 4vw, 2.25rem);
-    font-weight: 700;
+    font-size: clamp(1.6rem, 4vw, 2.5rem);
+    font-weight: 750;
     margin: 0 0 12px;
     color: var(--color-text-primary);
+    letter-spacing: 0;
   }
+
   .slug-intro {
     font-size: 1rem;
     line-height: 1.7;
     color: var(--color-text-secondary);
     margin: 0 0 32px;
   }
+
+  .slug-section,
+  .guide-body,
   .slug-faq {
-    max-width: 800px;
+    max-width: 860px;
     margin: 48px auto 0;
     padding: 0 24px;
   }
-  .slug-faq h2 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin: 0 0 24px;
-    color: var(--color-text-primary);
+
+  .section-heading {
+    max-width: 720px;
+    margin-bottom: 18px;
   }
+
+  .section-heading h2,
+  .slug-section h2,
+  .guide-section h2,
+  .slug-faq h2 {
+    color: var(--color-text-primary);
+    font-size: 1.2rem;
+    font-weight: 750;
+    letter-spacing: 0;
+    line-height: 1.3;
+    margin: 8px 0 10px;
+  }
+
+  .section-heading p,
+  .slug-section p,
+  .guide-section p,
+  .faq-item p {
+    color: var(--color-text-secondary);
+    font-size: 0.94rem;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--color-hairline);
+    border-radius: 8px;
+    background: var(--color-canvas-soft);
+  }
+
+  table {
+    width: 100%;
+    min-width: 560px;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+
+  th,
+  td {
+    border-bottom: 1px solid var(--color-hairline);
+    padding: 10px 14px;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  th {
+    color: var(--color-text-primary);
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  td {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  .slug-two-col {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 28px;
+  }
+
+  .seo-list,
+  .takeaway-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding-left: 20px;
+    color: var(--color-text-secondary);
+    font-size: 0.94rem;
+    line-height: 1.65;
+  }
+
+  .takeaway-list {
+    padding: 18px 20px 18px 38px;
+    border: 1px solid var(--color-hairline);
+    border-radius: 8px;
+    background: var(--color-canvas-soft);
+  }
+
+  .guide-body {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .guide-section {
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--color-hairline);
+  }
+
+  .guide-section:last-child { border-bottom: none; }
+
+  .guide-section h2 {
+    margin-top: 0;
+  }
+
+  .guide-section .seo-list {
+    margin-top: 14px;
+  }
+
+  .slug-faq h2 {
+    margin-bottom: 24px;
+  }
+
   .faq-item {
     margin-bottom: 24px;
     padding-bottom: 24px;
     border-bottom: 1px solid var(--color-hairline);
   }
+
   .faq-item:last-child { border-bottom: none; }
+
   .faq-item h3 {
     font-size: 0.95rem;
-    font-weight: 600;
+    font-weight: 650;
     margin: 0 0 8px;
     color: var(--color-text-primary);
   }
-  .faq-item p {
-    font-size: 0.9rem;
-    line-height: 1.65;
-    color: var(--color-text-secondary);
-    margin: 0;
-  }
+
   .slug-related {
-    max-width: 800px;
+    max-width: 860px;
     margin: 40px auto 60px;
     padding: 0 24px;
     display: flex;
@@ -317,6 +450,7 @@ const jsonLd = {
     font-size: 0.85rem;
     color: var(--color-text-secondary);
   }
+
   .slug-related a {
     padding: 6px 14px;
     border: 1px solid var(--color-hairline);
@@ -325,7 +459,23 @@ const jsonLd = {
     text-decoration: none;
     transition: background 0.15s;
   }
+
   .slug-related a:hover { background: var(--color-canvas-soft); }
+
+  @media (max-width: 760px) {
+    .slug-two-col {
+      grid-template-columns: 1fr;
+    }
+
+    .slug-section,
+    .guide-body,
+    .slug-faq,
+    .slug-related,
+    .slug-hero {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+  }
 </style>
 
 <script is:inline>

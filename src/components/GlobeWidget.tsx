@@ -885,12 +885,15 @@ export default function GlobeWidget({ sourceCity, targetCities }: {
         )}
       </div>
 
-      <div className="globe-legend">
-        <span className="globe-legend-item"><span className="globe-legend-dot globe-legend-dot--src" />source</span>
-        {routeTargets.length > 0 && <span className="globe-legend-item"><span className="globe-legend-dot globe-legend-dot--dst" />target</span>}
-        {routeTargets.length > 0 && <span className="globe-legend-item"><span className="globe-legend-plane">✈</span>flight</span>}
-        <span className="globe-drag-hint">scroll · drag · pinch</span>
+      <div className="globe-legend" aria-label="Globe route legend">
+        <span className="globe-legend-item globe-legend-item--source"><span className="globe-legend-dot globe-legend-dot--src" />Source</span>
+        {routeTargets.length > 0 && <span className="globe-legend-item globe-legend-item--target"><span className="globe-legend-dot globe-legend-dot--dst" />Target</span>}
+        {routeTargets.length > 0 && <span className="globe-legend-item globe-legend-item--route"><span className="globe-legend-plane">✈</span>Route</span>}
+        <span className="globe-drag-hint">Scroll · drag · pinch</span>
       </div>
+      <p className="globe-caption">
+        Preview the route between selected cities. Drag the globe or use zoom to inspect nearby time zones.
+      </p>
     </div>
   );
 }

@@ -4,43 +4,11 @@ import TimeConverter from '../components/TimeConverter';
 import About from '../components/About.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
+import { homepageConverterLinks, homepageGuideLinks } from '../lib/seoPages';
 
 const pageTitle = 'Time Zone Converter - Convert Time Zones Instantly | timetz';
 const pageDescription =
   'Free time zone converter for UTC, IST, EST, PST, GMT, and city-to-city scheduling. Type 4pm Mumbai to London and get the right time instantly.';
-
-const popularConverters = [
-  {
-    href: '/utc-to-ist',
-    label: 'UTC to IST',
-    description: 'Convert UTC timestamps and meeting times to India Standard Time.',
-  },
-  {
-    href: '/ist-to-est',
-    label: 'IST to EST',
-    description: 'Convert India time to US Eastern time with DST handled automatically.',
-  },
-  {
-    href: '/pst-to-ist',
-    label: 'PST to IST',
-    description: 'Convert US Pacific time to India time for calls and releases.',
-  },
-  {
-    href: '/india-to-usa-time',
-    label: 'India to USA time',
-    description: 'Compare IST with US Eastern, Central, Mountain, and Pacific time.',
-  },
-  {
-    href: '/new-york-to-london',
-    label: 'New York to London',
-    description: 'Find the correct ET to UK time across EST, EDT, GMT, and BST.',
-  },
-  {
-    href: '/london-to-mumbai',
-    label: 'London to Mumbai',
-    description: 'Convert UK time to IST and plan London-Mumbai meetings.',
-  },
-];
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -102,7 +70,28 @@ const jsonLd = {
       </div>
 
       <div class="popular-converters-grid">
-        {popularConverters.map(({ href, label, description }) => (
+        {homepageConverterLinks.map(({ href, label, description }) => (
+          <a href={href} class="popular-converter-card">
+            <span>{label}</span>
+            <small>{description}</small>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="seo-guides" aria-labelledby="seo-guides-title">
+    <div class="seo-guides-inner">
+      <div class="popular-converters-copy">
+        <span class="section-eyebrow">Time guides</span>
+        <h2 id="seo-guides-title">Timezone guides for scheduling and logs</h2>
+        <p>
+          Learn the rules behind UTC, GMT, daylight saving, Eastern Time, and Unix timestamps.
+        </p>
+      </div>
+
+      <div class="seo-guides-grid">
+        {homepageGuideLinks.map(({ href, label, description }) => (
           <a href={href} class="popular-converter-card">
             <span>{label}</span>
             <small>{description}</small>
@@ -155,13 +144,19 @@ const jsonLd = {
     text-transform: uppercase;
   }
 
-  .popular-converters {
+  .popular-converters,
+  .seo-guides {
     background: var(--color-canvas);
     padding: 56px 24px 72px;
     border-top: 1px solid var(--color-hairline);
   }
 
-  .popular-converters-inner {
+  .seo-guides {
+    padding-top: 0;
+  }
+
+  .popular-converters-inner,
+  .seo-guides-inner {
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
@@ -185,7 +180,8 @@ const jsonLd = {
     line-height: 24px;
   }
 
-  .popular-converters-grid {
+  .popular-converters-grid,
+  .seo-guides-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
@@ -225,21 +221,29 @@ const jsonLd = {
   }
 
   @media (max-width: 920px) {
-    .popular-converters-inner {
+    .popular-converters-inner,
+    .seo-guides-inner {
       grid-template-columns: 1fr;
     }
 
-    .popular-converters-grid {
+    .popular-converters-grid,
+    .seo-guides-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
   @media (max-width: 560px) {
-    .popular-converters {
+    .popular-converters,
+    .seo-guides {
       padding: 40px 16px 52px;
     }
 
-    .popular-converters-grid {
+    .seo-guides {
+      padding-top: 0;
+    }
+
+    .popular-converters-grid,
+    .seo-guides-grid {
       grid-template-columns: 1fr;
     }
   }
