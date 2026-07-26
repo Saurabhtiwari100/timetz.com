@@ -6,7 +6,7 @@
     <div class="contact-header">
       <span class="contact-eyebrow">Contact</span>
       <h2 class="contact-headline">Send us a message</h2>
-      <p class="contact-subtext">Have feedback, a bug report, or a feature idea? We read everything.</p>
+      <p class="contact-subtext">Contact is coming soon. We are setting up the inbox before accepting messages.</p>
     </div>
 
     <div class="contact-layout">
@@ -18,28 +18,33 @@
           </div>
           <div>
             <span class="msgbot-title">Message us</span>
-            <span class="msgbot-subtitle">Usually replies within 24h</span>
+            <span class="msgbot-subtitle">Coming soon</span>
           </div>
-          <span class="msgbot-status-dot" title="Online"></span>
+          <span class="msgbot-status-dot msgbot-status-dot--soon" title="Coming soon"></span>
         </div>
 
-        <form class="msgbot-form" id="contact-form" novalidate aria-describedby="form-success form-error">
+        <form class="msgbot-form msgbot-form--disabled" id="contact-form" novalidate aria-describedby="contact-coming-soon">
+          <div class="msgbot-coming-soon" id="contact-coming-soon">
+            <span class="msgbot-coming-soon-label">Coming soon</span>
+            <p>We are configuring <strong>hello@timetz.com</strong> and <strong>bugs@timetz.com</strong>. Messages are not being received yet.</p>
+          </div>
+
           <div class="msgbot-field-row">
             <div class="msgbot-field">
               <label class="msgbot-label" for="msg-name">Name</label>
-              <input class="msgbot-input" id="msg-name" name="name" type="text" placeholder="Your name…" autocomplete="name" aria-describedby="msg-name-error" required />
+              <input class="msgbot-input" id="msg-name" name="name" type="text" placeholder="Your name…" autocomplete="name" aria-describedby="msg-name-error" disabled />
               <span class="msgbot-field-error" id="msg-name-error" aria-live="polite"></span>
             </div>
             <div class="msgbot-field">
               <label class="msgbot-label" for="msg-email">Email</label>
-              <input class="msgbot-input" id="msg-email" name="email" type="email" inputmode="email" placeholder="you@example.com…" autocomplete="email" spellcheck="false" aria-describedby="msg-email-error" required />
+              <input class="msgbot-input" id="msg-email" name="email" type="email" inputmode="email" placeholder="you@example.com…" autocomplete="email" spellcheck="false" aria-describedby="msg-email-error" disabled />
               <span class="msgbot-field-error" id="msg-email-error" aria-live="polite"></span>
             </div>
           </div>
 
           <div class="msgbot-field">
             <label class="msgbot-label" for="msg-type">Type</label>
-            <select class="msgbot-input msgbot-select" id="msg-type" name="type">
+            <select class="msgbot-input msgbot-select" id="msg-type" name="type" disabled>
               <option value="feedback">💬 General feedback</option>
               <option value="bug">🐛 Bug report</option>
               <option value="feature">💡 Feature request</option>
@@ -49,36 +54,15 @@
 
           <div class="msgbot-field">
             <label class="msgbot-label" for="msg-body">Message</label>
-            <textarea class="msgbot-input msgbot-textarea" id="msg-body" name="message" rows="5" placeholder="Describe your question or feedback…" autocomplete="off" aria-describedby="msg-body-error" required></textarea>
+            <textarea class="msgbot-input msgbot-textarea" id="msg-body" name="message" rows="5" placeholder="Message support is coming soon…" autocomplete="off" aria-describedby="msg-body-error" disabled></textarea>
             <span class="msgbot-field-error" id="msg-body-error" aria-live="polite"></span>
           </div>
 
           <div class="msgbot-actions">
-            <button type="submit" class="msgbot-send-btn" id="send-btn">
+            <button type="button" class="msgbot-send-btn" id="send-btn" disabled>
               <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-              <span>Send Message</span>
+              <span>Coming soon</span>
             </button>
-          </div>
-
-          <p class="msgbot-success" id="form-success" aria-live="polite">
-            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Email draft ready. If your mail app does not open, use the backup actions below.
-          </p>
-          <p class="msgbot-error" id="form-error" aria-live="polite">
-            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            Please complete the highlighted fields before sending.
-          </p>
-
-          <div class="msgbot-fallback" id="mail-fallback" hidden>
-            <div>
-              <span class="msgbot-fallback-title">Mail app did not open?</span>
-              <span class="msgbot-fallback-copy">Open the draft again or copy the message and send it manually.</span>
-            </div>
-            <div class="msgbot-secondary-actions">
-              <a href="mailto:hello@timetz.com" class="msgbot-secondary-link" id="open-mail-link">Open Email App</a>
-              <button type="button" class="msgbot-secondary-btn" id="copy-message-btn">Copy Message</button>
-            </div>
-            <span class="msgbot-copy-status" id="copy-message-status" aria-live="polite"></span>
           </div>
         </form>
       </div>
@@ -91,7 +75,8 @@
           </div>
           <div>
             <span class="contact-info-label">Email</span>
-            <a href="mailto:hello@timetz.com" class="contact-info-value">hello@timetz.com</a>
+            <span class="contact-info-value">hello@timetz.com</span>
+            <span class="contact-info-note">Not configured yet</span>
           </div>
         </div>
         <div class="contact-info-card">
@@ -100,7 +85,8 @@
           </div>
           <div>
             <span class="contact-info-label">Response time</span>
-            <span class="contact-info-value">Within 24 hours</span>
+            <span class="contact-info-value">Coming soon</span>
+            <span class="contact-info-note">Replies start after inbox setup</span>
           </div>
         </div>
         <div class="contact-info-card">
@@ -109,114 +95,14 @@
           </div>
           <div>
             <span class="contact-info-label">Bug reports</span>
-            <a href="mailto:bugs@timetz.com" class="contact-info-value">bugs@timetz.com</a>
+            <span class="contact-info-value">bugs@timetz.com</span>
+            <span class="contact-info-note">Not configured yet</span>
           </div>
         </div>
       </div>
     </div>
   </div>
 </section>
-
-<script>
-  import { copyText } from '../lib/clipboard';
-  import { buildContactEmailBody, buildContactMailto, type ContactMessageType } from '../lib/contactMail';
-
-  const form = document.getElementById('contact-form') as HTMLFormElement | null;
-  const btn = document.getElementById('send-btn') as HTMLButtonElement | null;
-  const successEl = document.getElementById('form-success');
-  const errorEl = document.getElementById('form-error');
-  const fallbackEl = document.getElementById('mail-fallback') as HTMLDivElement | null;
-  const openMailLink = document.getElementById('open-mail-link') as HTMLAnchorElement | null;
-  const copyMessageBtn = document.getElementById('copy-message-btn') as HTMLButtonElement | null;
-  const copyMessageStatus = document.getElementById('copy-message-status');
-  let latestMessageText = '';
-
-  function setFieldError(field: HTMLInputElement | HTMLTextAreaElement, message: string) {
-    const error = document.getElementById(`${field.id}-error`);
-    field.classList.toggle('msgbot-input--error', Boolean(message));
-    field.setAttribute('aria-invalid', message ? 'true' : 'false');
-    if (error) error.textContent = message;
-  }
-
-  function resetStatus() {
-    successEl?.classList.remove('visible');
-    errorEl?.classList.remove('visible');
-    if (copyMessageStatus) copyMessageStatus.textContent = '';
-  }
-
-  function validateContactForm(fields: {
-    name: HTMLInputElement;
-    email: HTMLInputElement;
-    message: HTMLTextAreaElement;
-  }) {
-    let firstInvalid: HTMLInputElement | HTMLTextAreaElement | null = null;
-
-    setFieldError(fields.name, fields.name.value.trim() ? '' : 'Enter your name.');
-    setFieldError(fields.email, fields.email.validity.valid && fields.email.value.trim() ? '' : 'Enter a valid email address.');
-    setFieldError(fields.message, fields.message.value.trim() ? '' : 'Enter your message.');
-
-    for (const field of [fields.name, fields.email, fields.message]) {
-      if (field.getAttribute('aria-invalid') === 'true' && !firstInvalid) firstInvalid = field;
-    }
-
-    if (firstInvalid) {
-      errorEl?.classList.add('visible');
-      firstInvalid.focus();
-      return false;
-    }
-
-    return true;
-  }
-
-  if (form && btn && successEl && fallbackEl && openMailLink && copyMessageBtn) {
-    form.addEventListener('input', () => resetStatus());
-
-    form.addEventListener('submit', function (event) {
-      event.preventDefault();
-      resetStatus();
-
-      const name = document.getElementById('msg-name') as HTMLInputElement | null;
-      const email = document.getElementById('msg-email') as HTMLInputElement | null;
-      const type = document.getElementById('msg-type') as HTMLSelectElement | null;
-      const message = document.getElementById('msg-body') as HTMLTextAreaElement | null;
-      if (!name || !email || !type || !message) return;
-
-      if (!validateContactForm({ name, email, message })) return;
-
-      const payload = {
-        name: name.value,
-        email: email.value,
-        type: type.value as ContactMessageType,
-        message: message.value,
-      };
-      const mailtoHref = buildContactMailto(payload);
-      latestMessageText = buildContactEmailBody(payload);
-
-      openMailLink.href = mailtoHref;
-      fallbackEl.hidden = false;
-
-      btn.disabled = true;
-      btn.querySelector('span')!.textContent = 'Opening Mail…';
-      window.location.href = mailtoHref;
-
-      setTimeout(function () {
-        successEl.classList.add('visible');
-        btn.disabled = false;
-        btn.querySelector('span')!.textContent = 'Send Message';
-      }, 600);
-    });
-
-    copyMessageBtn.addEventListener('click', async function () {
-      if (!latestMessageText) return;
-      try {
-        await copyText(latestMessageText);
-        if (copyMessageStatus) copyMessageStatus.textContent = 'Message copied.';
-      } catch {
-        if (copyMessageStatus) copyMessageStatus.textContent = 'Copy failed. Select the form text and copy it manually.';
-      }
-    });
-  }
-</script>
 
 <style>
   .contact-section {
@@ -324,12 +210,51 @@
     box-shadow: 0 0 0 2px var(--color-canvas-soft-2);
   }
 
+  .msgbot-status-dot--soon {
+    background: #fbbf24;
+  }
+
   /* Form */
   .msgbot-form {
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 14px;
+  }
+
+  .msgbot-coming-soon {
+    padding: 14px;
+    border: 1px solid rgba(251,191,36,0.25);
+    border-radius: 10px;
+    background: rgba(251,191,36,0.08);
+  }
+
+  .msgbot-coming-soon-label {
+    display: inline-flex;
+    align-items: center;
+    min-height: 22px;
+    padding: 0 8px;
+    margin-bottom: 8px;
+    border: 1px solid rgba(251,191,36,0.35);
+    border-radius: 9999px;
+    color: #fbbf24;
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .msgbot-coming-soon p {
+    margin: 0;
+    color: var(--color-body);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .msgbot-coming-soon strong {
+    color: var(--color-ink);
+    font-weight: 650;
   }
 
   .msgbot-field-row {
@@ -376,12 +301,9 @@
 
   .msgbot-input::placeholder { color: var(--color-mute); }
 
-  .msgbot-input--error {
-    border-color: var(--red) !important;
-  }
-
-  .msgbot-input[aria-invalid="true"] {
-    border-color: var(--red);
+  .msgbot-form--disabled .msgbot-input:disabled {
+    cursor: not-allowed;
+    opacity: 0.62;
   }
 
   .msgbot-field-error {
@@ -433,110 +355,16 @@
 
   .msgbot-send-btn:hover { opacity: 0.88; }
   .msgbot-send-btn:active { transform: scale(0.98); }
-  .msgbot-send-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+  .msgbot-send-btn:disabled {
+    background: var(--color-canvas-soft-2);
+    border: 1px solid var(--color-hairline);
+    color: var(--color-body);
+    opacity: 1;
+    cursor: not-allowed;
+  }
   .msgbot-send-btn:focus-visible {
     outline: none;
     box-shadow: 0 0 0 3px var(--cyan-dim);
-  }
-
-  .msgbot-success,
-  .msgbot-error {
-    display: none;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    padding: 10px 14px;
-    border-radius: 9px;
-    margin-top: 2px;
-  }
-
-  .msgbot-success { background: rgba(34,197,94,0.1); color: #16a34a; border: 1px solid rgba(34,197,94,0.25); }
-  [data-theme="dark"] .msgbot-success { color: #4ade80; border-color: rgba(74,222,128,0.2); background: rgba(74,222,128,0.08); }
-
-  .msgbot-error { background: rgba(239,68,68,0.08); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
-  .msgbot-error a { color: inherit; text-decoration: underline; }
-
-  .msgbot-success.visible { display: flex; }
-  .msgbot-error.visible   { display: flex; }
-
-  .msgbot-fallback {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 14px;
-    background: var(--color-canvas-soft);
-    border: 1px solid var(--color-hairline);
-    border-radius: 10px;
-  }
-
-  .msgbot-fallback[hidden] { display: none; }
-
-  .msgbot-fallback-title {
-    display: block;
-    color: var(--color-ink);
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 3px;
-  }
-
-  .msgbot-fallback-copy {
-    display: block;
-    color: var(--color-body);
-    font-size: 12px;
-    line-height: 18px;
-  }
-
-  .msgbot-secondary-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    align-items: center;
-  }
-
-  .msgbot-secondary-link,
-  .msgbot-secondary-btn {
-    height: 34px;
-    padding: 0 12px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    font-family: inherit;
-    text-decoration: none;
-    cursor: pointer;
-    touch-action: manipulation;
-    transition: color 0.15s, border-color 0.15s, background 0.15s;
-  }
-
-  .msgbot-secondary-link {
-    color: #000;
-    background: var(--color-cyan);
-    border: 1px solid var(--color-cyan);
-  }
-
-  .msgbot-secondary-btn {
-    color: var(--color-ink);
-    background: var(--color-canvas-soft-2);
-    border: 1px solid var(--color-hairline);
-  }
-
-  .msgbot-secondary-link:hover,
-  .msgbot-secondary-btn:hover {
-    border-color: var(--color-cyan);
-  }
-
-  .msgbot-secondary-link:focus-visible,
-  .msgbot-secondary-btn:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 3px var(--cyan-dim);
-  }
-
-  .msgbot-copy-status {
-    min-height: 16px;
-    font-size: 12px;
-    color: var(--color-body);
   }
 
   /* Side info cards */
@@ -591,6 +419,14 @@
     color: var(--color-ink);
     text-decoration: none;
     transition: color 0.15s;
+  }
+
+  .contact-info-note {
+    display: block;
+    margin-top: 4px;
+    color: var(--color-body);
+    font-size: 11px;
+    line-height: 1.35;
   }
 
   a.contact-info-value:hover { color: var(--color-cyan); }
