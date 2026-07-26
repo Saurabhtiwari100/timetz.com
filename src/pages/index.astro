@@ -5,21 +5,69 @@ import About from '../components/About.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
 
+const pageTitle = 'Time Zone Converter - Convert Time Zones Instantly | timetz';
+const pageDescription =
+  'Free time zone converter for UTC, IST, EST, PST, GMT, and city-to-city scheduling. Type 4pm Mumbai to London and get the right time instantly.';
+
+const popularConverters = [
+  {
+    href: '/utc-to-ist',
+    label: 'UTC to IST',
+    description: 'Convert UTC timestamps and meeting times to India Standard Time.',
+  },
+  {
+    href: '/ist-to-est',
+    label: 'IST to EST',
+    description: 'Convert India time to US Eastern time with DST handled automatically.',
+  },
+  {
+    href: '/pst-to-ist',
+    label: 'PST to IST',
+    description: 'Convert US Pacific time to India time for calls and releases.',
+  },
+  {
+    href: '/india-to-usa-time',
+    label: 'India to USA time',
+    description: 'Compare IST with US Eastern, Central, Mountain, and Pacific time.',
+  },
+  {
+    href: '/new-york-to-london',
+    label: 'New York to London',
+    description: 'Find the correct ET to UK time across EST, EDT, GMT, and BST.',
+  },
+  {
+    href: '/london-to-mumbai',
+    label: 'London to Mumbai',
+    description: 'Convert UK time to IST and plan London-Mumbai meetings.',
+  },
+];
+
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'WebApplication',
-  name: 'timetz — Time Zone Converter',
-  description: "The fastest time zone converter. Type '4pm Mumbai to London' and get the answer instantly.",
-  url: 'https://www.timetz.com',
-  applicationCategory: 'UtilityApplication',
-  operatingSystem: 'Any',
-  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      name: 'timetz',
+      alternateName: 'timetz.com',
+      description: pageDescription,
+      url: 'https://www.timetz.com/',
+    },
+    {
+      '@type': 'WebApplication',
+      name: 'timetz Time Zone Converter',
+      description: pageDescription,
+      url: 'https://www.timetz.com/',
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'Any',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    },
+  ],
 };
 ---
 
 <Layout
-  title="timetz — Convert time zones instantly"
-  description="The fastest time zone converter. Type '4pm Mumbai to London' and get the answer instantly."
+  title={pageTitle}
+  description={pageDescription}
   canonicalPath="/"
   {jsonLd}
 >
@@ -38,8 +86,31 @@ const jsonLd = {
   </header>
 
   <main id="converter">
+    <h1 class="sr-only">Free Time Zone Converter</h1>
     <TimeConverter client:load />
   </main>
+
+  <section class="popular-converters" aria-labelledby="popular-converters-title">
+    <div class="popular-converters-inner">
+      <div class="popular-converters-copy">
+        <span class="section-eyebrow">Popular converters</span>
+        <h2 id="popular-converters-title">Common time zone conversions</h2>
+        <p>
+          Open the most requested timetz converters directly, with DST-aware city
+          cards and natural language input ready to use.
+        </p>
+      </div>
+
+      <div class="popular-converters-grid">
+        {popularConverters.map(({ href, label, description }) => (
+          <a href={href} class="popular-converter-card">
+            <span>{label}</span>
+            <small>{description}</small>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
 
   <About />
   <Contact />
@@ -47,6 +118,18 @@ const jsonLd = {
 </Layout>
 
 <style>
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
   .app-tagline {
     margin-left: auto;
     font-size: 13px;
@@ -59,6 +142,106 @@ const jsonLd = {
     background-clip: text;
     white-space: nowrap;
     flex-shrink: 0;
+  }
+
+  .section-eyebrow {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--color-mute);
+    font-family: 'Geist Mono Variable', ui-monospace, monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .popular-converters {
+    background: var(--color-canvas);
+    padding: 56px 24px 72px;
+    border-top: 1px solid var(--color-hairline);
+  }
+
+  .popular-converters-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  .popular-converters-copy h2 {
+    margin: 8px 0 12px;
+    color: var(--color-ink);
+    font-size: 24px;
+    line-height: 32px;
+    letter-spacing: -0.04em;
+  }
+
+  .popular-converters-copy p {
+    margin: 0;
+    color: var(--color-body);
+    font-size: 14px;
+    line-height: 24px;
+  }
+
+  .popular-converters-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .popular-converter-card {
+    display: flex;
+    min-height: 118px;
+    flex-direction: column;
+    gap: 10px;
+    padding: 18px;
+    border: 1px solid var(--color-hairline);
+    border-radius: 8px;
+    background: var(--color-canvas-soft);
+    color: var(--color-ink);
+    text-decoration: none;
+    box-shadow: var(--shadow-level-1);
+    transition: border-color 0.15s, transform 0.15s, background 0.15s;
+  }
+
+  .popular-converter-card:hover {
+    border-color: var(--color-cyan);
+    background: var(--color-canvas-soft-2);
+    transform: translateY(-1px);
+  }
+
+  .popular-converter-card span {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 20px;
+  }
+
+  .popular-converter-card small {
+    color: var(--color-body);
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+  @media (max-width: 920px) {
+    .popular-converters-inner {
+      grid-template-columns: 1fr;
+    }
+
+    .popular-converters-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .popular-converters {
+      padding: 40px 16px 52px;
+    }
+
+    .popular-converters-grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
 

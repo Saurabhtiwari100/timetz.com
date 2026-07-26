@@ -13,7 +13,7 @@ const {
   title = 'timetz — The fastest time zone converter',
   description = 'Convert time zones instantly with natural language. No login required.',
   canonicalPath = '',
-  ogImage = '/og-default.png',
+  ogImage = '/web-app-manifest-512x512.png',
   jsonLd,
 } = Astro.props;
 
@@ -32,21 +32,25 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? 'https://www.timetz.co
     <link rel="manifest" href="/site.webmanifest" crossorigin="anonymous" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="timetz" />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL(ogImage, Astro.site ?? 'https://www.timetz.com').toString()} />
+    <meta property="og:image:alt" content="timetz time zone converter" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(ogImage, Astro.site ?? 'https://www.timetz.com').toString()} />
+    <meta name="twitter:image:alt" content="timetz time zone converter" />
 
     {jsonLd && (
       <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

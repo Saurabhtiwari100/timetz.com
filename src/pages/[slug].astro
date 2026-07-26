@@ -149,15 +149,49 @@ export function getStaticPaths() {
 const { sourceCity, targetCities, h1, intro, title, description, faq, related } = Astro.props;
 
 const allCities = [sourceCity, ...targetCities].join(',');
+const pageUrl = new URL(`/${Astro.params.slug}`, Astro.site ?? 'https://www.timetz.com').toString();
 
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'WebApplication',
-  name: h1,
-  description,
-  url: Astro.url.toString(),
-  applicationCategory: 'UtilityApplication',
-  operatingSystem: 'Any',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: h1,
+      description,
+      url: pageUrl,
+      applicationCategory: 'UtilityApplication',
+      operatingSystem: 'Any',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faq.map(({ q, a }) => ({
+        '@type': 'Question',
+        name: q,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: a,
+        },
+      })),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Time Zone Converter',
+          item: 'https://www.timetz.com/',
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: h1,
+          item: pageUrl,
+        },
+      ],
+    },
+  ],
 };
 ---
 
@@ -178,6 +212,11 @@ const jsonLd = {
 
   <main>
     <div class="slug-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Time Zone Converter</a>
+        <span aria-hidden="true">/</span>
+        <span>{h1}</span>
+      </nav>
       <h1 class="slug-h1">{h1}</h1>
       <p class="slug-intro">{intro}</p>
     </div>
@@ -211,6 +250,21 @@ const jsonLd = {
     margin: 40px auto 0;
     padding: 0 24px;
   }
+  .breadcrumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 16px;
+    color: var(--color-text-secondary);
+    font-size: 0.78rem;
+    line-height: 1.4;
+  }
+  .breadcrumbs a {
+    color: var(--color-link);
+    text-decoration: none;
+  }
+  .breadcrumbs a:hover { text-decoration: underline; }
   .slug-h1 {
     font-size: clamp(1.5rem, 4vw, 2.25rem);
     font-weight: 700;
