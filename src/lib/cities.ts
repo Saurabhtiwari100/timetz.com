@@ -284,10 +284,36 @@ export const QUICK_PRESETS = [
   { label: 'Global Meeting', cities: ['London', 'New York', 'Dubai', 'Singapore', 'Tokyo'] },
 ];
 
+const PREFERRED_ALIAS_CITY: Record<string, string> = {
+  utc: 'UTC',
+  gmt: 'UTC',
+  z: 'UTC',
+  zulu: 'UTC',
+  ist: 'Mumbai',
+  est: 'New York',
+  edt: 'New York',
+  eastern: 'New York',
+  cst: 'Chicago',
+  cdt: 'Chicago',
+  central: 'Chicago',
+  mst: 'Denver',
+  mdt: 'Denver',
+  mountain: 'Denver',
+  pst: 'Los Angeles',
+  pdt: 'Los Angeles',
+  pacific: 'Los Angeles',
+  bst: 'London',
+};
+
+function normalizeCityQuery(query: string): string {
+  return query.toLowerCase().trim();
+}
+
 // ── Search ─────────────────────────────────────────────────────────────────
 export function searchCities(query: string): City[] {
-  const q = query.toLowerCase().trim();
+  const q = normalizeCityQuery(query);
   if (!q) return CITIES.slice(0, 8);
+  const preferredCityName = PREFERRED_ALIAS_CITY[q];
 
   const scored = CITIES.map(city => {
     const nameLower = city.name.toLowerCase();
@@ -295,6 +321,7 @@ export function searchCities(query: string): City[] {
     let score = 0;
 
     if (nameLower === q) score = 100;
+    else if (preferredCityName === city.name) score = 95;
     else if (nameLower.startsWith(q)) score = 80;
     else if (nameLower.includes(q)) score = 60;
     else if (countryLower === q) score = 70;
@@ -312,10 +339,15 @@ export function searchCities(query: string): City[] {
 }
 
 export function findCity(name: string): City | undefined {
-  const q = name.toLowerCase().trim();
-  return CITIES.find(c =>
+  const q = normalizeCityQuery(name);
+  const exactMatch = CITIES.find(c =>
     c.name.toLowerCase() === q ||
-    c.aliases.includes(q) ||
     c.country.toLowerCase() === q
   );
+  if (exactMatch) return exactMatch;
+
+  const preferredCityName = PREFERRED_ALIAS_CITY[q];
+  if (preferredCityName) return CITIES.find(c => c.name === preferredCityName);
+
+  return CITIES.find(c => c.aliases.includes(q));
 }

@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { DateTime } from 'luxon';
-import { convertTime, parseEpoch, shareUrl, getTimeStatus } from '../timeUtils';
+import { convertTime, parseEpoch, parseSharedDateTime, shareUrl, getTimeStatus } from '../timeUtils';
+import { CITIES } from '../cities';
 
 describe('getTimeStatus', () => {
   it('returns working for 9am', () => {
@@ -51,6 +52,46 @@ describe('convertTime', () => {
     const result = convertTime('America/New_York', 'Europe/London', 'London', 'UK', dt);
     expect(result.dayDiff).toBe(1);
   });
+
+  it('does not report a dayDiff when local calendar dates match', () => {
+    const dt = DateTime.fromObject(
+      { year: 2026, month: 7, day: 26, hour: 3, minute: 30 },
+      { zone: 'America/New_York' }
+    );
+    const result = convertTime('America/New_York', 'Asia/Tokyo', 'Tokyo', 'Japan', dt);
+    expect(result.time24).toBe('16:30');
+    expect(result.dayDiff).toBe(0);
+  });
+
+  it('UTC to Dublin uses summer DST correctly', () => {
+    const dt = DateTime.fromISO('2026-07-26T04:00:00.000Z', { zone: 'UTC' });
+    const result = convertTime('UTC', 'Europe/Dublin', 'Dublin', 'Ireland', dt);
+    expect(result.time24).toBe('05:00');
+    expect(result.offsetMinutes).toBe(60);
+  });
+
+  it('Dublin to UTC reverses the same instant correctly', () => {
+    const dt = DateTime.fromObject(
+      { year: 2026, month: 7, day: 26, hour: 5, minute: 0 },
+      { zone: 'Europe/Dublin' }
+    );
+    const result = convertTime('Europe/Dublin', 'UTC', 'UTC', 'Universal', dt);
+    expect(result.time24).toBe('04:00');
+    expect(result.offsetMinutes).toBe(-60);
+  });
+
+  it('all configured city timezones are valid and convertible', () => {
+    const dt = DateTime.fromISO('2026-07-26T04:00:00.000Z', { zone: 'UTC' });
+
+    for (const city of CITIES) {
+      const zoneProbe = DateTime.now().setZone(city.timezone);
+      expect(zoneProbe.isValid, `${city.name} uses invalid timezone ${city.timezone}`).toBe(true);
+
+      const result = convertTime('UTC', city.timezone, city.name, city.country, dt);
+      expect(result.dt.isValid, `${city.name} conversion failed`).toBe(true);
+      expect(result.time24, `${city.name} did not produce HH:mm time`).toMatch(/^\d{2}:\d{2}$/);
+    }
+  });
 });
 
 describe('parseEpoch', () => {
@@ -70,6 +111,22 @@ describe('parseEpoch', () => {
     expect(parseEpoch('not-a-number')).toBeNull();
     // Note: Number('') === 0, so empty string resolves to epoch 0 (1970-01-01T00:00:00Z)
     expect(parseEpoch('')).not.toBeNull();
+  });
+});
+
+describe('parseSharedDateTime', () => {
+  it('preserves explicit UTC instants in the source timezone', () => {
+    const dt = parseSharedDateTime('2026-07-26T04:00:00.000Z', 'Asia/Kolkata');
+
+    expect(dt?.zoneName).toBe('Asia/Kolkata');
+    expect(dt?.toFormat('HH:mm')).toBe('09:30');
+  });
+
+  it('interprets offset-less ISO input as source-zone wall time', () => {
+    const dt = parseSharedDateTime('2026-07-26T04:00:00.000', 'UTC');
+
+    expect(dt?.zoneName).toBe('UTC');
+    expect(dt?.toISO()).toBe('2026-07-26T04:00:00.000Z');
   });
 });
 

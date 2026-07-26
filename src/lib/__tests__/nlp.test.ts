@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { parseQuery } from '../nlp';
+import { findCity, searchCities } from '../cities';
 
 describe('parseQuery', () => {
   it('extracts city and time from "4pm Mumbai to London"', () => {
@@ -38,5 +39,13 @@ describe('parseQuery', () => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     expect(result.time?.day).toBe(tomorrow.getDate());
+  });
+
+  it('resolves IST to India instead of Dublin or Istanbul', () => {
+    const result = parseQuery('4pm UTC to IST');
+    expect(result.sourceCity?.name).toBe('UTC');
+    expect(result.targetCities[0]?.name).toBe('Mumbai');
+    expect(findCity('IST')?.name).toBe('Mumbai');
+    expect(searchCities('ist')[0]?.name).toBe('Mumbai');
   });
 });

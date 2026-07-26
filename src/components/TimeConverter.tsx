@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { DateTime } from 'luxon';
-import { CITIES, WORLD_CLOCK_DEFAULTS, QUICK_PRESETS, searchCities, type City } from '../lib/cities';
-import { convertTime, STATUS_META, parseEpoch, shareUrl, type ConvertedTime } from '../lib/timeUtils';
+import { CITIES, QUICK_PRESETS, searchCities, type City } from '../lib/cities';
+import { getInitialSelection, resolveCities } from '../lib/citySelection';
+import { convertTime, STATUS_META, parseEpoch, parseSharedDateTime, shareUrl, type ConvertedTime } from '../lib/timeUtils';
 import { parseQuery } from '../lib/nlp';
 const GlobeWidget = lazy(() => import('./GlobeWidget'));
 import MeetingPlanner from './MeetingPlanner';
@@ -113,12 +114,10 @@ function CheckIcon({ size = 16 }: { size?: number }) {
 
 // ── Main component ───────────────────────────────────────────────────────────
 export default function TimeConverter({ defaultCities }: { defaultCities?: string } = {}) {
-  const [sourceDt, setSourceDt] = useState<DateTime>(() => DateTime.now());
-  const [sourceCity, setSourceCity] = useState<City>(CITIES.find(c => c.name === 'New York')!);
-  const [targetCities, setTargetCities] = useState<City[]>(() =>
-    WORLD_CLOCK_DEFAULTS.filter(n => n !== 'New York')
-      .map(n => CITIES.find(c => c.name === n)!).filter(Boolean)
-  );
+  const initialSelection = getInitialSelection(defaultCities);
+  const [sourceDt, setSourceDt] = useState<DateTime>(() => DateTime.now().setZone(initialSelection.source.timezone));
+  const [sourceCity, setSourceCity] = useState<City>(() => initialSelection.source);
+  const [targetCities, setTargetCities] = useState<City[]>(() => initialSelection.targets);
   const [nlpInput, setNlpInput] = useState('');
   const [nlpHint, setNlpHint] = useState('');
   const [epochInput, setEpochInput] = useState('');
@@ -149,13 +148,18 @@ export default function TimeConverter({ defaultCities }: { defaultCities?: strin
   useEffect(() => {
     const p = new URLSearchParams(window.location.search);
     const cs = p.get('cities') ?? defaultCities ?? null; const t = p.get('t');
+    let hydratedSourceCity = sourceCity;
     if (cs) {
-      const found = cs.split(',').map(n => CITIES.find(c => c.name === n)).filter(Boolean) as City[];
-      if (found.length >= 1) { setSourceCity(found[0]); setTargetCities(found.slice(1)); }
+      const found = resolveCities(cs);
+      if (found.length >= 1) {
+        hydratedSourceCity = found[0];
+        setSourceCity(found[0]);
+        setTargetCities(found.slice(1));
+      }
     }
     if (t) {
-      const dt = DateTime.fromISO(t);
-      if (dt.isValid) { setSourceDt(dt); setLiveMode(false); }
+      const dt = parseSharedDateTime(t, hydratedSourceCity.timezone);
+      if (dt?.isValid) { setSourceDt(dt); setLiveMode(false); }
     }
   }, []);
 
@@ -213,6 +217,14 @@ export default function TimeConverter({ defaultCities }: { defaultCities?: strin
   };
 
   const removeTarget = (idx: number) => setTargetCities(prev => prev.filter((_, i) => i !== idx));
+
+  const swapSourceWithFirstTarget = () => {
+    const [nextSource, ...remainingTargets] = targetCities;
+    if (!nextSource) return;
+    setTargetCities([sourceCity, ...remainingTargets]);
+    setSourceCity(nextSource);
+    setSourceDt(dt => dt.setZone(nextSource.timezone));
+  };
 
   const applyPreset = (cities: string[]) => {
     const found = cities.map(n => CITIES.find(c => c.name === n)).filter(Boolean) as City[];
@@ -291,6 +303,15 @@ export default function TimeConverter({ defaultCities }: { defaultCities?: strin
 
         <div className="tc-controls">
           <button className="tc-pill-btn" onClick={() => setUse24h(v => !v)}>{use24h ? '12h' : '24h'}</button>
+          <button
+            className="tc-pill-btn"
+            onClick={swapSourceWithFirstTarget}
+            disabled={targetCities.length === 0}
+            title="Swap source with first target"
+            aria-label="Swap source with first target"
+          >
+            ↔ Swap
+          </button>
           <button className="tc-pill-btn tc-pill-btn-icon" onClick={copyTimes} title="Copy times">
             {copied ? <CheckIcon size={16} /> : <CopyIcon size={16} />}
             <span>{copied ? 'Copied' : 'Copy'}</span>

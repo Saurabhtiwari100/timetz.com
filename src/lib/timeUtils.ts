@@ -41,9 +41,9 @@ export function convertTime(
   sourceDt: DateTime
 ): ConvertedTime {
   const converted = sourceDt.setZone(targetTimezone);
-  const sourceDay = sourceDt.startOf('day');
-  const convertedDay = converted.startOf('day');
-  const dayDiff = Math.round(convertedDay.diff(sourceDay, 'days').days);
+  const sourceDate = DateTime.utc(sourceDt.year, sourceDt.month, sourceDt.day);
+  const convertedDate = DateTime.utc(converted.year, converted.month, converted.day);
+  const dayDiff = Math.round(convertedDate.diff(sourceDate, 'days').days);
 
   const diffMins = converted.offset - sourceDt.offset;
   const absDiff = Math.abs(diffMins);
@@ -75,6 +75,18 @@ export function parseEpoch(input: string): DateTime | null {
   // Handle seconds or milliseconds
   const ms = n > 1e12 ? n : n * 1000;
   const dt = DateTime.fromMillis(ms, { zone: 'UTC' });
+  return dt.isValid ? dt : null;
+}
+
+export function parseSharedDateTime(input: string, sourceTimezone: string): DateTime | null {
+  const value = input.trim();
+  if (!value) return null;
+
+  const hasExplicitOffset = /(?:z|[+-]\d{2}:?\d{2})$/i.test(value);
+  const dt = hasExplicitOffset
+    ? DateTime.fromISO(value, { setZone: true }).setZone(sourceTimezone)
+    : DateTime.fromISO(value, { zone: sourceTimezone });
+
   return dt.isValid ? dt : null;
 }
 
