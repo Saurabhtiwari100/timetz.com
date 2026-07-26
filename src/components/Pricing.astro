@@ -59,7 +59,7 @@ const tiers = [
             ))}
           </ul>
 
-          <a href="#" class={tier.featured ? 'tier-cta-featured' : 'tier-cta'}>{tier.cta}</a>
+          <a href={tier.name === 'Team' ? '/#contact' : '/#converter'} class={tier.featured ? 'tier-cta-featured' : 'tier-cta'}>{tier.cta}</a>
         </article>
       ))}
     </div>

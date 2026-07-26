@@ -874,8 +874,8 @@ export default function GlobeWidget({ sourceCity, targetCities }: {
         <canvas ref={canvasRef} style={{ position: 'absolute', top: 0, left: 0, borderRadius: '50%', display: 'block' }} />
         <canvas ref={overlayRef} style={{ position: 'absolute', top: 0, left: 0, borderRadius: '50%', display: 'block', background: 'transparent' }} />
         <div className="globe-zoom-btns">
-          <button className="globe-zoom-btn" onClick={() => zoomBy(1)}>+</button>
-          <button className="globe-zoom-btn" onClick={() => zoomBy(-1)}>−</button>
+          <button type="button" className="globe-zoom-btn" onClick={() => zoomBy(1)} aria-label="Zoom globe in">+</button>
+          <button type="button" className="globe-zoom-btn" onClick={() => zoomBy(-1)} aria-label="Zoom globe out">−</button>
         </div>
         {tooltip && (
           <div className="globe-tooltip">

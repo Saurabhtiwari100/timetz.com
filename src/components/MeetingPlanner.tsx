@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { DateTime } from 'luxon';
+import { copyText } from '../lib/clipboard';
 import { STATUS_META, type TimeStatus } from '../lib/timeUtils';
 import type { City } from '../lib/cities';
 
@@ -47,6 +48,7 @@ export default function MeetingPlanner({ sourceCity, targetCities }: Props) {
   const [cityOverrides, setCityOverrides] = useState<Record<string, WorkHours>>({});
   const [expandedCity, setExpandedCity] = useState<string | null>(null);
   const [copyDone, setCopyDone] = useState(false);
+  const [copyFailed, setCopyFailed] = useState(false);
 
   const allCities = [sourceCity, ...targetCities];
   const hours = Array.from({ length: 24 }, (_, i) => i);
@@ -83,7 +85,7 @@ export default function MeetingPlanner({ sourceCity, targetCities }: Props) {
 
   const overlapHours = hours.filter(h => allCities.every(c => isWorking(c, h)));
 
-  const copySummary = () => {
+  const copySummary = async () => {
     const [y, mo, d] = date.split('-').map(Number);
     const dateStr = DateTime.fromObject({ year: y, month: mo, day: d }).toFormat('EEE, MMM d yyyy');
     const lines = [
@@ -100,10 +102,15 @@ export default function MeetingPlanner({ sourceCity, targetCities }: Props) {
         ? `Best overlap: ${overlapHours[0]}:00–${overlapHours[overlapHours.length - 1] + 1}:00 ${sourceCity.timezone.split('/').pop()?.replace('_', ' ')} time`
         : 'No common working-hours overlap found.',
     ];
-    navigator.clipboard.writeText(lines.join('\n')).then(() => {
+    try {
+      await copyText(lines.join('\n'));
+      setCopyFailed(false);
       setCopyDone(true);
       setTimeout(() => setCopyDone(false), 2000);
-    });
+    } catch {
+      setCopyFailed(true);
+      setTimeout(() => setCopyFailed(false), 2500);
+    }
   };
 
   const downloadIcs = () => {
@@ -154,9 +161,11 @@ export default function MeetingPlanner({ sourceCity, targetCities }: Props) {
           return (
             <div key={key} className="mp-city-override">
               <button
+                type="button"
                 className={`mp-city-override-toggle${hasOverride ? ' mp-city-override-toggle--active' : ''}`}
                 onClick={() => setExpandedCity(isOpen ? null : key)}
                 title={`Custom hours for ${city.name}`}
+                aria-expanded={isOpen}
               >
                 {city.name}
                 {hasOverride && <span className="mp-override-badge">{wh.start}–{wh.end}</span>}
@@ -170,9 +179,9 @@ export default function MeetingPlanner({ sourceCity, targetCities }: Props) {
                   <input type="number" className="mp-num" min={1} max={24} value={wh.end}
                     onChange={e => setOverride(city, { end: Number(e.target.value) })} />
                   {hasOverride && (
-                    <button className="mp-override-reset" onClick={() => {
+                    <button type="button" className="mp-override-reset" onClick={() => {
                       setCityOverrides(prev => { const n = { ...prev }; delete n[key]; return n; });
-                    }}>reset</button>
+                    }}>Reset</button>
                   )}
                 </span>
               )}
@@ -228,10 +237,10 @@ export default function MeetingPlanner({ sourceCity, targetCities }: Props) {
       </div>
 
       <div className="mp-actions">
-        <button className="tc-pill-btn tc-pill-btn-icon" onClick={copySummary}>
-          {copyDone ? '✓ Copied' : '📋 Copy summary'}
+        <button type="button" className="tc-pill-btn tc-pill-btn-icon" onClick={copySummary}>
+          {copyFailed ? 'Copy Failed' : copyDone ? '✓ Copied' : '📋 Copy Summary'}
         </button>
-        <button className="tc-pill-btn tc-pill-btn-icon" onClick={downloadIcs} disabled={!overlapHours.length}>
+        <button type="button" className="tc-pill-btn tc-pill-btn-icon" onClick={downloadIcs} disabled={!overlapHours.length}>
           📅 Download .ics
         </button>
       </div>

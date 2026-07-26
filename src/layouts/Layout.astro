@@ -17,7 +17,7 @@ const {
   jsonLd,
 } = Astro.props;
 
-const canonicalUrl = new URL(canonicalPath, Astro.site ?? 'https://timetz.com').toString();
+const canonicalUrl = new URL(canonicalPath, Astro.site ?? 'https://www.timetz.com').toString();
 ---
 <!doctype html>
 <html lang="en">
@@ -29,7 +29,7 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? 'https://timetz.com').
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
     <link rel="icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="manifest" href="/site.webmanifest" crossorigin="anonymous" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)" />
@@ -40,13 +40,13 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? 'https://timetz.com').
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(ogImage, Astro.site ?? 'https://timetz.com').toString()} />
+    <meta property="og:image" content={new URL(ogImage, Astro.site ?? 'https://www.timetz.com').toString()} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={new URL(ogImage, Astro.site ?? 'https://timetz.com').toString()} />
+    <meta name="twitter:image" content={new URL(ogImage, Astro.site ?? 'https://www.timetz.com').toString()} />
 
     {jsonLd && (
       <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

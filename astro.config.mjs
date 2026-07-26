@@ -5,7 +5,7 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://timetz.com',
+  site: 'https://www.timetz.com',
   integrations: [react(), sitemap()],
   vite: {
     plugins: [tailwindcss()],

@@ -1,6 +1,9 @@
 {
-  "name": "freeworldtimeconverter",
-  "short_name": "timeconverter",
+  "name": "timetz",
+  "short_name": "timetz",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",

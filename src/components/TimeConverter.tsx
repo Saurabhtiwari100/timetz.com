@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { DateTime } from 'luxon';
 import { CITIES, QUICK_PRESETS, searchCities, type City } from '../lib/cities';
+import { copyText } from '../lib/clipboard';
 import { getInitialSelection, resolveCities } from '../lib/citySelection';
 import { convertTime, STATUS_META, parseEpoch, parseSharedDateTime, shareUrl, type ConvertedTime } from '../lib/timeUtils';
 import { parseQuery } from '../lib/nlp';
@@ -30,19 +31,29 @@ function CitySearch({ onSelect, placeholder, className = '' }: {
       <input className="cs-input" value={q}
         onChange={e => { setQ(e.target.value); setOpen(true); }}
         onFocus={() => setOpen(true)}
-        placeholder={placeholder} autoComplete="off" />
+        placeholder={placeholder} autoComplete="off" spellCheck={false} aria-label={placeholder} />
       {open && results.length > 0 && (
         <ul className="cs-dropdown">
-          {results.map(city => (
-            <li key={city.timezone + city.name}>
-              <button className="cs-item" onMouseDown={e => {
-                e.preventDefault(); onSelect(city); setQ(''); setOpen(false);
-              }}>
-                <span className="cs-city">{city.name}</span>
-                <span className="cs-country">{city.country}</span>
-              </button>
-            </li>
-          ))}
+          {results.map(city => {
+            const selectCity = () => {
+              onSelect(city);
+              setQ('');
+              setOpen(false);
+            };
+            return (
+              <li key={city.timezone + city.name}>
+                <button
+                  type="button"
+                  className="cs-item"
+                  onMouseDown={e => e.preventDefault()}
+                  onClick={selectCity}
+                >
+                  <span className="cs-city">{city.name}</span>
+                  <span className="cs-country">{city.country}</span>
+                </button>
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>
@@ -73,7 +84,7 @@ function CityRow({ result, use24h, onRemove, isPinned }: {
           <div className="row-country">{result.country} · {result.timezone.replace('_', ' ')}</div>
         </div>
         {!isPinned && (
-          <button className="row-remove" onClick={onRemove} aria-label={`Remove ${result.cityName}`}>×</button>
+          <button type="button" className="row-remove" onClick={onRemove} aria-label={`Remove ${result.cityName}`}>×</button>
         )}
       </div>
 
@@ -97,7 +108,7 @@ function CityRow({ result, use24h, onRemove, isPinned }: {
 // ── Copy icon SVG ────────────────────────────────────────────────────────────
 function CopyIcon({ size = 16 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="5" y="5" width="8" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
       <path d="M3 11V3.5A1.5 1.5 0 0 1 4.5 2H11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
     </svg>
@@ -106,7 +117,7 @@ function CopyIcon({ size = 16 }: { size?: number }) {
 
 function CheckIcon({ size = 16 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M3 8.5L6.5 12L13 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
@@ -127,6 +138,7 @@ export default function TimeConverter({ defaultCities }: { defaultCities?: strin
   const [copied, setCopied] = useState(false);
   const [sharedCopied, setSharedCopied] = useState(false);
   const [epochCopied, setEpochCopied] = useState<string | null>(null);
+  const [copyFailed, setCopyFailed] = useState<string | null>(null);
   const [inputTab, setInputTab] = useState<'time' | 'epoch' | 'meeting'>('time');
   const [showGlobe, setShowGlobe] = useState(false);
   // null until mounted to avoid SSR/CSR hydration mismatch
@@ -235,23 +247,37 @@ export default function TimeConverter({ defaultCities }: { defaultCities?: strin
     setLiveMode(true);
   };
 
-  const copyTimes = () => {
+  const copyTimes = async () => {
     const src = `${sourceCity.name}: ${use24h ? sourceDt.toFormat('HH:mm') : sourceDt.toFormat('h:mm a')} — ${sourceDt.toFormat('EEE, MMM d')}`;
     const rows = results.map(r => `${r.cityName}: ${use24h ? r.time24 : r.timeStr} — ${r.dayShort}, ${r.dateStr}`);
-    navigator.clipboard.writeText([src, ...rows].join('\n')).then(() => {
+    try {
+      await copyText([src, ...rows].join('\n'));
+      setCopyFailed(null);
       setCopied(true); setTimeout(() => setCopied(false), 2000);
-    });
+    } catch {
+      setCopyFailed('times'); setTimeout(() => setCopyFailed(null), 2500);
+    }
   };
 
-  const copyShare = () => {
+  const copyShare = async () => {
     const url = shareUrl([sourceCity, ...targetCities].map(c => c.name), sourceDt.toISO()!);
-    navigator.clipboard.writeText(url).then(() => { setSharedCopied(true); setTimeout(() => setSharedCopied(false), 2000); });
+    try {
+      await copyText(url);
+      setCopyFailed(null);
+      setSharedCopied(true); setTimeout(() => setSharedCopied(false), 2000);
+    } catch {
+      setCopyFailed('share'); setTimeout(() => setCopyFailed(null), 2500);
+    }
   };
 
-  const copyEpoch = (val: string, key: string) => {
-    navigator.clipboard.writeText(val).then(() => {
+  const copyEpoch = async (val: string, key: string) => {
+    try {
+      await copyText(val);
+      setCopyFailed(null);
       setEpochCopied(key); setTimeout(() => setEpochCopied(null), 2000);
-    });
+    } catch {
+      setCopyFailed(key); setTimeout(() => setCopyFailed(null), 2500);
+    }
   };
 
   const results: ConvertedTime[] = targetCities.map(city =>
@@ -272,9 +298,9 @@ export default function TimeConverter({ defaultCities }: { defaultCities?: strin
       {/* ── Sticky control bar ── */}
       <div className="tc-bar">
         <div className="tc-tabs">
-          <button className={`tc-tab ${inputTab === 'time' ? 'tc-tab-active' : ''}`} onClick={() => setInputTab('time')}>Time</button>
-          <button className={`tc-tab ${inputTab === 'epoch' ? 'tc-tab-active' : ''}`} onClick={() => setInputTab('epoch')}>Epoch</button>
-          <button className={`tc-tab ${inputTab === 'meeting' ? 'tc-tab-active' : ''}`} onClick={() => setInputTab('meeting')}>Meeting</button>
+          <button type="button" className={`tc-tab ${inputTab === 'time' ? 'tc-tab-active' : ''}`} onClick={() => setInputTab('time')} aria-pressed={inputTab === 'time'}>Time</button>
+          <button type="button" className={`tc-tab ${inputTab === 'epoch' ? 'tc-tab-active' : ''}`} onClick={() => setInputTab('epoch')} aria-pressed={inputTab === 'epoch'}>Epoch</button>
+          <button type="button" className={`tc-tab ${inputTab === 'meeting' ? 'tc-tab-active' : ''}`} onClick={() => setInputTab('meeting')} aria-pressed={inputTab === 'meeting'}>Meeting</button>
         </div>
 
         {inputTab === 'time' ? (
@@ -287,8 +313,8 @@ export default function TimeConverter({ defaultCities }: { defaultCities?: strin
             <input type="time" className="tc-time-input" value={sourceDt.toFormat('HH:mm')} onChange={handleTimeChange} />
             <CitySearch onSelect={c => { setSourceCity(c); setSourceDt(dt => dt.setZone(c.timezone)); }} placeholder={sourceCity.name} className="tc-city-search" />
             {nlpInput
-              ? <button className="tc-btn-cyan" onClick={applyNlp}>Go</button>
-              : <button className={`tc-btn-live ${liveMode ? 'active' : ''}`} onClick={() => { setLiveMode(true); setSourceDt(DateTime.now().setZone(sourceCity.timezone)); }}>● Live</button>
+              ? <button type="button" className="tc-btn-cyan" onClick={applyNlp}>Go</button>
+              : <button type="button" className={`tc-btn-live ${liveMode ? 'active' : ''}`} onClick={() => { setLiveMode(true); setSourceDt(DateTime.now().setZone(sourceCity.timezone)); }}>● Live</button>
             }
           </div>
         ) : inputTab === 'epoch' ? (
@@ -297,13 +323,14 @@ export default function TimeConverter({ defaultCities }: { defaultCities?: strin
               onChange={e => { setEpochInput(e.target.value); setEpochError(''); }}
               onKeyDown={e => e.key === 'Enter' && applyEpoch()}
               placeholder="Unix timestamp — seconds (1700000000) or ms (1700000000000)" />
-            <button className="tc-btn-cyan" onClick={applyEpoch}>Convert</button>
+            <button type="button" className="tc-btn-cyan" onClick={applyEpoch}>Convert</button>
           </div>
         ) : null}
 
         <div className="tc-controls">
-          <button className="tc-pill-btn" onClick={() => setUse24h(v => !v)}>{use24h ? '12h' : '24h'}</button>
+          <button type="button" className="tc-pill-btn" onClick={() => setUse24h(v => !v)}>{use24h ? '12h' : '24h'}</button>
           <button
+            type="button"
             className="tc-pill-btn"
             onClick={swapSourceWithFirstTarget}
             disabled={targetCities.length === 0}
@@ -312,15 +339,15 @@ export default function TimeConverter({ defaultCities }: { defaultCities?: strin
           >
             ↔ Swap
           </button>
-          <button className="tc-pill-btn tc-pill-btn-icon" onClick={copyTimes} title="Copy times">
+          <button type="button" className="tc-pill-btn tc-pill-btn-icon" onClick={copyTimes} title="Copy times">
             {copied ? <CheckIcon size={16} /> : <CopyIcon size={16} />}
-            <span>{copied ? 'Copied' : 'Copy'}</span>
+            <span>{copyFailed === 'times' ? 'Failed' : copied ? 'Copied' : 'Copy'}</span>
           </button>
-          <button className="tc-pill-btn tc-pill-btn-icon" onClick={copyShare} title="Share link">
+          <button type="button" className="tc-pill-btn tc-pill-btn-icon" onClick={copyShare} title="Share link">
             {sharedCopied ? <CheckIcon size={16} /> : (
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3l3 3-3 3M13 6H6.5A3.5 3.5 0 0 0 3 9.5V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3l3 3-3 3M13 6H6.5A3.5 3.5 0 0 0 3 9.5V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
             )}
-            <span>{sharedCopied ? 'Copied' : 'Share'}</span>
+            <span>{copyFailed === 'share' ? 'Failed' : sharedCopied ? 'Copied' : 'Share'}</span>
           </button>
         </div>
       </div>
@@ -343,7 +370,7 @@ export default function TimeConverter({ defaultCities }: { defaultCities?: strin
       {/* ── Quick presets ── */}
       <div className="tc-presets">
         {QUICK_PRESETS.map(p => (
-          <button key={p.label} className="tc-preset" onClick={() => applyPreset(p.cities)}>{p.label}</button>
+          <button type="button" key={p.label} className="tc-preset" onClick={() => applyPreset(p.cities)}>{p.label}</button>
         ))}
       </div>
 
@@ -357,6 +384,7 @@ export default function TimeConverter({ defaultCities }: { defaultCities?: strin
                 <span className="tc-epoch-widget-key">{label}</span>
                 <span className="tc-epoch-widget-val">{val}</span>
                 <button
+                  type="button"
                   className="tc-epoch-widget-copy"
                   onClick={() => copyEpoch(val, key)}
                   title={`Copy ${label}`}

@@ -51,6 +51,9 @@
   --color-on-primary:      #000000;
   --color-link:            #50e3c2;
   --color-cyan:            #50e3c2;
+  --color-cyan-dim:        var(--cyan-dim);
+  --color-text-primary:    var(--color-ink);
+  --color-text-secondary:  var(--color-body);
   --shadow-level-1: var(--shadow-1);
   --shadow-level-2: var(--shadow-2);
   --shadow-level-3: var(--shadow-3);
@@ -96,6 +99,9 @@
   --color-on-primary:      #ffffff;
   --color-link:            #0b8f6e;
   --color-cyan:            #0b8f6e;
+  --color-cyan-dim:        var(--cyan-dim);
+  --color-text-primary:    var(--color-ink);
+  --color-text-secondary:  var(--color-body);
   --shadow-level-1: var(--shadow-1);
   --shadow-level-2: var(--shadow-2);
   --shadow-level-3: var(--shadow-3);
@@ -113,6 +119,40 @@ html, body {
   font-family: 'Geist Variable', Inter, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
+  overflow-x: hidden;
+}
+
+html {
+  color-scheme: dark;
+  scroll-padding-top: 68px;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  touch-action: manipulation;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--cyan-dim);
+}
+
+section[id],
+h1[id],
+h2[id],
+h3[id] {
+  scroll-margin-top: 72px;
 }
 
 ::selection { background: var(--cyan); color: #000; }
@@ -398,7 +438,7 @@ html, body {
   color: var(--body);
   cursor: pointer;
   flex-shrink: 0;
-  transition: all 0.15s;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
 }
 
 .tc-btn-live.active {
@@ -815,6 +855,10 @@ html, body {
   min-width: 0;
 }
 
+.row-left > div {
+  min-width: 0;
+}
+
 .row-city-name {
   font-size: 15px;
   font-weight: 700;
@@ -855,6 +899,8 @@ html, body {
   display: flex;
   align-items: baseline;
   gap: 7px;
+  min-width: 0;
+  flex-wrap: wrap;
 }
 
 .row-time {
