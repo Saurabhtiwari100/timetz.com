@@ -18,6 +18,15 @@
       ]
     },
     {
+      "source": "/og-default.png",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    },
+    {
       "source": "/web-app-manifest-192x192.png",
       "headers": [
         {
